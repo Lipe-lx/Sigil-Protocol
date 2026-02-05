@@ -1,0 +1,21 @@
+[package]
+name = "sigil_registry"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "sigil_registry"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-instruction = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.32.1"
+anchor-spl = "0.32.1"
+solana-program = "3.0.10"
