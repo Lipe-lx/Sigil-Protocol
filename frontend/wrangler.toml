@@ -1,6 +1,6 @@
 name = "sigil-protocol"
 compatibility_date = "2024-05-02"
-pages_build_output_dir = ".vercel/output/static"
+pages_build_output_dir = "out"
 
 [vars]
 # NEXT_PUBLIC_API_URL = "https://your-backend.com"
