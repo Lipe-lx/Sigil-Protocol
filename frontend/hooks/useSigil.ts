@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useConnection, useAnchorWallet } from '@solana/wallet-adapter-react';
 import { Program, AnchorProvider } from '@coral-xyz/anchor';
+import { PublicKey } from '@solana/web3.js';
 import idl from '@/lib/idl.json';
 
 export function useSigil() {
