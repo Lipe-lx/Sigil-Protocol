@@ -7,7 +7,7 @@ import {
 const DEFAULT_USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
 
 // Protocol treasury wallet
-const DEFAULT_PROTOCOL_TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';
+const DEFAULT_PROTOCOL_TREASURY = '3adsGFsaGUDePR61ZtvkwkkpCeLne6immQbp2gR5jbfo';
 
 // Payment split ratios (must sum to 100)
 const SPLIT_CREATOR = 70;   // 70% to skill creator

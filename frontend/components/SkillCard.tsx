@@ -27,7 +27,7 @@ interface Skill {
 
 // Devnet USDC Mint provided by user
 const USDC_MINT = new PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU');
-const PROTOCOL_TREASURY = new PublicKey('8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws');
+const PROTOCOL_TREASURY = new PublicKey('3adsGFsaGUDePR61ZtvkwkkpCeLne6immQbp2gR5jbfo');
 
 export function SkillCard({ skill }: { skill: Skill }) {
   const { program, wallet, connection } = useSigil();
