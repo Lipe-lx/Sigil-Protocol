@@ -475,6 +475,69 @@
   ],
   "types": [
     {
+      "name": "auditorTier",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "tier1"
+          },
+          {
+            "name": "tier2"
+          },
+          {
+            "name": "tier3"
+          }
+        ]
+      }
+    },
+    {
+      "name": "consensusVerdict",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "pending"
+          },
+          {
+            "name": "approved"
+          },
+          {
+            "name": "rejected"
+          },
+          {
+            "name": "inconclusive"
+          }
+        ]
+      }
+    },
+    {
+      "name": "consensusStatus",
+      "docs": [
+        "Consensus status for a skill"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "pending"
+          },
+          {
+            "name": "inReview"
+          },
+          {
+            "name": "approved"
+          },
+          {
+            "name": "rejected"
+          },
+          {
+            "name": "contested"
+          }
+        ]
+      }
+    },
+    {
       "name": "auditor",
       "type": {
         "kind": "struct",
@@ -539,23 +602,6 @@
           {
             "name": "timestamp",
             "type": "i64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "auditorTier",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "tier1"
-          },
-          {
-            "name": "tier2"
-          },
-          {
-            "name": "tier3"
           }
         ]
       }
@@ -636,52 +682,6 @@
           {
             "name": "bump",
             "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "consensusStatus",
-      "docs": [
-        "Consensus status for a skill"
-      ],
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "pending"
-          },
-          {
-            "name": "inReview"
-          },
-          {
-            "name": "approved"
-          },
-          {
-            "name": "rejected"
-          },
-          {
-            "name": "contested"
-          }
-        ]
-      }
-    },
-    {
-      "name": "consensusVerdict",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "pending"
-          },
-          {
-            "name": "approved"
-          },
-          {
-            "name": "rejected"
-          },
-          {
-            "name": "inconclusive"
           }
         ]
       }
