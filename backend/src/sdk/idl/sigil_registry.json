@@ -340,7 +340,9 @@
         {
           "name": "verdict",
           "type": {
-            "defined": "consensusVerdict"
+            "defined": {
+              "name": "consensusVerdict"
+            }
           }
         },
         {
@@ -479,12 +481,14 @@
         "fields": [
           {
             "name": "pubkey",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "tier",
             "type": {
-              "defined": "auditorTier"
+              "defined": {
+                "name": "auditorTier"
+              }
             }
           },
           {
@@ -513,7 +517,7 @@
         "fields": [
           {
             "name": "auditor",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "signature",
@@ -527,7 +531,9 @@
           {
             "name": "tier",
             "type": {
-              "defined": "auditorTier"
+              "defined": {
+                "name": "auditorTier"
+              }
             }
           },
           {
@@ -565,7 +571,7 @@
         "fields": [
           {
             "name": "skill",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "version",
@@ -574,7 +580,9 @@
           {
             "name": "verdict",
             "type": {
-              "defined": "consensusVerdict"
+              "defined": {
+                "name": "consensusVerdict"
+              }
             }
           },
           {
@@ -623,7 +631,7 @@
           },
           {
             "name": "recorded_by",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "bump",
@@ -685,11 +693,11 @@
         "fields": [
           {
             "name": "skill",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "executor",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "success",
@@ -726,7 +734,7 @@
           },
           {
             "name": "creator",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "creator_signature",
@@ -757,20 +765,24 @@
             "name": "auditors",
             "type": {
               "vec": {
-                "defined": "auditorSignature"
+                "defined": {
+                  "name": "auditorSignature"
+                }
               }
             }
           },
           {
             "name": "consensus_status",
             "type": {
-              "defined": "consensusStatus"
+              "defined": {
+                "name": "consensusStatus"
+              }
             }
           },
           {
             "name": "consensus_record",
             "type": {
-              "option": "publicKey"
+              "option": "pubkey"
             }
           },
           {
@@ -811,7 +823,7 @@
         "fields": [
           {
             "name": "authority",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "skill_count",
