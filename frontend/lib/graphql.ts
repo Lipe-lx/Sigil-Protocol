@@ -1,7 +1,8 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
+const PRODUCTION_URL = 'https://sigil-protocol.lulipe-lx.workers.dev';
 const GRAPHQL_URL = process.env.NEXT_PUBLIC_API_URL 
   ? `${process.env.NEXT_PUBLIC_API_URL}/graphql` 
-  : isDevelopment ? 'http://localhost:3001/graphql' : null;
+  : isDevelopment ? 'http://localhost:3001/graphql' : `${PRODUCTION_URL}/graphql`;
 
 export async function fetchGraphQL<T>(query: string, variables: any = {}): Promise<T> {
   if (!GRAPHQL_URL) {
