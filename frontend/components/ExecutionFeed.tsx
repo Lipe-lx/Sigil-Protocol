@@ -31,17 +31,25 @@ export function ExecutionFeed() {
     const fetchLogs = async () => {
       try {
         const allLogs = await (program.account as any).executionLog.all();
-        const formatted = allLogs.map((l: any) => ({
-          id: l.publicKey.toString(),
-          skill: l.account.skill.toString(),
-          executor: l.account.executor.toString(),
-          success: l.account.success,
-          latencyMs: l.account.latencyMs,
-          timestamp: Date.now(), // Anchor logs usually need a timestamp field or we use slot time
-        })).sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
+        const formatted = allLogs.map((l: any) => {
+          const data = l.account;
+          const timestamp = data.timestamp || data.timestamp || { toNumber: () => Date.now() / 1000 };
+          const latencyMs = data.latencyMs || data.latency_ms || 0;
+          
+          return {
+            id: l.publicKey.toString(),
+            skill: data.skill.toString(),
+            executor: data.executor.toString(),
+            success: data.success,
+            latencyMs: latencyMs,
+            timestamp: typeof timestamp === 'number' ? timestamp * 1000 : timestamp.toNumber() * 1000,
+          };
+        }).sort((a: any, b: any) => b.timestamp - a.timestamp).slice(0, 5);
         
         setLogs(formatted);
-      } catch (e) {}
+      } catch (e) {
+        console.error("Error fetching logs:", e);
+      }
     };
 
     fetchLogs();

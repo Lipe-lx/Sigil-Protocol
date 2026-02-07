@@ -42,24 +42,41 @@ export default function SkillsPage() {
       
       const formattedSkills: Skill[] = accounts.map((acc: any) => {
         const data = acc.account;
-        const executionCount = data.executionCount.toNumber();
-        const successCount = data.successCount.toNumber();
-        const successRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
+        
+        // Handle both camelCase and snake_case for Anchor 0.30 compatibility
+        const executionCount = (data.executionCount || data.execution_count || { toNumber: () => 0 }).toNumber();
+        const successCount = (data.successCount || data.success_count || { toNumber: () => 0 }).toNumber();
+        const priceUsdc = (data.priceUsdc || data.price_usdc || { toNumber: () => 0 }).toNumber();
+        const trustScore = data.trustScore || data.trust_score || 0;
+        const ipfsHash = data.ipfsHash || data.ipfs_hash || "";
         
         let name = `Sigil Skill #${acc.publicKey.toString().slice(0, 4)}`;
-        try {
-          if (data.ipfsHash.startsWith('{')) {
-             const parsed = JSON.parse(data.ipfsHash);
-             name = parsed.name || name;
-          }
-        } catch (e) {}
+        
+        // Handle reference skills mapping
+        const refSkills: Record<string, string> = {
+          'QmSecurityScannerHash': 'Security Scanner',
+          'QmCodeReviewerHash': 'Code Reviewer',
+          'QmDeFiAnalyzerHash': 'DeFi Analyzer',
+          'QmTestHash1770416406741': 'Sigil Test Skill'
+        };
+
+        if (refSkills[ipfsHash]) {
+          name = refSkills[ipfsHash];
+        } else {
+          try {
+            if (ipfsHash.startsWith('{')) {
+               const parsed = JSON.parse(ipfsHash);
+               name = parsed.name || name;
+            }
+          } catch (e) {}
+        }
 
         return {
           id: acc.publicKey.toString(),
           pda: acc.publicKey.toString(),
           creator: data.creator.toString(),
-          priceUsdc: data.priceUsdc.toNumber() / 1000000, 
-          trustScore: data.trustScore,
+          priceUsdc: priceUsdc / 1000000, 
+          trustScore: trustScore,
           executionCount: executionCount,
           successRate: successRate,
           name: name
@@ -120,11 +137,11 @@ export default function SkillsPage() {
 
         <div className="h-px bg-zinc-900 w-full mb-12" />
 
-        {!connected ? (
-           <div className="flex flex-col items-center justify-center py-40 border border-dashed border-zinc-800 bg-zinc-950/20">
-              <h3 className="text-2xl font-bold tracking-tighter text-zinc-400 mb-4 uppercase italic font-serif">Wallet Disconnected</h3>
-              <p className="text-zinc-600 mb-8 max-w-sm text-center">Connect your wallet to browse and execute skills from the Sigil Registry.</p>
-           </div>
+        {!program ? (
+          <div className="flex flex-col items-center justify-center py-40 gap-4">
+            <div className="w-12 h-12 border-2 border-white/10 border-t-white animate-spin rounded-full" />
+            <span className="text-xs font-bold tracking-widest text-zinc-500 uppercase">Synchronizing Sigil Registry...</span>
+          </div>
         ) : loading ? (
           <div className="flex flex-col items-center justify-center py-40 gap-4">
             <div className="w-12 h-12 border-2 border-white/10 border-t-white animate-spin rounded-full" />

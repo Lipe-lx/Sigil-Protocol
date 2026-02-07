@@ -10,11 +10,16 @@ export function useSigil() {
   const wallet = useAnchorWallet();
 
   const program = useMemo(() => {
-    // Only return program if wallet is connected and we are in client-side
-    if (!wallet || typeof window === 'undefined') return null;
+    if (typeof window === 'undefined') return null;
 
     try {
-      const provider = new AnchorProvider(connection, wallet, {
+      const mockWallet = {
+        publicKey: PublicKey.default,
+        signTransaction: async (tx: any) => tx,
+        signAllTransactions: async (txs: any[]) => txs,
+      };
+
+      const provider = new AnchorProvider(connection, wallet || (mockWallet as any), {
         preflightCommitment: 'confirmed',
       });
 
