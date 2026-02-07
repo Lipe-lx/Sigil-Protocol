@@ -20,10 +20,13 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
-          "name": "auditor"
+          "name": "auditor",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "auditorSigner",
@@ -52,7 +55,8 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "registry",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "authority",
@@ -61,7 +65,9 @@ export type SigilRegistry = {
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "address": "11111111111111111111111111111111",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": []
@@ -71,7 +77,8 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "executionLog",
@@ -85,23 +92,30 @@ export type SigilRegistry = {
         },
         {
           "name": "executorUsdc",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "creatorUsdc",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "protocolUsdc",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "address": "11111111111111111111111111111111",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -120,7 +134,8 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "creator",
@@ -129,11 +144,14 @@ export type SigilRegistry = {
         },
         {
           "name": "registry",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "address": "11111111111111111111111111111111",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -174,15 +192,18 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "consensusRecord",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "skill",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "registry",
-          "isMut": true
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "authority",
@@ -191,16 +212,16 @@ export type SigilRegistry = {
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "address": "11111111111111111111111111111111",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
         {
           "name": "verdict",
           "type": {
-            "defined": {
-              "name": "consensusVerdict"
-            }
+            "defined": "consensusVerdict"
           }
         },
         {
@@ -250,14 +271,12 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "pubkey",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "tier",
             "type": {
-              "defined": {
-                "name": "auditorTier"
-              }
+              "defined": "auditorTier"
             }
           },
           {
@@ -290,7 +309,7 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "skill",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "version",
@@ -299,9 +318,7 @@ export type SigilRegistry = {
           {
             "name": "verdict",
             "type": {
-              "defined": {
-                "name": "consensusVerdict"
-              }
+              "defined": "consensusVerdict"
             }
           },
           {
@@ -350,7 +367,7 @@ export type SigilRegistry = {
           },
           {
             "name": "recordedBy",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "bump",
@@ -366,11 +383,11 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "skill",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "executor",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "success",
@@ -407,7 +424,7 @@ export type SigilRegistry = {
           },
           {
             "name": "creator",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "creatorSignature",
@@ -438,24 +455,20 @@ export type SigilRegistry = {
             "name": "auditors",
             "type": {
               "vec": {
-                "defined": {
-                  "name": "auditorSignature"
-                }
+                "defined": "auditorSignature"
               }
             }
           },
           {
             "name": "consensusStatus",
             "type": {
-              "defined": {
-                "name": "consensusStatus"
-              }
+              "defined": "consensusStatus"
             }
           },
           {
             "name": "consensusRecord",
             "type": {
-              "option": "pubkey"
+              "option": "publicKey"
             }
           },
           {
@@ -496,7 +509,7 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "authority",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "skillCount",
@@ -526,14 +539,12 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "pubkey",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "tier",
             "type": {
-              "defined": {
-                "name": "auditorTier"
-              }
+              "defined": "auditorTier"
             }
           },
           {
@@ -562,7 +573,7 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "auditor",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "signature",
@@ -576,9 +587,7 @@ export type SigilRegistry = {
           {
             "name": "tier",
             "type": {
-              "defined": {
-                "name": "auditorTier"
-              }
+              "defined": "auditorTier"
             }
           },
           {
@@ -616,7 +625,7 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "skill",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "version",
@@ -625,9 +634,7 @@ export type SigilRegistry = {
           {
             "name": "verdict",
             "type": {
-              "defined": {
-                "name": "consensusVerdict"
-              }
+              "defined": "consensusVerdict"
             }
           },
           {
@@ -676,7 +683,7 @@ export type SigilRegistry = {
           },
           {
             "name": "recordedBy",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "bump",
@@ -738,11 +745,11 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "skill",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "executor",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "success",
@@ -779,7 +786,7 @@ export type SigilRegistry = {
           },
           {
             "name": "creator",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "creatorSignature",
@@ -810,24 +817,20 @@ export type SigilRegistry = {
             "name": "auditors",
             "type": {
               "vec": {
-                "defined": {
-                  "name": "auditorSignature"
-                }
+                "defined": "auditorSignature"
               }
             }
           },
           {
             "name": "consensusStatus",
             "type": {
-              "defined": {
-                "name": "consensusStatus"
-              }
+              "defined": "consensusStatus"
             }
           },
           {
             "name": "consensusRecord",
             "type": {
-              "option": "pubkey"
+              "option": "publicKey"
             }
           },
           {
@@ -868,7 +871,7 @@ export type SigilRegistry = {
         "fields": [
           {
             "name": "authority",
-            "type": "pubkey"
+            "type": "publicKey"
           },
           {
             "name": "skillCount",

@@ -2,21 +2,43 @@ import { Connection } from '@solana/web3.js';
 export declare class RegistryService {
     private client;
     constructor(connection: Connection);
-    getSkills(filters: any): Promise<any>;
-    getSkillById(id: string): Promise<{
+    getSkills(filters: any): Promise<{
         id: string;
         skillId: string;
-        creator: any;
+        creator: string;
         priceUsdc: number;
-        ipfsHash: any;
-        auditReportHash: any;
-        trustScore: any;
+        ipfsHash: string;
+        auditReportHash: string;
+        trustScore: number;
         executionCount: any;
         successRate: number;
         totalEarned: number;
         lastUsed: string;
         createdAt: string;
-        auditors: any;
+        auditors: {
+            auditor: any;
+            tier: string;
+            timestamp: string;
+        }[];
+    }[]>;
+    getSkillById(id: string): Promise<{
+        id: string;
+        skillId: string;
+        creator: string;
+        priceUsdc: number;
+        ipfsHash: string;
+        auditReportHash: string;
+        trustScore: number;
+        executionCount: any;
+        successRate: number;
+        totalEarned: number;
+        lastUsed: string;
+        createdAt: string;
+        auditors: {
+            auditor: any;
+            tier: string;
+            timestamp: string;
+        }[];
     }>;
     getAuditors(): Promise<any>;
     getAuditorByPubkey(pubkey: string): Promise<{
