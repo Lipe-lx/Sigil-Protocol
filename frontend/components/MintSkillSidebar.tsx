@@ -234,7 +234,12 @@ export function MintSkillSidebar({
                   <textarea
                     value={skillDescription}
                     onChange={(e) => setSkillDescription(e.target.value.slice(0, MAX_RAW_CHARS))}
-                    placeholder="e.g. This skill analyzes Solana account depth and returns formatted JSON..."
+                    placeholder="e.g. 
+                                  ---
+                                  name: solana-setup
+                                  description: Use this skill when working with Solana blockchain development projects. This includes setting up new Solana/Anchor projects, resolving version conflicts between Rust/Solana CLI/Anchor/web3.js, troubleshooting build errors, configuring development environments, and ensuring compatibility between all toolchain components. Trigger for any Solana development setup, version conflict resolution, or build issues.
+                                  license: MIT
+                                  ---"
                     className="w-full bg-black border border-zinc-900 min-h-[120px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
                   />
                   <div className="absolute bottom-4 right-4 flex items-center gap-2 text-[9px] font-bold text-zinc-700 uppercase tracking-tighter opacity-0 group-focus-within:opacity-100 transition-opacity">
