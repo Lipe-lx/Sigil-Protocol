@@ -24,6 +24,7 @@ interface Skill {
   name?: string;
   pda: string;
   description?: string;
+  externalUrl?: string;
 }
 
 // Devnet USDC Mint provided by user
@@ -208,8 +209,34 @@ export function SkillCard({ skill }: { skill: Skill }) {
                 </summary>
                 <div className="mt-4 p-3 bg-zinc-950 border border-zinc-900 text-[10px] font-mono text-zinc-400 whitespace-pre-wrap max-h-40 overflow-y-auto leading-relaxed">
                   {skill.description}
+                  {skill.externalUrl && (
+                    <div className="mt-4 pt-4 border-t border-zinc-900">
+                      <a 
+                        href={skill.externalUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-white hover:underline flex items-center gap-1"
+                      >
+                        <LucideZap size={10} /> View External Source
+                      </a>
+                    </div>
+                  )}
                 </div>
               </details>
+            </div>
+          )}
+
+          {!skill.description && skill.externalUrl && (
+            <div className="pt-4 border-t border-zinc-900 mt-4">
+               <a 
+                href={skill.externalUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white transition-colors flex items-center justify-between"
+              >
+                <span>External Source</span>
+                <LucideZap size={10} />
+              </a>
             </div>
           )}
         </div>

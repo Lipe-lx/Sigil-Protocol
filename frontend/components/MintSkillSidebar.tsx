@@ -22,6 +22,10 @@ export function MintSkillSidebar({
   const [name, setName] = useState('');
   const [price, setPrice] = useState('0.01');
   const [skillDescription, setSkillDescription] = useState('');
+  const [externalUrl, setExternalUrl] = useState('');
+
+  const MAX_RAW_CHARS = 4000;
+  const charsLeft = MAX_RAW_CHARS - skillDescription.length;
 
   const handleMint = async () => {
     if (!program || !wallet) return;
@@ -55,10 +59,12 @@ export function MintSkillSidebar({
       }
 
       // Metadata contains name and the full skill description/instructions
-      const metadataObj = { 
-        n: name, 
-        d: skillDescription
+      const metadataObj: any = { 
+        n: name
       };
+
+      if (skillDescription) metadataObj.d = skillDescription;
+      if (externalUrl) metadataObj.u = externalUrl;
 
       const metadataStr = JSON.stringify(metadataObj);
       
@@ -74,7 +80,7 @@ export function MintSkillSidebar({
       // we have about 900-1000 bytes for the actual instruction data.
       // 1200 base64 chars = ~900 bytes.
       if (finalMetadata.length > 1200) {
-        throw new Error("Skill logic is too large for a single Solana transaction. Even after compression, it exceeds the 1232-byte limit. Please summarize your skill or host the full file on IPFS/GitHub and provide the link.");
+        throw new Error("Skill logic is too large for a single Solana transaction. Even after compression, it exceeds the network limits. Please summarize your skill or use the 'External Logic URL' field for large files (GitHub/IPFS).");
       }
       
       const priceBN = new BN(parseFloat(price) * 1000000); // USDC 6 decimals
@@ -97,6 +103,7 @@ export function MintSkillSidebar({
       setName('');
       setPrice('0.01');
       setSkillDescription('');
+      setExternalUrl('');
     } catch (error: any) {
       console.error("Minting failed:", error);
       alert(`Minting failed: ${error.message}`);
@@ -152,10 +159,16 @@ export function MintSkillSidebar({
             <div className="space-y-8">
               {/* Skill Name */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  Skill Name
+                <div className="flex items-center gap-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Name</label>
+                  <div className="group/tip relative">
+                    <LucideInfo size={10} className="text-zinc-700 cursor-help" />
+                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                      The public title of your AI capability.
+                    </div>
+                  </div>
                   <span className="text-zinc-800">—</span>
-                </label>
+                </div>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -166,10 +179,16 @@ export function MintSkillSidebar({
 
               {/* Price */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  Price (USDC)
+                <div className="flex items-center gap-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Price (USDC)</label>
+                  <div className="group/tip relative">
+                    <LucideInfo size={10} className="text-zinc-700 cursor-help" />
+                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                      Cost per execution. Payments are split between you and the protocol treasury.
+                    </div>
+                  </div>
                   <span className="text-zinc-800">—</span>
-                </label>
+                </div>
                 <div className="relative">
                   <input
                     type="number"
@@ -186,25 +205,55 @@ export function MintSkillSidebar({
 
               {/* Skill Content / Instructions */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  Skill Logic (SKILL.md)
-                  <span className="text-zinc-800">—</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Logic (SKILL.md)</label>
+                    <div className="group/tip relative">
+                      <LucideInfo size={10} className="text-zinc-700 cursor-help" />
+                      <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                        The core instructions for the AI. This is compressed and stored on-chain.
+                      </div>
+                    </div>
+                    <span className="text-zinc-800">—</span>
+                  </div>
+                  <span className={cn(
+                    "text-[9px] font-mono",
+                    charsLeft < 500 ? "text-red-500" : "text-zinc-700"
+                  )}>
+                    {charsLeft} chars remaining
+                  </span>
+                </div>
                 <div className="relative group">
                   <textarea
                     value={skillDescription}
-                    onChange={(e) => setSkillDescription(e.target.value)}
+                    onChange={(e) => setSkillDescription(e.target.value.slice(0, MAX_RAW_CHARS))}
                     placeholder="# Skill Instructions\n\nDefine the core logic and constraints of this skill..."
-                    className="w-full bg-black border border-zinc-900 min-h-[200px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
+                    className="w-full bg-black border border-zinc-900 min-h-[160px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
                   />
                   <div className="absolute bottom-4 right-4 flex items-center gap-2 text-[9px] font-bold text-zinc-700 uppercase tracking-tighter opacity-0 group-focus-within:opacity-100 transition-opacity">
-                    <LucideChevronRight size={10} /> Verifiable Content
+                    <LucideChevronRight size={10} /> Gzip Compression Active
                   </div>
                 </div>
-                <p className="text-[10px] text-zinc-600 flex items-start gap-2 leading-relaxed">
-                  <LucideInfo size={12} className="shrink-0 mt-0.5" />
-                  This content will be cryptographically hashed and stored as the Sigil's core capability logic.
-                </p>
+              </div>
+
+              {/* External URL */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">External Logic URL</label>
+                  <div className="group/tip relative">
+                    <LucideInfo size={10} className="text-zinc-700 cursor-help" />
+                    <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                      Optional. Link to GitHub or IPFS if your logic exceeds the on-chain byte limit.
+                    </div>
+                  </div>
+                  <span className="text-zinc-800">—</span>
+                </div>
+                <input
+                  value={externalUrl}
+                  onChange={(e) => setExternalUrl(e.target.value)}
+                  placeholder="https://github.com/.../skill.md"
+                  className="w-full bg-black border border-zinc-900 h-14 px-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white"
+                />
               </div>
             </div>
           </div>
@@ -212,7 +261,7 @@ export function MintSkillSidebar({
           <div className="pt-12">
             <Button
               onClick={handleMint}
-              disabled={loading || !name || !skillDescription || !wallet}
+              disabled={loading || !name || (!skillDescription && !externalUrl) || !wallet}
               className="w-full h-16 font-black tracking-tighter uppercase text-sm bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-900 disabled:text-zinc-700 transition-all rounded-none"
             >
               {loading ? (

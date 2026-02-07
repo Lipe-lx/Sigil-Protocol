@@ -19,6 +19,7 @@ interface Skill {
   name: string;
   pda: string;
   description?: string;
+  externalUrl?: string;
 }
 
 const TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';
@@ -66,6 +67,7 @@ export default function SkillsPage() {
         
         let name = `Sigil Skill #${acc.publicKey.toString().slice(0, 4)}`;
         let description = "";
+        let externalUrl = "";
         
         // Handle decompression if prefixed with gz:
         let processedIpfsHash = ipfsHash;
@@ -101,6 +103,7 @@ export default function SkillsPage() {
                const parsed = JSON.parse(processedIpfsHash);
                name = parsed.n || parsed.name || name;
                description = parsed.d || parsed.description || "";
+               externalUrl = parsed.u || parsed.externalUrl || "";
             }
           } catch (e) {}
         }
@@ -114,7 +117,8 @@ export default function SkillsPage() {
           executionCount: executionCount,
           successRate: calculatedSuccessRate,
           name: name,
-          description: description
+          description: description,
+          externalUrl: externalUrl
         };
       }));
 
