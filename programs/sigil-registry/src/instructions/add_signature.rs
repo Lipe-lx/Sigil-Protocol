@@ -1,15 +1,15 @@
 use anchor_lang::prelude::*;
 use crate::state::*;
-use crate::lib::ErrorCode;
+use crate::ErrorCode;
 
 #[derive(Accounts)]
 pub struct AddAuditorSignature<'info> {
     #[account(mut)]
-    pub skill: Account<'info, Skill>,
+    pub skill: Box<Account<'info, Skill>>,
     #[account(
         constraint = auditor.active @ ErrorCode::AuditorNotActive
     )]
-    pub auditor: Account<'info, Auditor>,
+    pub auditor: Box<Account<'info, Auditor>>,
     #[account(mut)]
     pub auditor_signer: Signer<'info>,
 }
@@ -53,7 +53,7 @@ fn calculate_trust_score(skill: &Skill) -> u16 {
     
     let execution_factor = (skill.execution_count.min(1000) * 300 / 1000) as u16;
     let success_rate = if skill.execution_count > 0 {
-        ((skill.success_count * 400 / skill.execution_count) as u16)
+        (skill.success_count * 400 / skill.execution_count) as u16
     } else {
         0
     };

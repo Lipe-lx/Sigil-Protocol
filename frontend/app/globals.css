@@ -1,18 +1,38 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: black;
+  color: white;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Swiss Style Typography Adjustments */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.border-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }

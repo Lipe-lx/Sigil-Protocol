@@ -4,27 +4,37 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "npm run build && npx wrangler pages deploy out --project-name=sigil-protocol"
+  },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "next": "^15.5.0",
+    "@coral-xyz/anchor": "^0.30.1",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@solana/spl-token": "^0.4.14",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/wallet-adapter-wallets": "^0.19.32",
-    "@solana/web3.js": "^1.99.0",
-    "@coral-xyz/anchor": "^0.32.1",
-    "tailwindcss": "^4.0.0",
-    "recharts": "^2.15.0",
-    "lucide-react": "^0.469.0",
+    "@solana/web3.js": "^1.95.0",
+    "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.7.0"
+    "lucide-react": "^0.469.0",
+    "next": "^14.2.5",
+    "pino-pretty": "^13.1.3",
+    "postcss": "^8.4.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.0",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
-    "@types/react": "^19.0.6",
-    "@types/react-dom": "^19.0.2",
     "@types/node": "^20.17.10",
-    "typescript": "^5.7.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1"
+    "@types/react": "18.3.28",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.7.2"
   }
 }

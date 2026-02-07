@@ -30,14 +30,17 @@ export const typeDefs = gql`
   }
 
   type Auditor {
+    id: ID!
     pubkey: String!
     tier: AuditorTier!
     skillsAudited: Int!
     reputation: Int!
     totalEarned: Float!
+    active: Boolean!
   }
 
   type ExecutionLog {
+    id: ID!
     skill: String!
     executor: String!
     success: Boolean!
@@ -46,25 +49,76 @@ export const typeDefs = gql`
     timestamp: String!
   }
 
+  type RegistryStats {
+    skillCount: Int!
+    totalExecutions: Int!
+    authority: String!
+  }
+
+  type PaymentSplit {
+    creator: Float!
+    auditors: Float!
+    protocol: Float!
+    total: Float!
+  }
+
+  type SplitRecipient {
+    address: String!
+    amount: Float!
+    role: String!
+  }
+
   type Query {
+    # Skills
     skill(id: ID!): Skill
     skills(
       minTrustScore: Int
       maxPrice: Float
+      creator: String
       limit: Int
       offset: Int
     ): [Skill!]!
+    
+    # Auditors
     auditor(pubkey: String!): Auditor
+    auditors(
+      tier: AuditorTier
+      activeOnly: Boolean
+      limit: Int
+    ): [Auditor!]!
     topAuditors(limit: Int): [Auditor!]!
+    
+    # Executions
     recentExecutions(limit: Int): [ExecutionLog!]!
+    executionsBySkill(skillId: ID!, limit: Int): [ExecutionLog!]!
+    
+    # Registry
+    registryStats: RegistryStats
+    
+    # Payments
+    calculateSplit(totalUsdc: Float!, auditorCount: Int): PaymentSplit!
+    getSplitRecipients(
+      totalUsdc: Float!
+      creatorAddress: String!
+      auditorAddresses: [String!]
+    ): [SplitRecipient!]!
   }
 
   type Mutation {
-    mintSkill(
+    # Note: Actual minting must be done via client-side SDK for security
+    # This mutation is for server-side validation/preparation only
+    prepareSkillMint(
       skillId: String!
       priceUsdc: Float!
       ipfsHash: String!
-      signature: String!
-    ): Skill!
+    ): SkillMintPreparation!
+  }
+
+  type SkillMintPreparation {
+    skillPda: String!
+    registryPda: String!
+    estimatedFee: Float!
+    ready: Boolean!
+    errors: [String!]
   }
 `;

@@ -1,5 +1,12 @@
 import './globals.css';
+import '@solana/wallet-adapter-react-ui/styles.css';
 import { WalletProvider } from '@/components/WalletProvider';
+import Nav from '@/components/Nav';
+
+export const metadata = {
+  title: 'Sigil Protocol | The Trust Layer for AI Agents',
+  description: 'Verifiable AI skills marketplace powered by USDC and Solana.',
+};
 
 export default function RootLayout({
   children,
@@ -7,23 +14,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-950 text-slate-50 min-h-screen">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className="bg-black text-white min-h-screen border-grid" suppressHydrationWarning>
         <WalletProvider>
-          <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Sigil Protocol ⚡
-              </h1>
-              <div className="flex gap-4 items-center">
-                <a href="/skills" className="hover:text-blue-400 transition-colors">Marketplace</a>
-                <a href="/auditors" className="hover:text-blue-400 transition-colors">Auditors</a>
-              </div>
-            </div>
-          </nav>
-          <main className="container mx-auto px-4 py-8">
+          <Nav />
+          <main className="pt-24 pb-20">
             {children}
           </main>
+          <footer className="border-t border-zinc-900 py-12 bg-black">
+            <div className="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-zinc-800 flex items-center justify-center rotate-45">
+                  <span className="text-[10px] -rotate-45">S</span>
+                </div>
+                <span className="text-sm font-bold tracking-tighter text-zinc-500">SIGIL PROTOCOL ⚡ 2026</span>
+              </div>
+              <div className="flex gap-8 text-xs font-medium text-zinc-500 uppercase tracking-widest">
+                <a href="#" className="hover:text-white transition-colors">Docs</a>
+                <a href="#" className="hover:text-white transition-colors">Github</a>
+                <a href="#" className="hover:text-white transition-colors">Moltbook</a>
+              </div>
+            </div>
+          </footer>
         </WalletProvider>
       </body>
     </html>

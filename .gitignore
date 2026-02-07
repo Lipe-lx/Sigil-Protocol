@@ -1,0 +1,11 @@
+# Build artifacts
+target/
+**/*.rs.bk
+*.so
+
+# Keys
+id.json
+*-keypair.json
+
+# Dependencies
+node_modules/

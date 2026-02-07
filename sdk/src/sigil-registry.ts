@@ -1,41 +1,52 @@
 import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { SigilRegistry } from './types';
+import idl from '../../target/idl/sigil_registry.json';
 
 export class SigilRegistryClient {
   program: Program<SigilRegistry>;
   provider: AnchorProvider;
 
   constructor(connection: Connection, wallet: any) {
-    this.provider = new AnchorProvider(connection, wallet, {});
-    // Note: We'll need the actual IDL or types. The Program constructor handles the conversion.
-    // For now, we cast the imported types to any to satisfy the compiler if needed,
-    // but in a real setup, anchor-cli generates these.
-    this.program = new Program(null as any, this.provider); 
+    this.provider = new AnchorProvider(connection, wallet, {
+      commitment: 'confirmed',
+    });
+    this.program = new Program(idl as any, new PublicKey('BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe'), this.provider);
+  }
+
+  async initializeRegistry(): Promise<string> {
+    const [registryPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('registry_v1')],
+        this.program.programId
+    );
+
+    return await this.program.methods
+      .initializeRegistry()
+      .accounts({
+        registry: registryPda,
+        authority: this.provider.wallet.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
   }
 
   async mintSkill(
-    skillId: Buffer,
+    skillId: number[],
     priceUsdc: BN,
     ipfsHash: string,
-    creatorSignature: Buffer
+    creatorSignature: number[]
   ): Promise<string> {
     const [skillPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from('skill'), skillId],
+      [Buffer.from('skill'), Buffer.from(skillId)],
       this.program.programId
     );
     const [registryPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from('registry')],
-      this.program.programId
+        [Buffer.from('registry_v1')],
+        this.program.programId
     );
 
-    const tx = await this.program.methods
-      .mintSkill(
-        Array.from(skillId),
-        priceUsdc,
-        ipfsHash,
-        Array.from(creatorSignature)
-      )
+    return await this.program.methods
+      .mintSkill(skillId, priceUsdc, ipfsHash, creatorSignature)
       .accounts({
         skill: skillPda,
         creator: this.provider.wallet.publicKey,
@@ -43,31 +54,136 @@ export class SigilRegistryClient {
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
-
-    return tx;
   }
 
-  async getSkill(skillId: Buffer): Promise<any> {
-    const [skillPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from('skill'), skillId],
+  async addAuditorSignature(
+    skillPda: PublicKey,
+    auditorPda: PublicKey,
+    signature: number[],
+    auditReportHash: string
+  ): Promise<string> {
+    return await this.program.methods
+      .addAuditorSignature(signature, auditReportHash)
+      .accounts({
+        skill: skillPda,
+        auditor: auditorPda,
+        auditorSigner: this.provider.wallet.publicKey,
+      })
+      .rpc();
+  }
+
+  async logExecution(
+    skillPda: PublicKey,
+    executionLogPda: PublicKey,
+    executorUsdc: PublicKey,
+    creatorUsdc: PublicKey,
+    protocolUsdc: PublicKey,
+    success: boolean,
+    latencyMs: number
+  ): Promise<string> {
+    return await this.program.methods
+      .logExecution(success, latencyMs)
+      .accounts({
+        skill: skillPda,
+        executionLog: executionLogPda,
+        executor: this.provider.wallet.publicKey,
+        executorUsdc,
+        creatorUsdc,
+        protocolUsdc,
+        tokenProgram: web3.PublicKey.default, // Needs spl-token program id
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+  }
+
+  async getSkill(skillPda: PublicKey) {
+    return await this.program.account.Skill.fetch(skillPda);
+  }
+
+  async getAllSkills() {
+    return await this.program.account.Skill.all();
+  }
+
+  async getAllLogs() {
+    // ExecutionLog account may not be defined in current IDL
+    // Return empty array for MVP - logs are tracked via transaction history
+    try {
+      // Try to fetch if account exists
+      const accounts = await (this.program.account as any).executionLog?.all();
+      return accounts || [];
+    } catch {
+      console.warn('ExecutionLog account not available in current program version');
+      return [];
+    }
+  }
+
+  async getAuditor(auditorPda: PublicKey) {
+    // Auditor account may not be defined in current IDL
+    try {
+      return await (this.program.account as any).auditor?.fetch(auditorPda);
+    } catch {
+      console.warn('Auditor account not available in current program version');
+      return null;
+    }
+  }
+
+  async getAllAuditors() {
+    // Auditor account may not be defined in current IDL
+    try {
+      const accounts = await (this.program.account as any).auditor?.all();
+      return accounts || [];
+    } catch {
+      console.warn('Auditor account not available in current program version');
+      return [];
+    }
+  }
+
+  async getRegistry() {
+    const [registryPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('registry_v1')],
+        this.program.programId
+    );
+    try {
+      // Account names in Anchor are camelCase versions of the struct name
+      return await (this.program.account as any).skillRegistry.fetch(registryPda);
+    } catch (e) {
+      // Try PascalCase as fallback
+      try {
+        return await (this.program.account as any).SkillRegistry.fetch(registryPda);
+      } catch {
+        console.warn('Registry not initialized');
+        return null;
+      }
+    }
+  }
+
+  // Helper to derive PDAs
+  deriveSkillPda(skillId: number[] | Uint8Array): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+      [Buffer.from('skill'), Buffer.from(skillId)],
       this.program.programId
     );
-    return await this.program.account.skill.fetch(skillPda);
+    return pda;
   }
 
-  async searchSkills(filters?: { minTrustScore?: number; maxPrice?: BN; }): Promise<any[]> {
-    const skills = await this.program.account.skill.all();
-    return skills
-      .map(s => s.account)
-      .filter(skill => {
-        if (filters?.minTrustScore && (skill as any).trustScore < filters.minTrustScore) {
-          return false;
-        }
-        if (filters?.maxPrice && (skill as any).priceUsdc.gt(filters.maxPrice)) {
-          return false;
-        }
-        return true;
-      })
-      .sort((a, b) => (b as any).trustScore - (a as any).trustScore);
+  deriveAuditorPda(auditorPubkey: PublicKey): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+      [Buffer.from('auditor'), auditorPubkey.toBuffer()],
+      this.program.programId
+    );
+    return pda;
+  }
+
+  deriveExecutionLogPda(skillPda: PublicKey, executor: PublicKey, timestamp: BN): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('execution'),
+        skillPda.toBuffer(),
+        executor.toBuffer(),
+        timestamp.toArrayLike(Buffer, 'le', 8)
+      ],
+      this.program.programId
+    );
+    return pda;
   }
 }

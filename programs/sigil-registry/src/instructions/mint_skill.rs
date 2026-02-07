@@ -11,12 +11,12 @@ pub struct MintSkill<'info> {
         seeds = [b"skill", skill_id.as_ref()],
         bump
     )]
-    pub skill: Account<'info, Skill>,
+    pub skill: Box<Account<'info, Skill>>,
     #[account(mut)]
     pub creator: Signer<'info>,
     #[account(
         mut,
-        seeds = [b"registry"],
+        seeds = [b"registry_v1"],
         bump = registry.bump
     )]
     pub registry: Account<'info, SkillRegistry>,
@@ -41,6 +41,8 @@ pub fn handler(
     skill.audit_report_hash = String::from("");
     skill.auditor_count = 0;
     skill.auditors = Vec::new();
+    skill.consensus_status = ConsensusStatus::Pending; // NEW: Start as pending
+    skill.consensus_record = None; // NEW: No consensus yet
     skill.trust_score = 0; // No auditors = 0 trust
     skill.execution_count = 0;
     skill.success_count = 0;

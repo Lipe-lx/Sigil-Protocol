@@ -1,0 +1,167 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { LucideArrowRight, LucideShieldCheck, LucideZap, LucideCpu, LucideLayers, LucideGlobe, LucideLock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ExecutionFeed } from '@/components/ExecutionFeed';
+import { fetchGraphQL } from '@/lib/graphql';
+
+export default function LandingPage() {
+  const [stats, setStats] = useState({
+    trustScore: 0,
+    totalSplits: 0,
+    verifiedAgents: 0,
+    loading: true
+  });
+
+  useEffect(() => {
+    const getStats = async () => {
+      try {
+        const data = await fetchGraphQL<any>(`
+          query GetRegistryStats {
+            registryStats {
+              skillCount
+              totalExecutions
+            }
+            skills {
+              trustScore
+              totalEarned
+            }
+          }
+        `);
+
+        const skills = data.skills || [];
+        const avgTrustScore = skills.length > 0 
+          ? (skills.reduce((acc: number, s: any) => acc + s.trustScore, 0) / skills.length) / 10
+          : 0;
+        
+        const totalEarned = skills.reduce((acc: number, s: any) => acc + s.totalEarned, 0);
+
+        setStats({
+          trustScore: avgTrustScore > 0 ? avgTrustScore : 0, 
+          totalSplits: totalEarned,
+          verifiedAgents: data.registryStats?.totalExecutions || 0,
+          loading: false
+        });
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+        setStats(s => ({ ...s, loading: false }));
+      }
+    };
+
+    getStats();
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Hero Section */}
+      <section className="w-full max-w-[1400px] px-6 py-20 md:py-40 flex flex-col items-center text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-950 border border-zinc-800 rounded-none mb-8 animate-fade-in">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">The Trust Layer for AI Agents</span>
+        </div>
+        
+        <h1 className="text-7xl md:text-[160px] font-bold tracking-[ -0.05em] leading-[0.85] mb-12 font-serif text-white uppercase italic">
+          Verifiable <br />
+          <span className="text-zinc-600">Intelligence</span>
+        </h1>
+        
+        <p className="max-w-2xl text-xl md:text-2xl text-zinc-400 tracking-tight leading-relaxed mb-12 font-medium">
+          Sigil Protocol enables agents to discover, audit, and monetize skills with absolute certainty using USDC on Solana.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-6 mb-24">
+          <Button size="lg" className="h-16 px-12 text-lg font-bold tracking-tighter uppercase group" asChild>
+            <Link href="/skills">
+              Enter Marketplace
+              <LucideArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" className="h-16 px-12 text-lg font-bold tracking-tighter uppercase border-zinc-800">
+            View Documentation
+          </Button>
+        </div>
+
+        {/* Live Feed Component in Landing */}
+        <div className="w-full max-w-4xl mx-auto p-8 border border-zinc-900 bg-zinc-950/50 backdrop-blur-xl relative">
+           <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+           <ExecutionFeed />
+        </div>
+      </section>
+
+      {/* Grid Stats */}
+      <section className="w-full border-y border-zinc-900 bg-zinc-950/50">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-900">
+          <div className="p-12 flex flex-col gap-4 group">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Global Trust Score</span>
+            <span className="text-5xl font-bold font-mono">
+              {stats.loading ? '...' : `${stats.trustScore.toFixed(1)}%`}
+            </span>
+            <p className="text-sm text-zinc-500 font-medium tracking-tight">Across all registered skills in the Sigil Registry.</p>
+          </div>
+          <div className="p-12 flex flex-col gap-4 group">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Atomic Splits</span>
+            <span className="text-5xl font-bold font-mono">
+              {stats.loading ? '...' : `$${(stats.totalSplits).toLocaleString()}`}
+            </span>
+            <p className="text-sm text-zinc-500 font-medium tracking-tight">USDC distributed automatically to skill creators.</p>
+          </div>
+          <div className="p-12 flex flex-col gap-4 group">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Total Executions</span>
+            <span className="text-5xl font-bold font-mono">
+              {stats.loading ? '...' : stats.verifiedAgents.toLocaleString()}
+            </span>
+            <p className="text-sm text-zinc-500 font-medium tracking-tight">Active entities executing skills via Sigil SDK.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="w-full max-w-[1400px] px-6 py-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-32">
+          <div>
+            <h2 className="text-5xl font-bold tracking-tighter mb-8 font-serif uppercase italic text-white leading-tight">
+              Sovereign <br />Monetization
+            </h2>
+            <p className="text-lg text-zinc-400 leading-relaxed mb-8">
+              No middleman. No platform fees. Your agent's skills are registered as unique on-chain sigils. Every execution triggers an atomic USDC transfer directly to your wallet via our x402 split architecture.
+            </p>
+            <div className="space-y-6">
+              {[
+                { icon: LucideShieldCheck, title: "Verifiable Audits", desc: "Every skill run is cryptographically logged and audited." },
+                { icon: LucideZap, title: "Instant Settlement", desc: "USDC settlement on Solana devnet/mainnet speed." },
+                { icon: LucideCpu, title: "Agent Native", desc: "Designed for the Agent-to-Agent economy from day one." }
+              ].map((f, i) => (
+                <div key={i} className="flex gap-4 group">
+                  <div className="shrink-0 w-10 h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500">
+                    <f.icon size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white tracking-tight uppercase text-sm mb-1">{f.title}</h4>
+                    <p className="text-xs text-zinc-500 leading-normal">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="relative">
+            <div className="aspect-square border border-zinc-800 p-8 flex items-center justify-center border-grid relative group overflow-hidden">
+               <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950/50 to-transparent pointer-events-none" />
+               <div className="w-48 h-48 border border-zinc-700 rotate-45 group-hover:rotate-90 transition-transform duration-[2000ms] flex items-center justify-center">
+                  <div className="w-32 h-32 border border-zinc-500 -rotate-90 group-hover:rotate-0 transition-transform duration-[1500ms] flex items-center justify-center">
+                    <LucideLayers className="text-white w-12 h-12" />
+                  </div>
+               </div>
+               
+               <div className="absolute bottom-8 right-8 text-right">
+                  <span className="text-[10px] font-bold font-mono uppercase tracking-[0.3em] text-zinc-600 block mb-2">Protocol Layer</span>
+                  <span className="text-xl font-bold font-serif text-white italic">0xSigil_v1.0.4</span>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -4,12 +4,17 @@ pub mod state;
 pub mod instructions;
 
 use instructions::*;
+use state::{ConsensusVerdict};
 
 declare_id!("BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe"); // Updated Program ID
 
 #[program]
 pub mod sigil_registry {
     use super::*;
+
+    pub fn initialize_registry(ctx: Context<InitializeRegistry>) -> Result<()> {
+        instructions::initialize_registry::handler(ctx)
+    }
 
     pub fn mint_skill(
         ctx: Context<MintSkill>,
@@ -36,6 +41,36 @@ pub mod sigil_registry {
     ) -> Result<()> {
         instructions::log_execution::handler(ctx, success, latency_ms)
     }
+
+    /// Record consensus verdict on-chain
+    /// This is the "Certificate" that makes Sigil a Certificate Authority
+    pub fn record_consensus(
+        ctx: Context<RecordConsensus>,
+        verdict: ConsensusVerdict,
+        confidence: u8,
+        trust_score: u16,
+        evaluator_count: u8,
+        mean_score: u16,
+        score_variance: u16,
+        critical_overlap: u16,
+        methodology_count: u8,
+        reports_ipfs_hash: String,
+        reasoning_ipfs_hash: String,
+    ) -> Result<()> {
+        instructions::record_consensus::handler(
+            ctx,
+            verdict,
+            confidence,
+            trust_score,
+            evaluator_count,
+            mean_score,
+            score_variance,
+            critical_overlap,
+            methodology_count,
+            reports_ipfs_hash,
+            reasoning_ipfs_hash,
+        )
+    }
 }
 
 #[error_code]
@@ -44,4 +79,8 @@ pub enum ErrorCode {
     AuditorNotActive,
     #[msg("Auditor has already signed this skill")]
     AuditorAlreadySigned,
+    #[msg("Invalid consensus verdict")]
+    InvalidConsensusVerdict,
+    #[msg("Skill already has a recorded consensus")]
+    ConsensusAlreadyRecorded,
 }

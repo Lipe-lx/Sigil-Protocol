@@ -1,13 +1,21 @@
 {
   "name": "sigil-protocol-backend",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Sigil Protocol Backend API - Trust Layer for AI Agent Skills",
+  "main": "src/server.ts",
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "start": "ts-node src/server.ts",
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts"
+  },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1",
-    "@solana/web3.js": "^1.99.0",
+    "@coral-xyz/anchor": "^0.29.0",
+    "@solana/web3.js": "^1.95.0",
     "@solana/spl-token": "^0.4.9",
     "@x402/core": "^2.0.0",
     "@x402/svm": "^2.0.0",
@@ -16,10 +24,12 @@
     "graphql": "^16.10.0",
     "apollo-server-express": "^3.13.0",
     "bs58": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ipfs-http-client": "^60.0.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/node": "^20.17.10",
     "@types/express": "^5.0.0",
     "typescript": "^5.7.2",

@@ -5,7 +5,7 @@ use crate::state::*;
 #[derive(Accounts)]
 pub struct LogExecution<'info> {
     #[account(mut)]
-    pub skill: Account<'info, Skill>,
+    pub skill: Box<Account<'info, Skill>>,
     #[account(
         init,
         payer = executor,
