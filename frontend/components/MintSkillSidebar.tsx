@@ -63,6 +63,18 @@ export function MintSkillSidebar({
       if (skillDescription) metadataObj.d = skillDescription;
       if (externalUrl) metadataObj.u = externalUrl;
 
+      // HASHING FOR AUDIT INTEGRITY:
+      // Even if the logic is external, we store its SHA-256 hash on-chain.
+      // This ensures the "Composition" cannot be changed without breaking the audit.
+      if (skillDescription || externalUrl) {
+        const contentToHash = skillDescription || externalUrl;
+        const msgBuffer = new TextEncoder().encode(contentToHash);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        metadataObj.h = hashHex; // 'h' for hash/integrity
+      }
+
       const metadataStr = JSON.stringify(metadataObj);
       
       // Compress metadata using native browser CompressionStream (Gzip)

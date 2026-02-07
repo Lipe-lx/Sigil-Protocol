@@ -25,6 +25,7 @@ interface Skill {
   pda: string;
   description?: string;
   externalUrl?: string;
+  integrityHash?: string;
 }
 
 // Devnet USDC Mint provided by user
@@ -158,9 +159,16 @@ export function SkillCard({ skill }: { skill: Skill }) {
             {skill.description}
           </p>
         )}
-        <p className="text-[10px] text-zinc-500 font-mono mt-2 truncate max-w-full">
-          PDA: {skill.pda}
-        </p>
+        <div className="flex flex-col gap-1 mt-3">
+          <p className="text-[10px] text-zinc-500 font-mono truncate max-w-full">
+            PDA: {skill.pda}
+          </p>
+          {skill.integrityHash && (
+            <p className="text-[9px] text-zinc-600 font-mono truncate max-w-full uppercase">
+              Hash: {skill.integrityHash.slice(0, 16)}...
+            </p>
+          )}
+        </div>
       </CardHeader>
 
       <CardContent className="flex-grow relative z-10">
@@ -209,6 +217,11 @@ export function SkillCard({ skill }: { skill: Skill }) {
                 </summary>
                 <div className="mt-4 p-3 bg-zinc-950 border border-zinc-900 text-[10px] font-mono text-zinc-400 whitespace-pre-wrap max-h-40 overflow-y-auto leading-relaxed">
                   {skill.description}
+                  {skill.integrityHash && (
+                    <div className="mt-4 pt-4 border-t border-zinc-900/50 text-zinc-600">
+                      Integrity Hash: {skill.integrityHash}
+                    </div>
+                  )}
                   {skill.externalUrl && (
                     <div className="mt-4 pt-4 border-t border-zinc-900">
                       <a 
