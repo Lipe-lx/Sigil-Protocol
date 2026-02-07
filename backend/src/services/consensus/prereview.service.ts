@@ -13,6 +13,8 @@ import {
   PreReviewCheck,
 } from './types';
 
+export { PreReviewResult, PreReviewCheck };
+
 // ============================================================
 // INJECTION PATTERNS
 // ============================================================

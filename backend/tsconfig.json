@@ -9,9 +9,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../sdk/src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

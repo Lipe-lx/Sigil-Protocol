@@ -178,6 +178,11 @@ export interface ConsensusResult {
   // Reasoning
   reasoning: string;             // Human-readable explanation
   
+  // Details (Internal/Reputation Engine)
+  details?: {
+    outlierFindings?: Finding[];
+  };
+
   // Timestamps
   evaluatedAt: number;
   expiresAt?: number;            // Consensus may expire if skill is updated
