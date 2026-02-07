@@ -156,24 +156,48 @@ export default function SkillsPage() {
             </p>
           </div>
           
-          <div className="flex flex-col gap-4 min-w-[300px]">
-            <div className="relative group">
-              <LucideSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-white transition-colors" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search skills..."
-                className="w-full bg-zinc-950 border border-zinc-900 h-12 pl-12 pr-4 text-sm focus:outline-none focus:border-zinc-500 transition-all font-mono"
-              />
+          <div className="flex flex-col gap-6 min-w-[320px]">
+            {/* Monetization CTA */}
+            <div className="bg-zinc-950 border border-zinc-900 p-5 relative overflow-hidden group hover:border-zinc-500 transition-all duration-700 shadow-2xl">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-[50px] -mr-16 -mt-16 pointer-events-none group-hover:bg-white/10 transition-colors duration-700" />
+              <div className="relative z-10 flex flex-col">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-bold tracking-tighter text-white uppercase italic font-serif">Monetize Logic</h3>
+                  <div className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse" />
+                </div>
+                <p className="text-[10px] text-zinc-500 mb-4 leading-relaxed tracking-tight">
+                  Register your AI capabilities as verifiable Sigils and earn <span className="text-zinc-300 font-bold italic">USDC per run</span>.
+                </p>
+                <Button 
+                  size="sm"
+                  className="w-full font-black tracking-tighter uppercase text-[10px] h-10 bg-white text-black hover:bg-zinc-200 transition-all rounded-none group/btn"
+                  onClick={() => setIsMintModalOpen(true)}
+                >
+                  <span>Mint New Sigil</span>
+                  <LucidePlus size={12} className="ml-2 group-hover/btn:rotate-90 transition-transform duration-300" />
+                </Button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" className="flex-1 gap-2 border-zinc-900 text-xs font-bold uppercase tracking-wider">
-                <LucideArrowUpDown size={14} />
-                Sort
-              </Button>
-              <Button variant="outline" className="flex-1 gap-2 border-zinc-900 text-xs font-bold uppercase tracking-wider">
-                <LucideFilter size={14} />
-                Filter
-              </Button>
+
+            <div className="space-y-4">
+              <div className="relative group">
+                <LucideSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-white transition-colors" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Search skills..."
+                  className="w-full bg-zinc-950 border border-zinc-900 h-12 pl-12 pr-4 text-sm focus:outline-none focus:border-zinc-500 transition-all font-mono text-white"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1 gap-2 border-zinc-900 text-xs font-bold uppercase tracking-wider text-zinc-400">
+                  <LucideArrowUpDown size={14} />
+                  Sort
+                </Button>
+                <Button variant="outline" className="flex-1 gap-2 border-zinc-900 text-xs font-bold uppercase tracking-wider text-zinc-400">
+                  <LucideFilter size={14} />
+                  Filter
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -209,25 +233,6 @@ export default function SkillsPage() {
             ))}
           </div>
         )}
-      </div>
-
-      <div className="mt-32 p-12 bg-zinc-950 border border-zinc-900 relative overflow-hidden group hover:border-zinc-500 transition-colors duration-500">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-zinc-800/10 blur-[100px] -mr-48 -mt-48 pointer-events-none" />
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-bold tracking-tighter mb-4 text-white uppercase italic font-serif">Want to monetize your skills?</h2>
-          <p className="text-zinc-400 mb-8 leading-relaxed">
-            Register your AI agent's capabilities on Sigil and earn USDC every time it's called. 
-            Verifiable, atomic, and secure.
-          </p>
-          <Button 
-            size="lg" 
-            className="font-bold tracking-tighter uppercase px-12 group"
-            onClick={() => setIsMintModalOpen(true)}
-          >
-            Mint New Sigil
-            <LucideArrowUpDown className="ml-2 group-hover:rotate-180 transition-transform duration-500" size={16} />
-          </Button>
-        </div>
       </div>
 
       <MintSkillSidebar 
