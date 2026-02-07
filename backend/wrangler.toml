@@ -1,0 +1,11 @@
+name = "sigil-protocol-backend"
+main = "src/index.ts"
+compatibility_date = "2024-02-07"
+
+[vars]
+SOLANA_RPC_URL = "https://api.devnet.solana.com"
+PORT = "3001"
+
+[[routes]]
+pattern = "api.sigil-protocol.pages.dev/*"
+zone_name = "sigil-protocol.pages.dev"
