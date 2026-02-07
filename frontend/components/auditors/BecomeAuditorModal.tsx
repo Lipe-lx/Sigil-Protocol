@@ -76,10 +76,16 @@ export function BecomeAuditorModal({ isOpen, onClose, onSuccess }: BecomeAuditor
         <div className="space-y-4 py-4">
           <div className="bg-zinc-900/50 p-4 rounded-lg border border-zinc-800 text-sm text-zinc-400">
             <p className="mb-2"><strong className="text-white">Responsibilities:</strong></p>
-            <ul className="list-disc pl-4 space-y-1">
+            <ul className="list-disc pl-4 space-y-1 mb-4">
               <li>Review skill logic code</li>
               <li>Verify execution integrity</li>
               <li>Sign valid audit reports</li>
+            </ul>
+            <p className="mb-2"><strong className="text-white">Trust Requirements:</strong></p>
+            <ul className="list-disc pl-4 space-y-1 text-xs">
+              <li>Minimum Stake: 100 USDC</li>
+              <li>Identity Verification (ZK Proof)</li>
+              <li>High Accuracy Maintainance</li>
             </ul>
           </div>
           

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { fetchGraphQL } from '@/lib/graphql';
 import { BecomeAuditorModal } from '@/components/auditors/BecomeAuditorModal';
+import { AuditorDetailsModal } from '@/components/auditors/AuditorDetailsModal';
 
 interface Auditor {
   id: string;
@@ -21,6 +22,7 @@ export default function AuditorsPage() {
   const [auditors, setAuditors] = useState<Auditor[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAuditor, setSelectedAuditor] = useState<Auditor | null>(null);
 
   const getAuditors = async () => {
     setLoading(true);
@@ -59,6 +61,11 @@ export default function AuditorsPage() {
           getAuditors(); // Refresh list
         }} 
       />
+      <AuditorDetailsModal 
+        auditor={selectedAuditor} 
+        isOpen={!!selectedAuditor} 
+        onClose={() => setSelectedAuditor(null)} 
+      />
       <div className="mb-16">
         <div className="max-w-2xl mb-20">
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 font-serif uppercase italic text-white">
@@ -76,7 +83,11 @@ export default function AuditorsPage() {
                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">Retrieving Network Auditors...</span>
             </div>
           ) : auditors.map((auditor) => (
-            <Card key={auditor.id} className="group border-zinc-900 bg-black hover:border-white transition-all duration-500">
+            <Card 
+              key={auditor.id} 
+              onClick={() => setSelectedAuditor(auditor)}
+              className="group border-zinc-900 bg-black hover:border-white transition-all duration-500 cursor-pointer relative"
+            >
               <CardHeader className="border-b border-zinc-900 p-8">
                 <div className="flex justify-between items-center mb-6">
                   <div className="w-12 h-12 bg-zinc-900 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-500">
