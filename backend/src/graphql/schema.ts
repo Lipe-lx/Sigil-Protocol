@@ -1,4 +1,5 @@
-import { gql } from 'apollo-server-express';
+// Minimal gql tag for worker compatibility
+const gql = (strs: any, ...args: any[]) => strs.reduce((acc: string, str: string, i: number) => acc + str + (args[i] || ''), '');
 
 export const typeDefs = gql`
   type Skill {

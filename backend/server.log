@@ -1,0 +1,22 @@
+Error: Cannot find module '../../sdk/src/sigil-registry'
+Require stack:
+- /home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/services/registry.service.ts
+- /home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/graphql/resolvers/index.ts
+- /home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/server.ts
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1383:15)
+    at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (/home/node/.npm/_npx/1bf7c3c15bf47d04/node_modules/@cspotcode/source-map-support/source-map-support.js:811:30)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (/home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/services/registry.service.ts:2:1) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/services/registry.service.ts',
+    '/home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/graphql/resolvers/index.ts',
+    '/home/node/.openclaw/workspace/02-SIGIL-USDC-MOLTBOOK/sigil-protocol/backend/src/server.ts'
+  ]
+}

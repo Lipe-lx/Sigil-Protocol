@@ -1,19 +1,19 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import * as dotenv from 'dotenv';
 
-dotenv.config();
+// Use direct import instead of require for ESM compatibility in Workers
+import { SigilRegistryClient } from '../../../sdk/src/sigil-registry';
 
-// Use require to bypass TS rootDir restrictions and version mismatches for the hackathon
-const { SigilRegistryClient } = require('../../../sdk/src/sigil-registry');
-
-const connection = new Connection(process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com', 'confirmed');
-// Using a dummy wallet for read-only operations if needed, or actual authority if signing
-const registryClient = new SigilRegistryClient(connection, { publicKey: PublicKey.default } as any);
-
+// We'll pass connection and config in constructor for better testing and worker usage
 export class RegistryService {
-  static async getSkills(filters: any) {
+  private client: SigilRegistryClient;
+
+  constructor(connection: Connection) {
+    this.client = new SigilRegistryClient(connection, { publicKey: PublicKey.default } as any);
+  }
+
+  async getSkills(filters: any) {
     try {
-      const skills = await registryClient.getAllSkills();
+      const skills = await this.client.getAllSkills();
       return skills.map(s => ({
         id: s.publicKey.toString(),
         skillId: Buffer.from(s.account.skillId).toString('hex'),
@@ -41,10 +41,10 @@ export class RegistryService {
     }
   }
 
-  static async getSkillById(id: string) {
+  async getSkillById(id: string) {
     try {
       const pubkey = new PublicKey(id);
-      const skill = await registryClient.getSkill(pubkey);
+      const skill = await this.client.getSkill(pubkey);
       return {
         id: pubkey.toString(),
         skillId: Buffer.from(skill.skillId).toString('hex'),
@@ -72,9 +72,9 @@ export class RegistryService {
     }
   }
 
-  static async getAuditors() {
+  async getAuditors() {
     try {
-      const auditors = await registryClient.getAllAuditors();
+      const auditors = await this.client.getAllAuditors();
       return auditors.map(a => ({
         id: a.publicKey.toString(),
         pubkey: a.account.pubkey.toString(),
@@ -90,11 +90,11 @@ export class RegistryService {
     }
   }
 
-  static async getAuditorByPubkey(pubkey: string) {
+  async getAuditorByPubkey(pubkey: string) {
     try {
       const auditorPubkey = new PublicKey(pubkey);
-      const auditorPda = registryClient.deriveAuditorPda(auditorPubkey);
-      const auditor = await registryClient.getAuditor(auditorPda);
+      const auditorPda = this.client.deriveAuditorPda(auditorPubkey);
+      const auditor = await this.client.getAuditor(auditorPda);
       return {
         id: auditorPda.toString(),
         pubkey: auditor.pubkey.toString(),
@@ -110,7 +110,7 @@ export class RegistryService {
     }
   }
 
-  static async getTopAuditors(limit: number = 10) {
+  async getTopAuditors(limit: number = 10) {
     try {
       const auditors = await this.getAuditors();
       return auditors
@@ -123,9 +123,9 @@ export class RegistryService {
     }
   }
 
-  static async getRecentExecutions(limit: number = 10) {
+  async getRecentExecutions(limit: number = 10) {
     try {
-      const logs = await registryClient.getAllLogs();
+      const logs = await this.client.getAllLogs();
       return logs
         .map(l => ({
           id: l.publicKey.toString(),
@@ -144,9 +144,10 @@ export class RegistryService {
     }
   }
 
-  static async getRegistryStats() {
+  async getRegistryStats() {
     try {
-      const registry = await registryClient.getRegistry();
+      const registry = await this.client.getRegistry();
+      if (!registry) return null;
       return {
         skillCount: registry.skillCount.toNumber(),
         totalExecutions: registry.totalExecutions.toNumber(),

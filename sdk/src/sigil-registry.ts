@@ -97,11 +97,11 @@ export class SigilRegistryClient {
   }
 
   async getSkill(skillPda: PublicKey) {
-    return await this.program.account.Skill.fetch(skillPda);
+    return await this.program.account.skill.fetch(skillPda);
   }
 
   async getAllSkills() {
-    return await this.program.account.Skill.all();
+    return await this.program.account.skill.all();
   }
 
   async getAllLogs() {

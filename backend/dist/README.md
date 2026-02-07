@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "sigil-protocol-backend" generated at 2026-02-07T04:41:41.165Z.

@@ -1,18 +1,13 @@
-import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { 
   getAssociatedTokenAddress, 
-  createTransferInstruction,
-  TOKEN_PROGRAM_ID 
 } from '@solana/spl-token';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 // USDC Mint on Devnet
-const USDC_MINT = new PublicKey(process.env.USDC_MINT || 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr');
+const DEFAULT_USDC_MINT = 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr';
 
 // Protocol treasury wallet
-const PROTOCOL_TREASURY = new PublicKey(process.env.PROTOCOL_TREASURY || '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws');
+const DEFAULT_PROTOCOL_TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';
 
 // Payment split ratios (must sum to 100)
 const SPLIT_CREATOR = 70;   // 70% to skill creator
@@ -44,12 +39,13 @@ export interface SplitRecipient {
 
 export class PaymentService {
   private connection: Connection;
+  private usdcMint: PublicKey;
+  private protocolTreasury: PublicKey;
 
-  constructor() {
-    this.connection = new Connection(
-      process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com', 
-      'confirmed'
-    );
+  constructor(connection: Connection, usdcMint?: string, protocolTreasury?: string) {
+    this.connection = connection;
+    this.usdcMint = new PublicKey(usdcMint || DEFAULT_USDC_MINT);
+    this.protocolTreasury = new PublicKey(protocolTreasury || DEFAULT_PROTOCOL_TREASURY);
   }
 
   /**
@@ -99,7 +95,7 @@ export class PaymentService {
     } else {
       // If no auditors, protocol gets the auditor share
       recipients.push({
-        address: PROTOCOL_TREASURY.toString(),
+        address: this.protocolTreasury.toString(),
         amount: split.auditors,
         role: 'protocol',
       });
@@ -107,7 +103,7 @@ export class PaymentService {
 
     // Protocol gets 5%
     recipients.push({
-      address: PROTOCOL_TREASURY.toString(),
+      address: this.protocolTreasury.toString(),
       amount: split.protocol,
       role: 'protocol',
     });
@@ -145,8 +141,6 @@ export class PaymentService {
       // Get transaction metadata
       const timestamp = tx.blockTime || 0;
       
-      // Parse token transfers from transaction
-      // For SPL token transfers, we need to look at the inner instructions
       const meta = tx.meta;
       if (!meta) {
         return {
@@ -160,17 +154,15 @@ export class PaymentService {
         };
       }
 
-      // Check pre and post token balances to determine transfer
       const preBalances = meta.preTokenBalances || [];
       const postBalances = meta.postTokenBalances || [];
 
-      // Find USDC transfers
       let transferAmount = 0;
       let sender = '';
       let recipient = '';
 
       for (const post of postBalances) {
-        if (post.mint === USDC_MINT.toString()) {
+        if (post.mint === this.usdcMint.toString()) {
           const pre = preBalances.find(
             p => p.accountIndex === post.accountIndex && p.mint === post.mint
           );
@@ -180,7 +172,6 @@ export class PaymentService {
           const diff = postAmount - preAmount;
 
           if (diff > 0) {
-            // This account received tokens
             transferAmount = diff;
             recipient = post.owner || '';
           } else if (diff < 0) {
@@ -189,7 +180,6 @@ export class PaymentService {
         }
       }
 
-      // Validate recipient and amount
       const recipientMatch = recipient.toLowerCase() === expectedRecipient.toLowerCase();
       const minAmount = expectedAmount * (1 - tolerancePercent / 100);
       const maxAmount = expectedAmount * (1 + tolerancePercent / 100);
@@ -241,25 +231,19 @@ export class PaymentService {
     }
   }
 
-  /**
-   * Get USDC Associated Token Account for a wallet
-   */
   async getUsdcTokenAccount(walletAddress: string): Promise<string> {
     const wallet = new PublicKey(walletAddress);
-    const ata = await getAssociatedTokenAddress(USDC_MINT, wallet);
+    const ata = await getAssociatedTokenAddress(this.usdcMint, wallet);
     return ata.toString();
   }
 
-  /**
-   * Build x402 payment requirement header
-   */
   buildPaymentRequirement(
     amount: number,
     recipient: string,
     description: string = 'Sigil Protocol skill execution'
   ): string {
     const requirement = {
-      network: 'solana:101', // Devnet chain ID
+      network: 'solana:101', 
       asset: 'usdc',
       amount: amount,
       recipient: recipient,
@@ -271,9 +255,6 @@ export class PaymentService {
     return Buffer.from(JSON.stringify(requirement)).toString('base64');
   }
 
-  /**
-   * Parse x402 payment signature from header
-   */
   parsePaymentSignature(header: string): { signature: string; sender: string } | null {
     try {
       const decoded = Buffer.from(header, 'base64').toString('utf-8');
@@ -287,20 +268,11 @@ export class PaymentService {
     }
   }
 
-  /**
-   * Get protocol treasury address
-   */
   getProtocolTreasury(): string {
-    return PROTOCOL_TREASURY.toString();
+    return this.protocolTreasury.toString();
   }
 
-  /**
-   * Get USDC mint address (devnet)
-   */
   getUsdcMint(): string {
-    return USDC_MINT.toString();
+    return this.usdcMint.toString();
   }
 }
-
-// Singleton instance
-export const paymentService = new PaymentService();
