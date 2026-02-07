@@ -99,8 +99,8 @@ export default function SkillsPage() {
           try {
             if (processedIpfsHash.startsWith('{')) {
                const parsed = JSON.parse(processedIpfsHash);
-               name = parsed.name || name;
-               description = parsed.description || "";
+               name = parsed.n || parsed.name || name;
+               description = parsed.d || parsed.description || "";
             }
           } catch (e) {}
         }

@@ -56,16 +56,13 @@ export function MintSkillSidebar({
 
       // Metadata contains name and the full skill description/instructions
       const metadataObj = { 
-        name, 
-        description: skillDescription,
-        author: wallet.publicKey.toString(),
-        timestamp: Date.now()
+        n: name, 
+        d: skillDescription
       };
 
       const metadataStr = JSON.stringify(metadataObj);
       
       // Compress metadata using native browser CompressionStream (Gzip)
-      // This is necessary because Solana transactions are limited to 1232 bytes
       const blob = new Blob([metadataStr]);
       const compressedStream = blob.stream().pipeThrough(new (window as any).CompressionStream('gzip'));
       const compressedBuffer = await new Response(compressedStream).arrayBuffer();
@@ -73,8 +70,11 @@ export function MintSkillSidebar({
       const base64Compressed = Buffer.from(compressedBuffer).toString('base64');
       const finalMetadata = `gz:${base64Compressed}`;
 
-      if (finalMetadata.length > 3800) {
-        throw new Error("Skill logic is too large even after compression. Please reduce text size.");
+      // Solana MTU limit is 1232 bytes. After accounts/signatures, 
+      // we have about 900-1000 bytes for the actual instruction data.
+      // 1200 base64 chars = ~900 bytes.
+      if (finalMetadata.length > 1200) {
+        throw new Error("Skill logic is too large for a single Solana transaction. Even after compression, it exceeds the 1232-byte limit. Please summarize your skill or host the full file on IPFS/GitHub and provide the link.");
       }
       
       const priceBN = new BN(parseFloat(price) * 1000000); // USDC 6 decimals

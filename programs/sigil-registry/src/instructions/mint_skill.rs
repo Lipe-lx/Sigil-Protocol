@@ -7,7 +7,7 @@ pub struct MintSkill<'info> {
     #[account(
         init,
         payer = creator,
-        space = 8 + 4096, // Increased space to 4KB for Skill account
+        space = 8 + 8192, // Increased to 8KB for Skill account
         seeds = [b"skill", skill_id.as_ref()],
         bump
     )]
