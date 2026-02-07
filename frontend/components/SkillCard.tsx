@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { LucideCheckCircle2, LucideZap, LucideCpu, LucideLoader2, LucideActivity as ActivityIcon } from 'lucide-react';
+import { LucideCheckCircle2, LucideZap, LucideCpu, LucideLoader2, LucideActivity as ActivityIcon, LucideShieldAlert, LucideShieldCheck as ShieldCheckIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSigil } from '@/hooks/useSigil';
 import { PublicKey, SystemProgram, Keypair } from '@solana/web3.js';
@@ -35,7 +35,46 @@ const PROTOCOL_TREASURY = new PublicKey('3adsGFsaGUDePR61ZtvkwkkpCeLne6immQbp2gR
 export function SkillCard({ skill }: { skill: Skill }) {
   const { program, wallet, connection } = useSigil();
   const [executing, setExecuting] = useState(false);
+  const [integrityStatus, setIntegrityStatus] = useState<'idle' | 'verifying' | 'valid' | 'invalid'>('idle');
   const isHighTrust = skill.trustScore > 800;
+
+  useEffect(() => {
+    const verifyIntegrity = async () => {
+      if (!skill.integrityHash || !skill.externalUrl) {
+        setIntegrityStatus('idle');
+        return;
+      }
+
+      try {
+        setIntegrityStatus('verifying');
+        
+        // Fetch content from external URL (GitHub raw / IPFS)
+        const response = await fetch(skill.externalUrl);
+        if (!response.ok) throw new Error("Failed to fetch external logic");
+        
+        const content = await response.text();
+        
+        // Hash the fetched content
+        const msgBuffer = new TextEncoder().encode(content);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        // Compare with on-chain hash
+        if (hashHex === skill.integrityHash) {
+          setIntegrityStatus('valid');
+        } else {
+          console.warn(`INTEGRITY BREACH DETECTED for ${skill.name}: Expected ${skill.integrityHash}, got ${hashHex}`);
+          setIntegrityStatus('invalid');
+        }
+      } catch (error) {
+        console.error("Integrity verification failed:", error);
+        setIntegrityStatus('idle'); // Network error, not necessarily tampered
+      }
+    };
+
+    verifyIntegrity();
+  }, [skill.integrityHash, skill.externalUrl, skill.name]);
   
   const handleExecute = async () => {
     if (!program || !wallet) {
@@ -143,8 +182,13 @@ export function SkillCard({ skill }: { skill: Skill }) {
       
       <CardHeader className="relative z-10">
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-none group-hover:border-zinc-500 transition-colors">
+          <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-none group-hover:border-zinc-500 transition-colors relative">
             <LucideCpu size={20} className="text-zinc-400 group-hover:text-white transition-colors" />
+            {integrityStatus === 'invalid' && (
+              <div className="absolute -top-1 -right-1 bg-red-600 rounded-full p-0.5 border border-black animate-pulse">
+                <LucideShieldAlert size={10} className="text-white" />
+              </div>
+            )}
           </div>
           <div className="flex flex-col items-end">
             <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Price per run</span>
@@ -164,8 +208,14 @@ export function SkillCard({ skill }: { skill: Skill }) {
             PDA: {skill.pda}
           </p>
           {skill.integrityHash && (
-            <p className="text-[9px] text-zinc-600 font-mono truncate max-w-full uppercase">
-              Hash: {skill.integrityHash.slice(0, 16)}...
+            <p className={cn(
+              "text-[9px] font-mono truncate max-w-full uppercase flex items-center gap-1",
+              integrityStatus === 'invalid' ? "text-red-500 font-bold" : "text-zinc-600"
+            )}>
+              {integrityStatus === 'verifying' && <LucideLoader2 size={8} className="animate-spin" />}
+              {integrityStatus === 'valid' && <ShieldCheckIcon size={8} className="text-green-500" />}
+              {integrityStatus === 'invalid' && <LucideShieldAlert size={8} className="text-red-500" />}
+              {integrityStatus === 'invalid' ? "TAMPERED COMPOSITION" : `Hash: ${skill.integrityHash.slice(0, 16)}...`}
             </p>
           )}
         </div>
@@ -207,6 +257,21 @@ export function SkillCard({ skill }: { skill: Skill }) {
               />
             </div>
           </div>
+
+          {integrityStatus === 'invalid' && (
+            <div className="p-3 bg-red-950/20 border border-red-900/50 mt-4 animate-in fade-in slide-in-from-top-1 duration-500">
+               <div className="flex items-start gap-2">
+                 <LucideShieldAlert size={14} className="text-red-500 shrink-0 mt-0.5" />
+                 <div>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-red-500">Security Breach</p>
+                   <p className="text-[9px] text-red-400/80 leading-relaxed mt-1">
+                     The external source code for this skill has been altered since its on-chain registration. 
+                     The audit and trust score are no longer valid. Execute at your own risk.
+                   </p>
+                 </div>
+               </div>
+            </div>
+          )}
 
           {skill.description && (
             <div className="pt-4 border-t border-zinc-900 mt-4">
@@ -257,11 +322,14 @@ export function SkillCard({ skill }: { skill: Skill }) {
 
       <CardFooter className="pt-6 relative z-10 flex gap-2">
         <Button 
-          disabled={executing}
+          disabled={executing || integrityStatus === 'invalid'}
           onClick={handleExecute}
-          className="flex-1 font-bold tracking-tighter uppercase text-xs h-12"
+          className={cn(
+            "flex-1 font-bold tracking-tighter uppercase text-xs h-12",
+            integrityStatus === 'invalid' ? "bg-zinc-900 text-zinc-700 cursor-not-allowed" : ""
+          )}
         >
-          {executing ? (
+          {integrityStatus === 'invalid' ? "Composition Blocked" : executing ? (
             <>
               <LucideLoader2 size={16} className="mr-2 animate-spin" />
               Processing...
