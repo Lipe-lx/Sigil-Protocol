@@ -1,4 +1,5 @@
 import { Connection, PublicKey } from '@solana/web3.js';
+// @ts-ignore
 import { SigilRegistryClient } from '../../../sdk/src/sigil-registry';
 import * as dotenv from 'dotenv';
 
