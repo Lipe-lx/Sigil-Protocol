@@ -1,9 +1,10 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-// @ts-ignore
-import { SigilRegistryClient } from '../../../sdk/src/sigil-registry';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
+// Use require to bypass TS rootDir restrictions and version mismatches for the hackathon
+const { SigilRegistryClient } = require('../../../sdk/src/sigil-registry');
 
 const connection = new Connection(process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com', 'confirmed');
 // Using a dummy wallet for read-only operations if needed, or actual authority if signing
