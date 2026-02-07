@@ -13,7 +13,7 @@ class RegistryService {
     async getSkills(filters) {
         try {
             const skills = await this.client.getAllSkills();
-            return skills.map(s => ({
+            return skills.map((s) => ({
                 id: s.publicKey.toString(),
                 skillId: Buffer.from(s.account.skillId).toString('hex'),
                 creator: s.account.creator.toString(),
@@ -74,7 +74,7 @@ class RegistryService {
     async getAuditors() {
         try {
             const auditors = await this.client.getAllAuditors();
-            return auditors.map(a => ({
+            return auditors.map((a) => ({
                 id: a.publicKey.toString(),
                 pubkey: a.account.pubkey.toString(),
                 tier: Object.keys(a.account.tier)[0].toUpperCase(),

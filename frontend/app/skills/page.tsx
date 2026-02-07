@@ -7,7 +7,7 @@ import { useSigil } from '@/hooks/useSigil';
 import { LucideSearch, LucideArrowUpDown, LucideFilter, LucidePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BN } from '@coral-xyz/anchor';
-import { MintSkillModal } from '@/components/MintSkillModal';
+import { MintSkillSidebar } from '@/components/MintSkillSidebar';
 
 interface Skill {
   id: string;
@@ -200,7 +200,7 @@ export default function SkillsPage() {
         </div>
       </div>
 
-      <MintSkillModal 
+      <MintSkillSidebar 
         isOpen={isMintModalOpen} 
         onClose={() => setIsMintModalOpen(false)} 
         onSuccess={fetchSkills}

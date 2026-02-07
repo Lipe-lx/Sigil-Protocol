@@ -12,7 +12,7 @@ class SigilRegistryClient {
         this.provider = new anchor_1.AnchorProvider(connection, wallet, {
             commitment: 'confirmed',
         });
-        this.program = new anchor_1.Program(sigil_registry_json_1.default, new web3_js_1.PublicKey('BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe'), this.provider);
+        this.program = new anchor_1.Program(sigil_registry_json_1.default, this.provider);
     }
     async initializeRegistry() {
         const [registryPda] = web3_js_1.PublicKey.findProgramAddressSync([Buffer.from('registry_v1')], this.program.programId);
