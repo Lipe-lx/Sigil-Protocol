@@ -133,7 +133,7 @@ export class ReputationEngine {
       }
 
       // Bonus for finding unique valid issues
-      const uniqueFindings = consensus.details.outlierFindings?.filter(f =>
+      const uniqueFindings = consensus.details?.outlierFindings?.filter(f =>
         report.findings.critical.some(rf => rf.id === f.id) ||
         report.findings.high.some(rf => rf.id === f.id)
       );
