@@ -33,8 +33,16 @@ export function ExecutionFeed() {
         const allLogs = await (program.account as any).executionLog.all();
         const formatted = allLogs.map((l: any) => {
           const data = l.account;
-          const timestamp = data.timestamp || data.timestamp || { toNumber: () => Date.now() / 1000 };
-          const latencyMs = data.latencyMs || data.latency_ms || 0;
+          
+          const toNum = (val: any) => {
+            if (!val) return 0;
+            if (typeof val === 'number') return val;
+            try { return val.toNumber ? val.toNumber() : Number(val); }
+            catch (e) { return Number(val.toString()); }
+          };
+
+          const timestamp = data.timestamp || 0;
+          const latencyMs = toNum(data.latencyMs || data.latency_ms);
           
           return {
             id: l.publicKey.toString(),
@@ -42,7 +50,7 @@ export function ExecutionFeed() {
             executor: data.executor.toString(),
             success: data.success,
             latencyMs: latencyMs,
-            timestamp: typeof timestamp === 'number' ? timestamp * 1000 : timestamp.toNumber() * 1000,
+            timestamp: toNum(timestamp) * 1000,
           };
         }).sort((a: any, b: any) => b.timestamp - a.timestamp).slice(0, 5);
         

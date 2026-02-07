@@ -43,11 +43,22 @@ export default function SkillsPage() {
       const formattedSkills: Skill[] = accounts.map((acc: any) => {
         const data = acc.account;
         
-        // Handle both camelCase and snake_case for Anchor 0.30 compatibility
-        const executionCount = (data.executionCount || data.execution_count || { toNumber: () => 0 }).toNumber();
-        const successCount = (data.successCount || data.success_count || { toNumber: () => 0 }).toNumber();
-        const priceUsdc = (data.priceUsdc || data.price_usdc || { toNumber: () => 0 }).toNumber();
-        const trustScore = data.trustScore || data.trust_score || 0;
+        // Robust BN to Number conversion
+        const toNum = (val: any) => {
+          if (!val) return 0;
+          if (typeof val === 'number') return val;
+          try {
+            return val.toNumber ? val.toNumber() : Number(val);
+          } catch (e) {
+            // Fallback for > 53 bits
+            return Number(val.toString());
+          }
+        };
+
+        const executionCount = toNum(data.executionCount || data.execution_count);
+        const successCount = toNum(data.successCount || data.success_count);
+        const priceUsdc = toNum(data.priceUsdc || data.price_usdc);
+        const trustScore = toNum(data.trustScore || data.trust_score);
         const ipfsHash = data.ipfsHash || data.ipfs_hash || "";
         
         const calculatedSuccessRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
