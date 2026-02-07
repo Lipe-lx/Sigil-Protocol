@@ -35,17 +35,30 @@ app.get('/health', (c) => {
 });
 
 app.post('/graphql', async (c) => {
-  const { query, variables } = await c.req.json();
-  const services = getServices(c.env);
-  
-  const result = await graphql({
-    schema,
-    source: query,
-    variableValues: variables,
-    contextValue: { ...services, env: c.env },
-  });
-  
-  return c.json(result);
+  try {
+    const { query, variables } = await c.req.json();
+    const services = getServices(c.env);
+    
+    const result = await graphql({
+      schema,
+      source: query,
+      variableValues: variables,
+      contextValue: { ...services, env: c.env },
+    });
+    
+    return c.json(result);
+  } catch (error: any) {
+    console.error('GraphQL Execution Error:', error);
+    return c.json({
+      errors: [{
+        message: error.message || 'Internal Server Error',
+        extensions: {
+          code: 'INTERNAL_SERVER_ERROR',
+          stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        }
+      }]
+    }, 500);
+  }
 });
 
 app.get('/', (c) => {
