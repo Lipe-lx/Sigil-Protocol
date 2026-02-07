@@ -1,17 +1,16 @@
-import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, web3, BN, Idl } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { SigilRegistry } from './types';
 import idl from './idl/sigil_registry.json';
 
 export class SigilRegistryClient {
-  program: Program<SigilRegistry>;
+  program: Program;
   provider: AnchorProvider;
 
   constructor(connection: Connection, wallet: any) {
     this.provider = new AnchorProvider(connection, wallet, {
       commitment: 'confirmed',
     });
-    this.program = new Program(idl as any, this.provider);
+    this.program = new Program(idl as Idl, this.provider);
   }
 
   async initializeRegistry(): Promise<string> {
@@ -97,11 +96,11 @@ export class SigilRegistryClient {
   }
 
   async getSkill(skillPda: PublicKey) {
-    return await this.program.account.skill.fetch(skillPda);
+    return await (this.program.account as any).skill.fetch(skillPda);
   }
 
   async getAllSkills() {
-    return await this.program.account.skill.all();
+    return await (this.program.account as any).skill.all();
   }
 
   async getAllLogs() {
