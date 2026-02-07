@@ -6,6 +6,7 @@ import { LucideShieldCheck, LucideExternalLink, LucideAward, LucideSearch } from
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { fetchGraphQL } from '@/lib/graphql';
+import { BecomeAuditorModal } from '@/components/auditors/BecomeAuditorModal';
 
 interface Auditor {
   id: string;
@@ -19,35 +20,45 @@ interface Auditor {
 export default function AuditorsPage() {
   const [auditors, setAuditors] = useState<Auditor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const getAuditors = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchGraphQL<{ auditors: Auditor[] }>(`
+        query GetAuditors {
+          auditors(activeOnly: true) {
+            id
+            pubkey
+            tier
+            skillsAudited
+            reputation
+            totalEarned
+          }
+        }
+      `);
+      setAuditors(data?.auditors || []);
+    } catch (error) {
+      console.error('Error fetching auditors:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const getAuditors = async () => {
-      try {
-        const data = await fetchGraphQL<{ auditors: Auditor[] }>(`
-          query GetAuditors {
-            auditors(activeOnly: true) {
-              id
-              pubkey
-              tier
-              skillsAudited
-              reputation
-              totalEarned
-            }
-          }
-        `);
-        setAuditors(data?.auditors || []);
-      } catch (error) {
-        console.error('Error fetching auditors:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     getAuditors();
   }, []);
 
   return (
     <div className="max-w-[1400px] mx-auto px-6">
+      <BecomeAuditorModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSuccess={() => {
+          setIsModalOpen(false);
+          getAuditors(); // Refresh list
+        }} 
+      />
       <div className="mb-16">
         <div className="max-w-2xl mb-20">
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 font-serif uppercase italic text-white">
@@ -105,7 +116,9 @@ export default function AuditorsPage() {
             </Card>
           ))}
 
-          <Card className="border-dashed border-zinc-800 bg-transparent flex flex-col items-center justify-center p-12 text-center hover:border-zinc-500 transition-colors cursor-pointer group">
+          <Card 
+             onClick={() => setIsModalOpen(true)}
+             className="border-dashed border-zinc-800 bg-transparent flex flex-col items-center justify-center p-12 text-center hover:border-zinc-500 transition-colors cursor-pointer group">
              <div className="w-16 h-16 rounded-full border border-zinc-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <LucideAward size={32} className="text-zinc-600 group-hover:text-white transition-colors" />
              </div>

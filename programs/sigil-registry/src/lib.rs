@@ -16,6 +16,10 @@ pub mod sigil_registry {
         instructions::initialize_registry::handler(ctx)
     }
 
+    pub fn initialize_auditor(ctx: Context<InitializeAuditor>) -> Result<()> {
+        instructions::initialize_auditor::handler(ctx)
+    }
+
     pub fn mint_skill(
         ctx: Context<MintSkill>,
         skill_id: [u8; 32],

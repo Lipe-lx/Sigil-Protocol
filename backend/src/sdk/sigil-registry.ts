@@ -29,6 +29,22 @@ export class SigilRegistryClient {
       .rpc();
   }
 
+  async initializeAuditor(): Promise<string> {
+    const [auditorPda] = PublicKey.findProgramAddressSync(
+      [Buffer.from('auditor'), this.provider.wallet.publicKey.toBuffer()],
+      this.program.programId
+    );
+
+    return await this.program.methods
+      .initializeAuditor()
+      .accounts({
+        auditor: auditorPda,
+        authority: this.provider.wallet.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+  }
+
   async mintSkill(
     skillId: number[],
     priceUsdc: BN,
