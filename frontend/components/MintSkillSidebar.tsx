@@ -45,7 +45,7 @@ export function MintSkillSidebar({
         program.programId
       );
 
-      // Real signature: Creator signs the skill ID to prove ownership/intent
+      // Real signature
       let creatorSignature = Array(64).fill(0);
       try {
         if ((wallet as any).signMessage) {
@@ -58,11 +58,8 @@ export function MintSkillSidebar({
         console.warn("Signature skipped or failed:", e);
       }
 
-      // Metadata contains name and the full skill description/instructions
-      const metadataObj: any = { 
-        n: name
-      };
-
+      // Metadata optimization: use extremely short keys to save bytes
+      const metadataObj: any = { n: name };
       if (skillDescription) metadataObj.d = skillDescription;
       if (externalUrl) metadataObj.u = externalUrl;
 
@@ -76,14 +73,14 @@ export function MintSkillSidebar({
       const base64Compressed = Buffer.from(compressedBuffer).toString('base64');
       const finalMetadata = `gz:${base64Compressed}`;
 
-      // Solana MTU limit is 1232 bytes. After accounts/signatures, 
-      // we have about 900-1000 bytes for the actual instruction data.
-      // 1200 base64 chars = ~900 bytes.
-      if (finalMetadata.length > 1200) {
-        throw new Error("Skill logic is too large for a single Solana transaction. Even after compression, it exceeds the network limits. Please summarize your skill or use the 'External Logic URL' field for large files (GitHub/IPFS).");
+      // SOLANA PACKET LIMIT: 1232 bytes.
+      // Overhead is ~350 bytes. Safe limit for String data is ~850 bytes.
+      // 1100 chars in Base64 = ~825 bytes.
+      if (finalMetadata.length > 1100) {
+        throw new Error(`Skill logic is still too large (${finalMetadata.length} units). Solana transactions have a strict 1232-byte limit. \n\nSolutions:\n1. Shorten the text further.\n2. Move the full logic to GitHub/IPFS and use the 'External Logic URL' field below.`);
       }
       
-      const priceBN = new BN(parseFloat(price) * 1000000); // USDC 6 decimals
+      const priceBN = new BN(parseFloat(price) * 1000000); 
       
       const tx = await (program.methods as any)
         .mintSkill(skillId, priceBN, finalMetadata, creatorSignature)
@@ -163,7 +160,7 @@ export function MintSkillSidebar({
                   <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Name</label>
                   <div className="group/tip relative">
                     <LucideInfo size={10} className="text-zinc-700 cursor-help" />
-                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
                       The public title of your AI capability.
                     </div>
                   </div>
@@ -183,7 +180,7 @@ export function MintSkillSidebar({
                   <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Price (USDC)</label>
                   <div className="group/tip relative">
                     <LucideInfo size={10} className="text-zinc-700 cursor-help" />
-                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
+                    <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
                       Cost per execution. Payments are split between you and the protocol treasury.
                     </div>
                   </div>
@@ -210,8 +207,8 @@ export function MintSkillSidebar({
                     <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Logic (SKILL.md)</label>
                     <div className="group/tip relative">
                       <LucideInfo size={10} className="text-zinc-700 cursor-help" />
-                      <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
-                        The core instructions for the AI. This is compressed and stored on-chain.
+                      <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
+                        Core instructions for the AI. This text is Gzipped and stored on-chain. Max capacity depends on text compressibility (~3KB).
                       </div>
                     </div>
                     <span className="text-zinc-800">—</span>
@@ -231,7 +228,7 @@ export function MintSkillSidebar({
                     className="w-full bg-black border border-zinc-900 min-h-[160px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
                   />
                   <div className="absolute bottom-4 right-4 flex items-center gap-2 text-[9px] font-bold text-zinc-700 uppercase tracking-tighter opacity-0 group-focus-within:opacity-100 transition-opacity">
-                    <LucideChevronRight size={10} /> Gzip Compression Active
+                    <LucideChevronRight size={10} /> Gzip Active
                   </div>
                 </div>
               </div>
@@ -242,8 +239,8 @@ export function MintSkillSidebar({
                   <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">External Logic URL</label>
                   <div className="group/tip relative">
                     <LucideInfo size={10} className="text-zinc-700 cursor-help" />
-                    <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20">
-                      Optional. Link to GitHub or IPFS if your logic exceeds the on-chain byte limit.
+                    <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
+                      Fallback for large logic. Link to a GitHub raw file or IPFS hash where the full SKILL.md is hosted.
                     </div>
                   </div>
                   <span className="text-zinc-800">—</span>
