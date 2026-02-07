@@ -24,7 +24,7 @@ export function MintSkillSidebar({
   const [skillDescription, setSkillDescription] = useState('');
   const [externalUrl, setExternalUrl] = useState('');
 
-  const MAX_RAW_CHARS = 4000;
+  const MAX_RAW_CHARS = 1000;
   const charsLeft = MAX_RAW_CHARS - skillDescription.length;
 
   const handleMint = async () => {
@@ -86,10 +86,8 @@ export function MintSkillSidebar({
       const finalMetadata = `gz:${base64Compressed}`;
 
       // SOLANA PACKET LIMIT: 1232 bytes.
-      // Overhead is ~350 bytes. Safe limit for String data is ~850 bytes.
-      // 1100 chars in Base64 = ~825 bytes.
-      if (finalMetadata.length > 1100) {
-        throw new Error(`Skill logic is still too large (${finalMetadata.length} units). Solana transactions have a strict 1232-byte limit. \n\nSolutions:\n1. Shorten the text further.\n2. Move the full logic to GitHub/IPFS and use the 'External Logic URL' field below.`);
+      if (finalMetadata.length > 1200) {
+        throw new Error(`Skill header is too large. Please keep the summary under 1000 characters.`);
       }
       
       const priceBN = new BN(parseFloat(price) * 1000000); 
@@ -212,22 +210,22 @@ export function MintSkillSidebar({
                 </div>
               </div>
 
-              {/* Skill Content / Instructions */}
+              {/* Skill Summary */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Logic (SKILL.md)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Skill Header / Summary</label>
                     <div className="group/tip relative">
                       <LucideInfo size={10} className="text-zinc-700 cursor-help" />
                       <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
-                        Core instructions for the AI. This text is Gzipped and stored on-chain. Max capacity depends on text compressibility (~3KB).
+                        A concise summary of what this skill does and how to call it. This is stored on-chain for discovery.
                       </div>
                     </div>
                     <span className="text-zinc-800">—</span>
                   </div>
                   <span className={cn(
                     "text-[9px] font-mono",
-                    charsLeft < 500 ? "text-red-500" : "text-zinc-700"
+                    charsLeft < 200 ? "text-red-500" : "text-zinc-700"
                   )}>
                     {charsLeft} chars remaining
                   </span>
@@ -236,23 +234,23 @@ export function MintSkillSidebar({
                   <textarea
                     value={skillDescription}
                     onChange={(e) => setSkillDescription(e.target.value.slice(0, MAX_RAW_CHARS))}
-                    placeholder="# Skill Instructions\n\nDefine the core logic and constraints of this skill..."
-                    className="w-full bg-black border border-zinc-900 min-h-[160px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
+                    placeholder="e.g. This skill analyzes Solana account depth and returns formatted JSON..."
+                    className="w-full bg-black border border-zinc-900 min-h-[120px] p-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white resize-none"
                   />
                   <div className="absolute bottom-4 right-4 flex items-center gap-2 text-[9px] font-bold text-zinc-700 uppercase tracking-tighter opacity-0 group-focus-within:opacity-100 transition-opacity">
-                    <LucideChevronRight size={10} /> Gzip Active
+                    <LucideChevronRight size={10} /> On-Chain Metadata
                   </div>
                 </div>
               </div>
 
-              {/* External URL */}
+              {/* Logic Source URL */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">External Logic URL</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 text-white">Full Logic Source (GITHUB/IPFS)</label>
                   <div className="group/tip relative">
                     <LucideInfo size={10} className="text-zinc-700 cursor-help" />
-                    <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl leading-normal">
-                      Fallback for large logic. Link to a GitHub raw file or IPFS hash where the full SKILL.md is hosted.
+                    <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
+                      REQUIRED. The definitive SKILL.md file. This URL is hashed on-chain to anchor your audit.
                     </div>
                   </div>
                   <span className="text-zinc-800">—</span>
@@ -260,8 +258,8 @@ export function MintSkillSidebar({
                 <input
                   value={externalUrl}
                   onChange={(e) => setExternalUrl(e.target.value)}
-                  placeholder="https://github.com/.../skill.md"
-                  className="w-full bg-black border border-zinc-900 h-14 px-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800 text-white"
+                  placeholder="https://github.com/user/repo/blob/main/SKILL.md"
+                  className="w-full bg-zinc-900 border border-zinc-800 h-14 px-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-700 text-white"
                 />
               </div>
             </div>
@@ -270,7 +268,7 @@ export function MintSkillSidebar({
           <div className="pt-12">
             <Button
               onClick={handleMint}
-              disabled={loading || !name || (!skillDescription && !externalUrl) || !wallet}
+              disabled={loading || !name || !externalUrl || !wallet}
               className="w-full h-16 font-black tracking-tighter uppercase text-sm bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-900 disabled:text-zinc-700 transition-all rounded-none"
             >
               {loading ? (
