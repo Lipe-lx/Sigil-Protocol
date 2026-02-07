@@ -4,7 +4,7 @@ import {
 } from '@solana/spl-token';
 
 // USDC Mint on Devnet
-const DEFAULT_USDC_MINT = 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr';
+const DEFAULT_USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
 
 // Protocol treasury wallet
 const DEFAULT_PROTOCOL_TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';

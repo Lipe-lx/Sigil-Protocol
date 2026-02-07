@@ -6,5 +6,5 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 SOLANA_RPC_URL = "https://api.devnet.solana.com"
 PORT = "3001"
-USDC_MINT = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
+USDC_MINT = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
 PROTOCOL_TREASURY = "8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws"
