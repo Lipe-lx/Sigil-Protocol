@@ -124,7 +124,16 @@ export default function AuditorsPage() {
              </div>
              <h3 className="text-xl font-bold tracking-tight mb-2 text-white">Become an Auditor</h3>
              <p className="text-sm text-zinc-500 mb-6">Contribute to the security of the Sigil economy and earn USDC rewards.</p>
-             <Button variant="outline" className="border-zinc-800 uppercase text-[10px] font-bold tracking-[0.2em]">Apply Now</Button>
+             <Button 
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent double trigger if card also has onClick
+                  setIsModalOpen(true);
+                }}
+                variant="outline" 
+                className="border-zinc-800 uppercase text-[10px] font-bold tracking-[0.2em]"
+             >
+                Apply Now
+             </Button>
           </Card>
         </div>
       </div>
