@@ -97,11 +97,11 @@ export class SigilRegistryClient {
   }
 
   async getSkill(skillPda: PublicKey) {
-    return await this.program.account.Skill.fetch(skillPda);
+    return await this.program.account.skill.fetch(skillPda);
   }
 
   async getAllSkills() {
-    return await this.program.account.Skill.all();
+    return await this.program.account.skill.all();
   }
 
   async getAllLogs() {
@@ -109,7 +109,7 @@ export class SigilRegistryClient {
     // Return empty array for MVP - logs are tracked via transaction history
     try {
       // Try to fetch if account exists
-      const accounts = await (this.program.account as any).ExecutionLog?.all();
+      const accounts = await (this.program.account as any).executionLog?.all();
       return accounts || [];
     } catch {
       console.warn('ExecutionLog account not available in current program version');
@@ -120,7 +120,7 @@ export class SigilRegistryClient {
   async getAuditor(auditorPda: PublicKey) {
     // Auditor account may not be defined in current IDL
     try {
-      return await (this.program.account as any).Auditor?.fetch(auditorPda);
+      return await (this.program.account as any).auditor?.fetch(auditorPda);
     } catch {
       console.warn('Auditor account not available in current program version');
       return null;
@@ -130,7 +130,7 @@ export class SigilRegistryClient {
   async getAllAuditors() {
     // Auditor account may not be defined in current IDL
     try {
-      const accounts = await (this.program.account as any).Auditor?.all();
+      const accounts = await (this.program.account as any).auditor?.all();
       return accounts || [];
     } catch {
       console.warn('Auditor account not available in current program version');
@@ -145,11 +145,11 @@ export class SigilRegistryClient {
     );
     try {
       // Account names in Anchor are camelCase versions of the struct name
-      return await (this.program.account as any).SkillRegistry.fetch(registryPda);
+      return await (this.program.account as any).skillRegistry.fetch(registryPda);
     } catch (e) {
       // Try PascalCase as fallback
       try {
-        return await (this.program.account as any).SkillRegistry.fetch(registryPda);
+      return await (this.program.account as any).skillRegistry.fetch(registryPda);
       } catch {
         console.warn('Registry not initialized');
         return null;

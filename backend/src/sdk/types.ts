@@ -5,6 +5,8 @@
  * IDL can be found at `target/idl/sigil_registry.json`.
  */
 export type SigilRegistry = {
+  "version": "0.1.0",
+  "name": "sigil_registry",
   "address": "BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe",
   "metadata": {
     "name": "sigilRegistry",
@@ -28,15 +30,15 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "auditor"
         },
         {
           "name": "auditorSigner",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -71,7 +73,7 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "registry",
-          "writable": true,
+          "isMut": true,
           "pda": {
             "seeds": [
               {
@@ -95,8 +97,8 @@ export type SigilRegistry = {
         },
         {
           "name": "authority",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
@@ -120,29 +122,29 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "executionLog",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "executor",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "executorUsdc",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "creatorUsdc",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "protocolUsdc",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "tokenProgram",
@@ -179,7 +181,7 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "skill",
-          "writable": true,
+          "isMut": true,
           "pda": {
             "seeds": [
               {
@@ -201,12 +203,12 @@ export type SigilRegistry = {
         },
         {
           "name": "creator",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "registry",
-          "writable": true,
+          "isMut": true,
           "pda": {
             "seeds": [
               {
@@ -281,11 +283,11 @@ export type SigilRegistry = {
       "accounts": [
         {
           "name": "consensusRecord",
-          "writable": true
+          "isMut": true
         },
         {
           "name": "skill",
-          "writable": true,
+          "isMut": true,
           "pda": {
             "seeds": [
               {
@@ -308,7 +310,7 @@ export type SigilRegistry = {
         },
         {
           "name": "registry",
-          "writable": true,
+          "isMut": true,
           "pda": {
             "seeds": [
               {
@@ -332,8 +334,8 @@ export type SigilRegistry = {
         },
         {
           "name": "authority",
-          "writable": true,
-          "signer": true,
+          "isMut": true,
+          "isSigner": true,
           "relations": [
             "registry"
           ]
