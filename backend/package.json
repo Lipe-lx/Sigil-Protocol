@@ -2,14 +2,15 @@
   "name": "sigil-protocol-backend",
   "version": "1.0.0",
   "description": "Sigil Protocol Backend API - Trust Layer for AI Agent Skills",
-  "main": "src/server.ts",
+  "main": "src/index.ts",
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
-    "start": "ts-node src/server.ts",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
     "build": "tsc",
     "lint": "eslint src/**/*.ts"
   },
