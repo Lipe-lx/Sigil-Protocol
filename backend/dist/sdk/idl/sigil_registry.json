@@ -1,0 +1,848 @@
+{
+    "address": "BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe",
+    "metadata": {
+        "name": "sigil_registry",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Sigil Protocol - Trust Layer for AI Agent Skills"
+    },
+    "instructions": [
+        {
+            "name": "add_auditor_signature",
+            "discriminator": [
+                58,
+                218,
+                50,
+                166,
+                77,
+                67,
+                230,
+                112
+            ],
+            "accounts": [
+                {
+                    "name": "skill",
+                    "writable": true
+                },
+                {
+                    "name": "auditor"
+                },
+                {
+                    "name": "auditor_signer",
+                    "writable": true,
+                    "signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "signature",
+                    "type": {
+                        "array": [
+                            "u8",
+                            64
+                        ]
+                    }
+                },
+                {
+                    "name": "audit_report_hash",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "initialize_registry",
+            "discriminator": [
+                189,
+                181,
+                20,
+                17,
+                174,
+                57,
+                249,
+                59
+            ],
+            "accounts": [
+                {
+                    "name": "registry",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    114,
+                                    101,
+                                    103,
+                                    105,
+                                    115,
+                                    116,
+                                    114,
+                                    121,
+                                    95,
+                                    118,
+                                    49
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "log_execution",
+            "discriminator": [
+                138,
+                115,
+                51,
+                156,
+                87,
+                89,
+                71,
+                134
+            ],
+            "accounts": [
+                {
+                    "name": "skill",
+                    "writable": true
+                },
+                {
+                    "name": "execution_log",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "executor",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "executor_usdc",
+                    "writable": true
+                },
+                {
+                    "name": "creator_usdc",
+                    "writable": true
+                },
+                {
+                    "name": "protocol_usdc",
+                    "writable": true
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                },
+                {
+                    "name": "latency_ms",
+                    "type": "u32"
+                }
+            ]
+        },
+        {
+            "name": "mint_skill",
+            "discriminator": [
+                189,
+                4,
+                3,
+                82,
+                182,
+                158,
+                59,
+                160
+            ],
+            "accounts": [
+                {
+                    "name": "skill",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    115,
+                                    107,
+                                    105,
+                                    108,
+                                    108
+                                ]
+                            },
+                            {
+                                "kind": "arg",
+                                "path": "skill_id"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "creator",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "registry",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    114,
+                                    101,
+                                    103,
+                                    105,
+                                    115,
+                                    116,
+                                    114,
+                                    121,
+                                    95,
+                                    118,
+                                    49
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "skill_id",
+                    "type": {
+                        "array": [
+                            "u8",
+                            32
+                        ]
+                    }
+                },
+                {
+                    "name": "price_usdc",
+                    "type": "u64"
+                },
+                {
+                    "name": "ipfs_hash",
+                    "type": "string"
+                },
+                {
+                    "name": "creator_signature",
+                    "type": {
+                        "array": [
+                            "u8",
+                            64
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "record_consensus",
+            "docs": [
+                "Record consensus verdict on-chain",
+                "This is the \"Certificate\" that makes Sigil a Certificate Authority"
+            ],
+            "discriminator": [
+                28,
+                112,
+                16,
+                180,
+                233,
+                204,
+                109,
+                19
+            ],
+            "accounts": [
+                {
+                    "name": "consensus_record",
+                    "writable": true
+                },
+                {
+                    "name": "skill",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    115,
+                                    107,
+                                    105,
+                                    108,
+                                    108
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "skill.skill_id",
+                                "account": "Skill"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "registry",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    114,
+                                    101,
+                                    103,
+                                    105,
+                                    115,
+                                    116,
+                                    114,
+                                    121,
+                                    95,
+                                    118,
+                                    49
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true,
+                    "relations": [
+                        "registry"
+                    ]
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "verdict",
+                    "type": {
+                        "defined": {
+                            "name": "ConsensusVerdict"
+                        }
+                    }
+                },
+                {
+                    "name": "confidence",
+                    "type": "u8"
+                },
+                {
+                    "name": "trust_score",
+                    "type": "u16"
+                },
+                {
+                    "name": "evaluator_count",
+                    "type": "u8"
+                },
+                {
+                    "name": "mean_score",
+                    "type": "u16"
+                },
+                {
+                    "name": "score_variance",
+                    "type": "u16"
+                },
+                {
+                    "name": "critical_overlap",
+                    "type": "u16"
+                },
+                {
+                    "name": "methodology_count",
+                    "type": "u8"
+                },
+                {
+                    "name": "reports_ipfs_hash",
+                    "type": "string"
+                },
+                {
+                    "name": "reasoning_ipfs_hash",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Auditor",
+            "discriminator": [
+                163,
+                185,
+                74,
+                35,
+                129,
+                30,
+                235,
+                28
+            ]
+        },
+        {
+            "name": "ConsensusRecord",
+            "discriminator": [
+                53,
+                224,
+                3,
+                75,
+                221,
+                134,
+                185,
+                42
+            ]
+        },
+        {
+            "name": "ExecutionLog",
+            "discriminator": [
+                115,
+                151,
+                52,
+                213,
+                99,
+                171,
+                200,
+                240
+            ]
+        },
+        {
+            "name": "Skill",
+            "discriminator": [
+                53,
+                13,
+                242,
+                204,
+                77,
+                249,
+                1,
+                215
+            ]
+        },
+        {
+            "name": "SkillRegistry",
+            "discriminator": [
+                100,
+                187,
+                221,
+                130,
+                166,
+                188,
+                159,
+                174
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "AuditorNotActive",
+            "msg": "Auditor is not active"
+        },
+        {
+            "code": 6001,
+            "name": "AuditorAlreadySigned",
+            "msg": "Auditor has already signed this skill"
+        },
+        {
+            "code": 6002,
+            "name": "InvalidConsensusVerdict",
+            "msg": "Invalid consensus verdict"
+        },
+        {
+            "code": 6003,
+            "name": "ConsensusAlreadyRecorded",
+            "msg": "Skill already has a recorded consensus"
+        }
+    ],
+    "types": [
+        {
+            "name": "Auditor",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "pubkey",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "tier",
+                        "type": {
+                            "defined": {
+                                "name": "AuditorTier"
+                            }
+                        }
+                    },
+                    {
+                        "name": "skills_audited",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "reputation",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "total_earned",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "active",
+                        "type": "bool"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AuditorSignature",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "auditor",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "signature",
+                        "type": {
+                            "array": [
+                                "u8",
+                                64
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tier",
+                        "type": {
+                            "defined": {
+                                "name": "AuditorTier"
+                            }
+                        }
+                    },
+                    {
+                        "name": "timestamp",
+                        "type": "i64"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AuditorTier",
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "Tier1"
+                    },
+                    {
+                        "name": "Tier2"
+                    },
+                    {
+                        "name": "Tier3"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ConsensusRecord",
+            "docs": [
+                "On-chain record of consensus verdict",
+                "This is the \"Certificate\" in \"Certificate Authority\""
+            ],
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "skill",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "version",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "verdict",
+                        "type": {
+                            "defined": {
+                                "name": "ConsensusVerdict"
+                            }
+                        }
+                    },
+                    {
+                        "name": "confidence",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "trust_score",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "evaluator_count",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "mean_score",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "score_variance",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "critical_overlap",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "methodology_count",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "reports_ipfs_hash",
+                        "type": "string"
+                    },
+                    {
+                        "name": "reasoning_ipfs_hash",
+                        "type": "string"
+                    },
+                    {
+                        "name": "evaluated_at",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "expires_at",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "recorded_by",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ConsensusStatus",
+            "docs": [
+                "Consensus status for a skill"
+            ],
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "Pending"
+                    },
+                    {
+                        "name": "InReview"
+                    },
+                    {
+                        "name": "Approved"
+                    },
+                    {
+                        "name": "Rejected"
+                    },
+                    {
+                        "name": "Contested"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ConsensusVerdict",
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "Pending"
+                    },
+                    {
+                        "name": "Approved"
+                    },
+                    {
+                        "name": "Rejected"
+                    },
+                    {
+                        "name": "Inconclusive"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ExecutionLog",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "skill",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "executor",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "latency_ms",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "payment_amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "timestamp",
+                        "type": "i64"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Skill",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "skill_id",
+                        "type": {
+                            "array": [
+                                "u8",
+                                32
+                            ]
+                        }
+                    },
+                    {
+                        "name": "creator",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "creator_signature",
+                        "type": {
+                            "array": [
+                                "u8",
+                                64
+                            ]
+                        }
+                    },
+                    {
+                        "name": "price_usdc",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "ipfs_hash",
+                        "type": "string"
+                    },
+                    {
+                        "name": "audit_report_hash",
+                        "type": "string"
+                    },
+                    {
+                        "name": "auditor_count",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "auditors",
+                        "type": {
+                            "vec": {
+                                "defined": {
+                                    "name": "AuditorSignature"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "consensus_status",
+                        "type": {
+                            "defined": {
+                                "name": "ConsensusStatus"
+                            }
+                        }
+                    },
+                    {
+                        "name": "consensus_record",
+                        "type": {
+                            "option": "pubkey"
+                        }
+                    },
+                    {
+                        "name": "trust_score",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "execution_count",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "success_count",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "total_earned",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "last_used",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "created_at",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "SkillRegistry",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "skill_count",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "total_executions",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "total_consensus_records",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        }
+    ]
+}

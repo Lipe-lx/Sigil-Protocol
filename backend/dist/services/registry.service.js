@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegistryService = void 0;
 const web3_js_1 = require("@solana/web3.js");
 // Use direct import instead of require for ESM compatibility in Workers
-const sigil_registry_1 = require("../../../sdk/src/sigil-registry");
+// Use direct import from local SDK copy for Cloudflare compatibility
+const sigil_registry_1 = require("../sdk/sigil-registry");
 // We'll pass connection and config in constructor for better testing and worker usage
 class RegistryService {
     constructor(connection) {

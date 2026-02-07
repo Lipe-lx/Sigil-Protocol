@@ -4,9 +4,9 @@ exports.PaymentService = void 0;
 const web3_js_1 = require("@solana/web3.js");
 const spl_token_1 = require("@solana/spl-token");
 // USDC Mint on Devnet
-const DEFAULT_USDC_MINT = 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr';
+const DEFAULT_USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
 // Protocol treasury wallet
-const DEFAULT_PROTOCOL_TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';
+const DEFAULT_PROTOCOL_TREASURY = '3adsGFsaGUDePR61ZtvkwkkpCeLne6immQbp2gR5jbfo';
 // Payment split ratios (must sum to 100)
 const SPLIT_CREATOR = 70; // 70% to skill creator
 const SPLIT_AUDITOR = 25; // 25% to auditors (distributed equally)
