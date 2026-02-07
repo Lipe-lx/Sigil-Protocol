@@ -32,6 +32,23 @@ export function MintSkillSidebar({
 
     try {
       setLoading(true);
+
+      // AUTOMATIC URL CORRECTION: GitHub /blob/ to /raw/
+      let processedUrl = externalUrl.trim();
+      if (processedUrl.includes('github.com') && processedUrl.includes('/blob/')) {
+        const originalUrl = processedUrl;
+        processedUrl = processedUrl
+          .replace('github.com', 'raw.githubusercontent.com')
+          .replace('/blob/', '/');
+        
+        console.log(`URL Transformed: ${originalUrl} -> ${processedUrl}`);
+        
+        // Notify user before proceeding if possible, or just use the better URL
+        if (!confirm(`We detected a standard GitHub URL. To ensure cryptographic integrity, we will use the RAW version instead:\n\n${processedUrl}\n\nProceed?`)) {
+          setLoading(false);
+          return;
+        }
+      }
       
       // Generate a random 32-byte skill ID
       const skillId = Array.from(crypto.getRandomValues(new Uint8Array(32)));
@@ -61,13 +78,13 @@ export function MintSkillSidebar({
       // Metadata optimization: use extremely short keys to save bytes
       const metadataObj: any = { n: name };
       if (skillDescription) metadataObj.d = skillDescription;
-      if (externalUrl) metadataObj.u = externalUrl;
+      if (processedUrl) metadataObj.u = processedUrl;
 
       // HASHING FOR AUDIT INTEGRITY:
       // Even if the logic is external, we store its SHA-256 hash on-chain.
       // This ensures the "Composition" cannot be changed without breaking the audit.
-      if (skillDescription || externalUrl) {
-        const contentToHash = skillDescription || externalUrl;
+      if (skillDescription || processedUrl) {
+        const contentToHash = skillDescription || processedUrl;
         const msgBuffer = new TextEncoder().encode(contentToHash);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
