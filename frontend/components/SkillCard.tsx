@@ -94,6 +94,8 @@ export function SkillCard({ skill }: { skill: Skill }) {
 
       // 5. Execute the Sigil
       const skillLatency = Math.floor(Math.random() * 150) + 50; // Simulated execution latency (not mock, just dynamic)
+      const startTime = Date.now();
+      // @ts-ignore - Anchor IDL types cause deep instantiation
       const tx = await program.methods
         .logExecution(true, skillLatency)
         .accounts({
