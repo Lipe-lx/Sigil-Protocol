@@ -81,10 +81,22 @@ export function MintSkillSidebar({
       if (processedUrl) metadataObj.u = processedUrl;
 
       // HASHING FOR AUDIT INTEGRITY:
-      // Even if the logic is external, we store its SHA-256 hash on-chain.
-      // This ensures the "Composition" cannot be changed without breaking the audit.
+      // We must hash the ACTUAL CONTENT of the skill logic, not just the URL string.
       if (skillDescription || processedUrl) {
-        const contentToHash = skillDescription || processedUrl;
+        let contentToHash = skillDescription;
+        
+        // If an external URL is provided, we fetch its content to generate the anchor hash
+        if (processedUrl) {
+          try {
+            const response = await fetch(processedUrl);
+            if (!response.ok) throw new Error("Could not fetch external logic for hashing.");
+            contentToHash = await response.text();
+          } catch (e) {
+            console.error("Integrity fetch failed:", e);
+            throw new Error("Failed to reach the external logic URL. Please ensure the link is public and correct (Raw GitHub/IPFS).");
+          }
+        }
+
         const msgBuffer = new TextEncoder().encode(contentToHash);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
