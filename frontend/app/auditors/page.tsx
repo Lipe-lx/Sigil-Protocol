@@ -35,7 +35,7 @@ export default function AuditorsPage() {
             }
           }
         `);
-        setAuditors(data.auditors);
+        setAuditors(data?.auditors || []);
       } catch (error) {
         console.error('Error fetching auditors:', error);
       } finally {
