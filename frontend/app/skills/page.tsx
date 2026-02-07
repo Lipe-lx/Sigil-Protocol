@@ -50,6 +50,8 @@ export default function SkillsPage() {
         const trustScore = data.trustScore || data.trust_score || 0;
         const ipfsHash = data.ipfsHash || data.ipfs_hash || "";
         
+        const successRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
+        
         let name = `Sigil Skill #${acc.publicKey.toString().slice(0, 4)}`;
         
         // Handle reference skills mapping
