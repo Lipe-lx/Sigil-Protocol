@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { LucideShieldCheck, LucideLoader2 } from "lucide-react";
-import { SigilRegistryClient } from '@/lib/sigil-registry-client'; // Needs adaptation for frontend
 import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 
