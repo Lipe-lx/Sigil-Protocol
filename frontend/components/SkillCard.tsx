@@ -23,6 +23,7 @@ interface Skill {
   successRate: number;
   name?: string;
   pda: string;
+  description?: string;
 }
 
 // Devnet USDC Mint provided by user
@@ -151,6 +152,11 @@ export function SkillCard({ skill }: { skill: Skill }) {
         <CardTitle className="text-xl tracking-tight leading-tight group-hover:text-white transition-colors font-serif italic uppercase">
           {skill.name || `Sigil Skill #${skill.id.slice(0, 4)}`}
         </CardTitle>
+        {skill.description && (
+          <p className="text-[10px] text-zinc-400 mt-2 line-clamp-2 italic">
+            {skill.description}
+          </p>
+        )}
         <p className="text-[10px] text-zinc-500 font-mono mt-2 truncate max-w-full">
           PDA: {skill.pda}
         </p>
@@ -192,6 +198,20 @@ export function SkillCard({ skill }: { skill: Skill }) {
               />
             </div>
           </div>
+
+          {skill.description && (
+            <div className="pt-4 border-t border-zinc-900 mt-4">
+              <details className="group/details">
+                <summary className="list-none cursor-pointer flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+                  <span>View Protocol Logic</span>
+                  <LucideZap size={10} className="group-open/details:rotate-180 transition-transform" />
+                </summary>
+                <div className="mt-4 p-3 bg-zinc-950 border border-zinc-900 text-[10px] font-mono text-zinc-400 whitespace-pre-wrap max-h-40 overflow-y-auto leading-relaxed">
+                  {skill.description}
+                </div>
+              </details>
+            </div>
+          )}
         </div>
       </CardContent>
 

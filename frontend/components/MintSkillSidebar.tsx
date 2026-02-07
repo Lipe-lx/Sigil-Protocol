@@ -55,16 +55,32 @@ export function MintSkillSidebar({
       }
 
       // Metadata contains name and the full skill description/instructions
-      const metadata = JSON.stringify({ 
+      const metadataObj = { 
         name, 
         description: skillDescription,
-        author: wallet.publicKey.toString()
-      });
+        author: wallet.publicKey.toString(),
+        timestamp: Date.now()
+      };
+
+      const metadataStr = JSON.stringify(metadataObj);
+      
+      // Compress metadata using native browser CompressionStream (Gzip)
+      // This is necessary because Solana transactions are limited to 1232 bytes
+      const blob = new Blob([metadataStr]);
+      const compressedStream = blob.stream().pipeThrough(new (window as any).CompressionStream('gzip'));
+      const compressedBuffer = await new Response(compressedStream).arrayBuffer();
+      
+      const base64Compressed = Buffer.from(compressedBuffer).toString('base64');
+      const finalMetadata = `gz:${base64Compressed}`;
+
+      if (finalMetadata.length > 3800) {
+        throw new Error("Skill logic is too large even after compression. Please reduce text size.");
+      }
       
       const priceBN = new BN(parseFloat(price) * 1000000); // USDC 6 decimals
       
       const tx = await (program.methods as any)
-        .mintSkill(skillId, priceBN, metadata, creatorSignature)
+        .mintSkill(skillId, priceBN, finalMetadata, creatorSignature)
         .accounts({
           skill: skillPda,
           creator: wallet.publicKey,

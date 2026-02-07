@@ -18,6 +18,7 @@ interface Skill {
   successRate: number;
   name: string;
   pda: string;
+  description?: string;
 }
 
 const TREASURY = '8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws';
@@ -40,7 +41,7 @@ export default function SkillsPage() {
       // @ts-ignore - Anchor IDL types need generation
       const accounts = await program.account.skill.all();
       
-      const formattedSkills: Skill[] = accounts.map((acc: any) => {
+      const formattedSkills: Skill[] = await Promise.all(accounts.map(async (acc: any) => {
         const data = acc.account;
         
         // Robust BN to Number conversion
@@ -64,7 +65,26 @@ export default function SkillsPage() {
         const calculatedSuccessRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
         
         let name = `Sigil Skill #${acc.publicKey.toString().slice(0, 4)}`;
+        let description = "";
         
+        // Handle decompression if prefixed with gz:
+        let processedIpfsHash = ipfsHash;
+        if (ipfsHash.startsWith('gz:')) {
+          try {
+            const base64Data = ipfsHash.slice(3);
+            const binaryString = window.atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            
+            const decompressedStream = new Blob([bytes]).stream().pipeThrough(new (window as any).DecompressionStream('gzip'));
+            processedIpfsHash = await new Response(decompressedStream).text();
+          } catch (e) {
+            console.error("Decompression failed:", e);
+          }
+        }
+
         // Handle reference skills mapping
         const refSkills: Record<string, string> = {
           'QmSecurityScannerHash': 'Security Scanner',
@@ -73,13 +93,14 @@ export default function SkillsPage() {
           'QmTestHash1770416406741': 'Sigil Test Skill'
         };
 
-        if (refSkills[ipfsHash]) {
-          name = refSkills[ipfsHash];
+        if (refSkills[processedIpfsHash]) {
+          name = refSkills[processedIpfsHash];
         } else {
           try {
-            if (ipfsHash.startsWith('{')) {
-               const parsed = JSON.parse(ipfsHash);
+            if (processedIpfsHash.startsWith('{')) {
+               const parsed = JSON.parse(processedIpfsHash);
                name = parsed.name || name;
+               description = parsed.description || "";
             }
           } catch (e) {}
         }
@@ -92,9 +113,10 @@ export default function SkillsPage() {
           trustScore: trustScore,
           executionCount: executionCount,
           successRate: calculatedSuccessRate,
-          name: name
+          name: name,
+          description: description
         };
-      });
+      }));
 
       setSkills(formattedSkills);
     } catch (error) {
