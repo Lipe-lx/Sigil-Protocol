@@ -248,14 +248,14 @@ export function MintSkillSidebar({
                 </div>
               </div>
 
-              {/* Logic Source URL */}
+      // Logic Source URL
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 text-white">Full Logic Source (GITHUB/IPFS)</label>
                   <div className="group/tip relative">
                     <LucideInfo size={10} className="text-zinc-700 cursor-help" />
                     <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
-                      REQUIRED. The definitive SKILL.md file. This URL is hashed on-chain to anchor your audit.
+                      REQUIRED. The definitive SKILL.md file. Use the "Raw" URL from GitHub for real-time audit verification.
                     </div>
                   </div>
                   <span className="text-zinc-800">—</span>
@@ -263,7 +263,7 @@ export function MintSkillSidebar({
                 <input
                   value={externalUrl}
                   onChange={(e) => setExternalUrl(e.target.value)}
-                  placeholder="https://github.com/user/repo/blob/main/SKILL.md"
+                  placeholder="https://raw.githubusercontent.com/user/repo/main/SKILL.md"
                   className="w-full bg-zinc-900 border border-zinc-800 h-14 px-4 text-sm focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-700 text-white"
                 />
               </div>
