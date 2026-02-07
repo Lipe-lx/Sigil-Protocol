@@ -50,7 +50,7 @@ export default function SkillsPage() {
         const trustScore = data.trustScore || data.trust_score || 0;
         const ipfsHash = data.ipfsHash || data.ipfs_hash || "";
         
-        const successRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
+        const calculatedSuccessRate = executionCount > 0 ? (successCount / executionCount) * 100 : 100;
         
         let name = `Sigil Skill #${acc.publicKey.toString().slice(0, 4)}`;
         
@@ -80,7 +80,7 @@ export default function SkillsPage() {
           priceUsdc: priceUsdc / 1000000, 
           trustScore: trustScore,
           executionCount: executionCount,
-          successRate: successRate,
+          successRate: calculatedSuccessRate,
           name: name
         };
       });
