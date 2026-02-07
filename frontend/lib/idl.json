@@ -22,15 +22,15 @@
       "accounts": [
         {
           "name": "skill",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "auditor"
         },
         {
           "name": "auditor_signer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         }
       ],
       "args": [
@@ -64,6 +64,7 @@
       "accounts": [
         {
           "name": "registry",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -83,13 +84,12 @@
                 ]
               }
             ]
-          },
-          "isMut": true
+          }
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "system_program",
@@ -113,29 +113,29 @@
       "accounts": [
         {
           "name": "skill",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "execution_log",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "executor",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "executor_usdc",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "creator_usdc",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "protocol_usdc",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "token_program",
@@ -172,6 +172,7 @@
       "accounts": [
         {
           "name": "skill",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -189,16 +190,16 @@
                 "path": "skill_id"
               }
             ]
-          },
-          "isMut": true
+          }
         },
         {
           "name": "creator",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "registry",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -218,8 +219,7 @@
                 ]
               }
             ]
-          },
-          "isMut": true
+          }
         },
         {
           "name": "system_program",
@@ -274,10 +274,11 @@
       "accounts": [
         {
           "name": "consensus_record",
-          "isMut": true
+          "writable": true
         },
         {
           "name": "skill",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -296,11 +297,11 @@
                 "account": "Skill"
               }
             ]
-          },
-          "isMut": true
+          }
         },
         {
           "name": "registry",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -320,16 +321,15 @@
                 ]
               }
             ]
-          },
-          "isMut": true
+          }
         },
         {
           "name": "authority",
+          "writable": true,
+          "signer": true,
           "relations": [
             "registry"
-          ],
-          "isMut": true,
-          "isSigner": true
+          ]
         },
         {
           "name": "system_program",
@@ -341,7 +341,7 @@
           "name": "verdict",
           "type": {
             "defined": {
-              "name": "consensusVerdict"
+              "name": "ConsensusVerdict"
             }
           }
         },
@@ -386,7 +386,7 @@
   ],
   "accounts": [
     {
-      "name": "auditor",
+      "name": "Auditor",
       "discriminator": [
         163,
         185,
@@ -399,7 +399,7 @@
       ]
     },
     {
-      "name": "consensusRecord",
+      "name": "ConsensusRecord",
       "discriminator": [
         53,
         224,
@@ -412,7 +412,7 @@
       ]
     },
     {
-      "name": "executionLog",
+      "name": "ExecutionLog",
       "discriminator": [
         115,
         151,
@@ -425,7 +425,7 @@
       ]
     },
     {
-      "name": "skill",
+      "name": "Skill",
       "discriminator": [
         53,
         13,
@@ -438,7 +438,7 @@
       ]
     },
     {
-      "name": "skillRegistry",
+      "name": "SkillRegistry",
       "discriminator": [
         100,
         187,
@@ -475,70 +475,7 @@
   ],
   "types": [
     {
-      "name": "auditorTier",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "tier1"
-          },
-          {
-            "name": "tier2"
-          },
-          {
-            "name": "tier3"
-          }
-        ]
-      }
-    },
-    {
-      "name": "consensusVerdict",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "pending"
-          },
-          {
-            "name": "approved"
-          },
-          {
-            "name": "rejected"
-          },
-          {
-            "name": "inconclusive"
-          }
-        ]
-      }
-    },
-    {
-      "name": "consensusStatus",
-      "docs": [
-        "Consensus status for a skill"
-      ],
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "pending"
-          },
-          {
-            "name": "inReview"
-          },
-          {
-            "name": "approved"
-          },
-          {
-            "name": "rejected"
-          },
-          {
-            "name": "contested"
-          }
-        ]
-      }
-    },
-    {
-      "name": "auditor",
+      "name": "Auditor",
       "type": {
         "kind": "struct",
         "fields": [
@@ -550,7 +487,7 @@
             "name": "tier",
             "type": {
               "defined": {
-                "name": "auditorTier"
+                "name": "AuditorTier"
               }
             }
           },
@@ -574,7 +511,7 @@
       }
     },
     {
-      "name": "auditorSignature",
+      "name": "AuditorSignature",
       "type": {
         "kind": "struct",
         "fields": [
@@ -595,7 +532,7 @@
             "name": "tier",
             "type": {
               "defined": {
-                "name": "auditorTier"
+                "name": "AuditorTier"
               }
             }
           },
@@ -607,7 +544,24 @@
       }
     },
     {
-      "name": "consensusRecord",
+      "name": "AuditorTier",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Tier1"
+          },
+          {
+            "name": "Tier2"
+          },
+          {
+            "name": "Tier3"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConsensusRecord",
       "docs": [
         "On-chain record of consensus verdict",
         "This is the \"Certificate\" in \"Certificate Authority\""
@@ -627,7 +581,7 @@
             "name": "verdict",
             "type": {
               "defined": {
-                "name": "consensusVerdict"
+                "name": "ConsensusVerdict"
               }
             }
           },
@@ -687,7 +641,53 @@
       }
     },
     {
-      "name": "executionLog",
+      "name": "ConsensusStatus",
+      "docs": [
+        "Consensus status for a skill"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "InReview"
+          },
+          {
+            "name": "Approved"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Contested"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConsensusVerdict",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Approved"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Inconclusive"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ExecutionLog",
       "type": {
         "kind": "struct",
         "fields": [
@@ -719,7 +719,7 @@
       }
     },
     {
-      "name": "skill",
+      "name": "Skill",
       "type": {
         "kind": "struct",
         "fields": [
@@ -766,7 +766,7 @@
             "type": {
               "vec": {
                 "defined": {
-                  "name": "auditorSignature"
+                  "name": "AuditorSignature"
                 }
               }
             }
@@ -775,7 +775,7 @@
             "name": "consensus_status",
             "type": {
               "defined": {
-                "name": "consensusStatus"
+                "name": "ConsensusStatus"
               }
             }
           },
@@ -817,7 +817,7 @@
       }
     },
     {
-      "name": "skillRegistry",
+      "name": "SkillRegistry",
       "type": {
         "kind": "struct",
         "fields": [

@@ -11,7 +11,7 @@ export class SigilRegistryClient {
     this.provider = new AnchorProvider(connection, wallet, {
       commitment: 'confirmed',
     });
-    this.program = new Program(idl as any, new PublicKey('BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe'), this.provider);
+    this.program = new Program(idl as any, this.provider);
   }
 
   async initializeRegistry(): Promise<string> {
