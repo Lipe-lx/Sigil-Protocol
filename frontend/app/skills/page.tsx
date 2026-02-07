@@ -37,6 +37,7 @@ export default function SkillsPage() {
 
     try {
       setLoading(true);
+      // @ts-ignore - Anchor IDL types need generation
       const accounts = await program.account.skill.all();
       
       const formattedSkills: Skill[] = accounts.map((acc: any) => {
