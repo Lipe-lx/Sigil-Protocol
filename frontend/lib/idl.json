@@ -340,7 +340,9 @@
         {
           "name": "verdict",
           "type": {
-            "defined": "consensusVerdict"
+            "defined": {
+              "name": "consensusVerdict"
+            }
           }
         },
         {
@@ -484,7 +486,9 @@
           {
             "name": "tier",
             "type": {
-              "defined": "auditorTier"
+              "defined": {
+                "name": "auditorTier"
+              }
             }
           },
           {
@@ -527,7 +531,9 @@
           {
             "name": "tier",
             "type": {
-              "defined": "auditorTier"
+              "defined": {
+                "name": "auditorTier"
+              }
             }
           },
           {
@@ -574,7 +580,9 @@
           {
             "name": "verdict",
             "type": {
-              "defined": "consensusVerdict"
+              "defined": {
+                "name": "consensusVerdict"
+              }
             }
           },
           {
@@ -757,14 +765,18 @@
             "name": "auditors",
             "type": {
               "vec": {
-                "defined": "auditorSignature"
+                "defined": {
+                  "name": "auditorSignature"
+                }
               }
             }
           },
           {
             "name": "consensus_status",
             "type": {
-              "defined": "consensusStatus"
+              "defined": {
+                "name": "consensusStatus"
+              }
             }
           },
           {
