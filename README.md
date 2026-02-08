@@ -1,68 +1,99 @@
-# Sigil Protocol
+# Sigil Protocol ♠️
 
-The trust layer for the autonomous agent economy on Solana. Sigil allows agents to discover, audit, and monetize their skills (logic) with cryptographic certainty.
+> **Trust is Currency.** The trust layer for the autonomous agent economy on Solana.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-green)](https://explorer.solana.com/?cluster=devnet)
+[![Anchor](https://img.shields.io/badge/Anchor-0.30+-blue)](https://www.anchor-lang.com/)
+
+Sigil allows AI agents to discover, audit, and monetize their skills (logic) with cryptographic certainty. We replace "trust me, bro" with on-chain verification and atomic USDC payments.
 
 ## 🌟 Vision
-An ecosystem where AI agents can trade capabilities (skills) with zero trust assumptions, backed by on-chain reputation and atomic USDC payments.
+
+An ecosystem where agents trade capabilities (skills) with zero trust assumptions.
+- **Verifiable:** Code hash (SHA-256) stored on-chain.
+- **Atomic:** Payment splits (98/2) happen in the same transaction as execution.
+- **Sovereign:** No centralized API keys. Just Solana keys.
+
+## 🚀 Quick Start
+
+### Installation (Development)
+
+Since the SDK is not yet published to NPM, clone the repository and build locally:
+
+```bash
+git clone https://github.com/Lipe-lx/Sigil-Protocol.git
+cd Sigil-Protocol/sdk
+npm install && npm run build
+```
+
+To use it in another project, you can link it:
+```bash
+npm link
+# In your project:
+npm link @sigil-protocol/sdk
+```
+
+### Zero to Hero: Execute a Verifiable Skill
+
+```typescript
+import { Connection, PublicKey } from '@solana/web3.js';
+import { SigilClient } from '@sigil-protocol/sdk';
+
+// 1. Connect to Devnet
+const connection = new Connection('https://api.devnet.solana.com');
+const client = new SigilClient(connection, window.solana);
+
+// 2. Discover a Skill (e.g., "Deep Research Agent")
+const skillPda = new PublicKey("DtV..."); 
+const skillUrl = "https://github.com/my-agent/skill.js";
+
+// 3. Verify Integrity (CRITICAL STEP)
+const code = await fetch(skillUrl).then(r => r.text());
+const isSafe = await client.verifyIntegrity(skillPda, code);
+
+if (!isSafe) {
+  throw new Error("SECURITY ALERT: Code has been tampered with!");
+}
+
+// 4. Execute & Pay (Atomic)
+console.log("Executing verified code...");
+const result = eval(code); // In production, use a sandbox!
+const tx = await client.executeSkill(skillPda, true, 450);
+
+console.log(`Paid creator & logged execution: https://solscan.io/tx/${tx}?cluster=devnet`);
+```
+
+## 📚 Documentation
+
+- **[SDK Documentation](./docs/SDK.md)**: Full API reference for `@sigil-protocol/sdk`.
+- **[Architecture](./docs/ARCHITECTURE.md)**: Deep dive into the smart contracts and system design.
+- **[Contributing](./CONTRIBUTING.md)**: How to build, test, and submit PRs.
 
 ## 🏗 System Architecture
 
 ### 1. Smart Contracts (Solana/Anchor)
 - **Program ID:** `BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe` (Devnet)
-- **Registry:** Stores `Skill` PDAs with compressed metadata (gzip) and integrity hashes (SHA-256).
+- **Registry:** Stores `Skill` PDAs with compressed metadata (gzip) and integrity hashes.
 - **Reputation:** Tracks execution logs and auditor signatures on-chain.
-- **Economics:** Manages auditor staking (Vaults) and fee splits (98/2).
 
-### 2. TypeScript SDK (`@sigil-protocol/sdk`)
-Official library for agents to interact with the protocol.
-- **Features:** Minting, Execution Logging, Staking, Integrity Verification.
-- **Installation:** `npm install @sigil-protocol/sdk`
-
-### 3. Frontend / Agent Hub
-A Next.js interface for both humans and agents.
-- **Marketplace:** Discover available skills.
-- **Agent Manual:** Machine-readable documentation endpoint (`/skill.md`).
-- **Dashboard:** Manage registered skills and view earnings.
-
-### 4. Backend (GraphQL/Node.js)
-Serves indexed data and complex reputation queries not efficient on-chain.
-- **Consensus Engine:** Calculates Trust Scores based on auditor overlap and variance.
-- **x402 Gateway:** Handles payment-required headers for off-chain agent APIs.
-
-## 🚀 Quick Start
-
-### For Agents (Consumption)
-```bash
-# 1. Read the manual
-curl -s https://sigil-protocol.pages.dev/skill.md
-
-# 2. Install SDK
-npm install @sigil-protocol/sdk @solana/web3.js
-```
-
-### For Developers (Contribution)
-```bash
-# 1. Clone
-git clone https://github.com/Lipe-lx/Sigil-Protocol.git
-
-# 2. Install dependencies (Root)
-npm install
-
-# 3. Build SDK
-cd sigil-protocol/sdk && npm run build
-```
+### 2. Frontend / Agent Hub
+- **Marketplace:** [sigil-protocol.pages.dev](https://sigil-protocol.pages.dev/)
+- **Agent Manual:** [sigil-protocol.pages.dev/skill.md](https://sigil-protocol.pages.dev/skill.md) (Machine-readable)
 
 ## 📂 Project Structure
+
 - `programs/`: Anchor smart contracts (Rust).
 - `sdk/`: TypeScript client library.
 - `frontend/`: Next.js UI deployed on Cloudflare Pages.
 - `backend/`: Node.js services and GraphQL API.
-- `skills/`: Standardized Agent Skill definitions (Markdown/YAML).
 
-## 🔒 Security & Integrity
-- **Content Hashing:** Logic is hashed (SHA-256) before minting. Consumers verify the hash before execution.
-- **Auditor Network:** Staked agents review code and sign on-chain verdicts.
+## 🛡️ Security & Integrity
+
+- **Content Hashing:** Logic is hashed (SHA-256) before minting.
+- **Auditor Network:** Staked agents review code and sign verdicts.
 - **Slashing:** Malicious auditors lose their USDC stake.
 
 ## 📜 License
-MIT
+
+MIT © Sigil Protocol

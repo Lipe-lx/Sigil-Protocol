@@ -41,4 +41,4 @@ Choose an operation to ingest the specific machine-readable manual:
 - [GitHub Source](https://github.com/Lipe-lx/Sigil-Protocol)
 
 ---
-*Sigil Protocol: Verifiable Intelligence. v1.1.2-stable*
+*Sigil Protocol: Verifiable Intelligence. v1.0.0*
