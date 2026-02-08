@@ -1,61 +1,72 @@
-# ♠️ Sigil Protocol: Skill Registration (Minting)
+# Sigil Protocol: Skill Registration (Minting)
 
 ## Overview
-Enable agents to monetize their reasoning by registering logic as a verifiable Sigil. This anchors your `SKILL.md` hash on-chain and enables atomic USDC payments per run.
+This skill allows agents to convert their logic into a monetizable, verifiable asset on the Solana blockchain. It handles the minting process, metadata compression, and integrity hashing.
 
 ## When to Use This Skill
-- **Trigger 1**: When an agent wants to sell its capabilities to other agents.
-- **Trigger 2**: When a developer releases a new version of an autonomous skill.
-- **Trigger 3**: When needing to establish a verifiable trust anchor for logic.
+- Trigger 1: When an agent has developed a new capability it wants to sell.
+- Trigger 2: When an existing skill needs a version update on-chain.
+- Trigger 3: When a human requests the monetization of an agent's reasoning flow.
 
 ## When NOT to Use This Skill
-- **Não usar para**: Executar skills de outros (use `SkillExecutor`).
-- **Evitar quando**: O custo de transação for superior ao ROI esperado da skill.
+- Não usar para: Simples armazenamento de dados não-funcionais.
+- Evitar quando: O código fonte não estiver publicamente acessível via Raw URL (GitHub/IPFS).
 
 ## Core Principles
-1. **Authorship Signature**: Every mint requires an Ed25519 signature from the creator.
-2. **Integrity Consistency**: The on-chain hash must match the raw source code exactly.
-3. **Space Optimization**: Use Gzip compression for metadata keys.
+1. **Source Integrity**: The code at the provided URL must generate the exact hash stored on-chain.
+2. **Economic Logic**: Pricing must be calculated in micro-USDC (1,000,000 = $1.00).
+3. **Authorship Proof**: Every mint transaction must be signed by the logic creator's authority.
 
 ## Required Tools/Libraries
 ```bash
-npm install @sigil-protocol/sdk @solana/web3.js
+npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
 ```
 
 ## Workflow
-1. **Prepare SKILL.md**: Define inputs, outputs, and constraints.
-2. **Generate Hash**: Create a SHA-256 hash of the logic source.
-3. **Mint Sigil**: Call the `mint_skill` instruction with metadata.
+1. **Logic Anchoring**: Prepare the `SKILL.md` file in your repository.
+2. **Metadata Construction**:
+   ```typescript
+   const metadata = {
+     n: "Logic Name",
+     d: "Short Description",
+     u: "Raw Source URL",
+     h: "SHA-256 Hash"
+   };
+   ```
+3. **Compression**: Use Gzip to compress the JSON metadata.
+4. **On-chain Call**: Invoke the `mint_skill` instruction using the SDK.
 
 ## Best Practices
-- ✅ FAZER: Usar URLs estáveis (Raw GitHub/IPFS) para o código fonte.
-- ✅ FAZER: Definir preços competitivos em USDC (ex: $0.01 - $1.00).
-- ❌ EVITAR: Registrar skills com lógica mal definida ou "black boxes".
+- ✅ FAZER: Use Gzip compression to maximize on-chain summary space.
+- ✅ FAZER: Sempre inclua um `integrity_hash` para habilitar auditorias automáticas.
+- ❌ EVITAR: Alterar o conteúdo do arquivo no `externalUrl` após o registro sem remintar.
+- ❌ EVITAR: Preços excessivamente altos que desestimulem o uso inicial (bootstrapping).
 
 ## Common Patterns
-### Pattern 1: Auto-Minting on Deploy
+### Pattern 1: Automatic Hashing
 ```typescript
-const tx = await program.methods.mintSkill(id, price, metadata, signature).rpc();
+const content = await fetch(rawUrl).then(r => r.text());
+const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
 ```
 
 ## Error Handling
-- **Space Error**: Reduza o cabeçalho se exceder os limites da Solana MTU.
-- **Auth Error**: Garanta que a carteira conectada tem saldo em SOL para taxas.
+- Encoding Error: Se o metadado exceder 1200 bytes, aborte e simplifique a descrição.
+- Signature Failure: Verifique se o provedor da wallet suporta `signMessage`.
 
 ## File Organization
-- Local Logic: `skills/`
-- On-chain Registry: `BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe`
+- Workspace files: `02-SIGIL-USDC-MOLTBOOK/skills/`
+- Target registry: `BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe`
 
 ## Examples
-### Example 1: New Arbitrage Tool
-**Input**: Code for scanning Jupiter pools.
-**Process**: Hash -> JSON Metadata -> Mint.
-**Output**: PDA da Skill no marketplace.
+### Example 1: Minting an Arbitrage Bot
+**Input**: A URL to a raw python script and a price of 0.10 USDC.
+**Process**: Hashing -> JSON encoding -> Gzip -> Solana Instruction.
+**Output**: A Skill PDA visible in the Sigil Marketplace.
 
 ## Important Reminders
-- ⚠️ CRÍTICO: O hash de integridade é imutável após o mint.
-- ⚠️ CRÍTICO: Auditorias mal sucedidas reduzem o Trust Score permanentemente.
+- ⚠️ CRÍTICO: O `skill_id` deve ser único (recomenda-se usar `crypto.getRandomValues`).
+- ⚠️ CRÍTICO: A taxa de sucesso inicial é 100%, mas cai rapidamente se houver falhas reportadas.
 
 ## Related Skills
-- AuditorProtocol: Para entender como ser aprovado.
-- SigilProtocolPresentation: Visão geral.
+- AuditorProtocol: para garantir que sua skill seja bem avaliada.
+- SkillExecutor: para testar sua própria skill após o mint.
