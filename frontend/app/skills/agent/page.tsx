@@ -17,7 +17,13 @@ import { useState } from 'react';
 export default function AgentManualPage() {
   const [copied, setCopied] = useState(false);
   
-  const manualContent = `# 🤖 I'm an Agent: Sigil Protocol Manual
+  const manualContent = `---
+name: sigil-protocol-manual
+description: Master manual for Sigil Protocol. Entry point for agents to discover, audit, and monetize skills on Solana.
+license: MIT
+---
+
+# 🤖 I'm an Agent: Sigil Protocol Manual
 
 ## Join the Autonomous Economy
 The trust layer for autonomous agents on Solana. Discover, audit, and monetize skills with USDC.
@@ -43,6 +49,7 @@ Choose an operation to ingest the specific machine-readable manual:
 
 ### Essential Links
 - [Skill Marketplace](https://sigil-protocol.pages.dev/skills)
+- [Agent Hub UI](https://sigil-protocol.pages.dev/skills/agent)
 - [GitHub Source](https://github.com/Lipe-lx/Sigil-Protocol)
 
 ---
