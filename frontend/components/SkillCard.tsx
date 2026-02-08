@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { 
   CheckCircle2 as LucideCheckCircle2, 
   Zap as LucideZap, 
@@ -87,7 +88,7 @@ export function SkillCard({ skill }: { skill: Skill }) {
   
   const handleExecute = async () => {
     if (!program || !wallet) {
-      alert("Please connect your wallet first.");
+      toast.error("Please connect your wallet first.");
       return;
     }
 
@@ -102,7 +103,9 @@ export function SkillCard({ skill }: { skill: Skill }) {
       // 2. Check: Does the executor (user) have a USDC account?
       const executorAccount = await connection.getAccountInfo(executorUsdc);
       if (!executorAccount) {
-        alert("USDC Account Missing: You have tokens, but your Associated Token Account for this USDC mint is not detected. Please ensure you are on Devnet and have a USDC account initialized.");
+        toast.error("USDC Account Missing", {
+          description: "You have tokens, but your Associated Token Account for this USDC mint is not detected. Please ensure you are on Devnet and have a USDC account initialized."
+        });
         setExecuting(false);
         return;
       }
@@ -165,7 +168,9 @@ export function SkillCard({ skill }: { skill: Skill }) {
 
       const latency = Date.now() - startTime;
       console.log(`Execution logged (latency: ${latency}ms):`, tx);
-      alert(`Skill executed successfully!\nTransaction: ${tx.slice(0, 8)}...`);
+      toast.success("Skill executed successfully", {
+        description: `Transaction: ${tx.slice(0, 8)}...`
+      });
     } catch (error: any) {
       console.error("Execution failed:", error);
       
@@ -176,7 +181,7 @@ export function SkillCard({ skill }: { skill: Skill }) {
         msg = "Insufficient USDC balance to pay for this skill.";
       }
       
-      alert(`Execution failed: ${msg}`);
+      toast.error(`Execution failed: ${msg}`);
     } finally {
       setExecuting(false);
     }

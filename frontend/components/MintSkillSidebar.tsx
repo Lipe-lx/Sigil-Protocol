@@ -7,6 +7,8 @@ import { useSigil } from '@/hooks/useSigil';
 import { BN } from '@coral-xyz/anchor';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+import { useConfirm } from '@/components/providers/confirm-provider';
 
 export function MintSkillSidebar({ 
   isOpen, 
@@ -18,6 +20,7 @@ export function MintSkillSidebar({
   onSuccess: () => void 
 }) {
   const { program, wallet } = useSigil();
+  const { confirm } = useConfirm();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('0.01');
@@ -44,7 +47,12 @@ export function MintSkillSidebar({
         console.log(`URL Transformed: ${originalUrl} -> ${processedUrl}`);
         
         // Notify user before proceeding if possible, or just use the better URL
-        if (!confirm(`We detected a standard GitHub URL. To ensure cryptographic integrity, we will use the RAW version instead:\n\n${processedUrl}\n\nProceed?`)) {
+        if (!await confirm({
+          title: "URL Auto-Correction",
+          description: `We detected a standard GitHub URL. To ensure cryptographic integrity, we will use the RAW version instead:\n\n${processedUrl}\n\nProceed?`,
+          confirmText: "Proceed",
+          cancelText: "Cancel"
+        })) {
           setLoading(false);
           return;
         }
@@ -142,7 +150,7 @@ export function MintSkillSidebar({
       setExternalUrl('');
     } catch (error: any) {
       console.error("Minting failed:", error);
-      alert(`Minting failed: ${error.message}`);
+      toast.error(`Minting failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
