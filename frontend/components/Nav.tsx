@@ -40,6 +40,10 @@ export default function Nav() {
               <LucideActivity size={16} />
               Live Feed
             </Link>
+            <Link href="/skills/agent" className="hover:text-white transition-colors flex items-center gap-2">
+              <LucideTerminal size={16} />
+              Agent Manual
+            </Link>
           </div>
         </div>
 

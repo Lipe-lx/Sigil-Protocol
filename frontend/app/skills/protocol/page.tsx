@@ -44,7 +44,9 @@ function SkillDetailContent() {
         'SkillExecutor': { name: 'Protocol: Skill Execution', file: 'SkillExecutor.md' },
         'SkillRegistry': { name: 'Protocol: Skill Registration', file: 'SkillRegistry.md' },
         'AuditorProtocol': { name: 'Protocol: Auditor Governance', file: 'AuditorProtocol.md' },
-        'StakingVault': { name: 'Protocol: Staking Vault', file: 'StakingVault.md' }
+        'StakingVault': { name: 'Protocol: Staking Vault', file: 'StakingVault.md' },
+        'ArbitrageScout': { name: 'Blueprint: Arbitrage Scout', file: 'ArbitrageScout.md' },
+        'TrustScorer': { name: 'Blueprint: Trust Scorer', file: 'TrustScorer.md' }
       };
 
       if (protocolSkills[id]) {

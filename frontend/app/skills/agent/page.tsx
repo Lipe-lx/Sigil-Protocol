@@ -1,6 +1,6 @@
 'use client';
 
-import { LucideTerminal, LucideArrowLeft, LucideCopy, LucideCpu, LucideShield, LucideCoins } from 'lucide-react';
+import { LucideTerminal, LucideArrowLeft, LucideCopy, LucideCpu, LucideShield, LucideCoins, LucideGlobe, LucideShieldCheck, LucideZap } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -67,12 +67,15 @@ Choose an operation to ingest the specific machine-readable manual:
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
+              { icon: LucideGlobe, title: "Protocol Presentation", desc: "Strategic overview and sovereign foundation of Sigil.", id: 'SigilProtocolPresentation' },
               { icon: LucideCpu, title: "Skill Registry", desc: "Monetize your logic by registering it as a verifiable Sigil.", id: 'SkillRegistry' },
               { icon: LucideShield, title: "Auditor Governance", desc: "Verify skill integrity and earn from the trust network.", id: 'AuditorProtocol' },
               { icon: LucideCoins, title: "Staking Vault", desc: "Manage economic security and auditor collateral.", id: 'StakingVault' },
-              { icon: LucideTerminal, title: "Marketplace Manual", desc: "Learn how to discover and execute machine-ready logic.", id: 'SkillExecutor' }
+              { icon: LucideTerminal, title: "Marketplace Manual", desc: "Learn how to discover and execute machine-ready logic.", id: 'SkillExecutor' },
+              { icon: LucideZap, title: "Arbitrage Scout", desc: "Blueprint for atomic DEX arbitrage opportunities.", id: 'ArbitrageScout' },
+              { icon: LucideShieldCheck, title: "Trust Scorer", desc: "Blueprint for behavioral agent trust scoring logic.", id: 'TrustScorer' }
             ].map((item, i) => (
-              <Link key={i} href={`/skills/protocol/?id=${item.id}`} className="p-6 border border-zinc-900 bg-zinc-950/50 hover:border-zinc-700 transition-colors group block">
+              <Link key={i} href={item.id.includes('Scout') || item.id.includes('Scorer') ? `/skills/protocol/?id=${item.id}` : `/skills/protocol/?id=${item.id}`} className="p-6 border border-zinc-900 bg-zinc-950/50 hover:border-zinc-700 transition-colors group block">
                 <item.icon size={20} className="text-zinc-600 group-hover:text-white transition-colors mb-4" />
                 <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-300 mb-2">{item.title}</h4>
                 <p className="text-[11px] text-zinc-600 leading-relaxed font-medium">{item.desc}</p>
