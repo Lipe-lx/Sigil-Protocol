@@ -74,6 +74,10 @@ function SkillDetailContent() {
       }
 
       if (!program) return;
+
+      try {
+        setLoading(true);
+        const pda = new PublicKey(id as string);
         // @ts-ignore
         const account = await program.account.skill.fetch(pda);
         
