@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { LucideShieldCheck, LucideExternalLink, LucideAward, LucideSearch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { fetchGraphQL } from '@/lib/graphql';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { BecomeAuditorModal } from '@/components/auditors/BecomeAuditorModal';
 import { AuditorDetailsModal } from '@/components/auditors/AuditorDetailsModal';
 
@@ -16,9 +16,14 @@ interface Auditor {
   skillsAudited: number;
   reputation: number;
   totalEarned: number;
+  stakeAmount?: number;
+  lockedUntil?: number;
+  active?: boolean;
 }
 
 export default function AuditorsPage() {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
   const [auditors, setAuditors] = useState<Auditor[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,29 +32,53 @@ export default function AuditorsPage() {
   const getAuditors = async () => {
     setLoading(true);
     try {
-      const data = await fetchGraphQL<{ auditors: Auditor[] }>(`
-        query GetAuditors {
-          auditors(activeOnly: true) {
-            id
-            pubkey
-            tier
-            skillsAudited
-            reputation
-            totalEarned
-          }
-        }
-      `);
-      setAuditors(data?.auditors || []);
+      const { SigilRegistryClient } = await import('@/lib/solana/registry-client');
+      
+      // We don't need a full wallet for fetching data
+      const client = new SigilRegistryClient(connection, {
+        publicKey: publicKey || null,
+        signTransaction: null,
+        signAllTransactions: null,
+      });
+
+      const onChainAuditors = await client.getAllAuditors();
+      console.log("On-chain auditors fetched:", onChainAuditors);
+
+      const mappedAuditors: Auditor[] = onChainAuditors.map((a: any) => {
+        const account = a.account;
+        // Map Tier enum to string
+        let tierLabel = 'Community';
+        if (account.tier.tier1) tierLabel = 'Critical';
+        if (account.tier.tier2) tierLabel = 'Premium';
+
+        return {
+          id: a.publicKey.toBase58(),
+          pubkey: account.pubkey.toBase58(),
+          tier: tierLabel,
+          skillsAudited: account.skillsAudited.toNumber(),
+          reputation: account.reputation,
+          totalEarned: account.totalEarned.toNumber() / 1_000_000, // Assuming 6 decimals for USDC
+          stakeAmount: account.stakeAmount.toNumber(),
+          lockedUntil: account.lockedUntil.toNumber(),
+          active: account.active
+        };
+      });
+
+      // Filter to only show active or recently staked auditors if needed
+      // For now, let's show all registered
+      setAuditors(mappedAuditors.filter(a => a.active || a.stakeAmount! > 0));
     } catch (error) {
-      console.error('Error fetching auditors:', error);
+      console.error('Error fetching auditors from chain:', error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getAuditors();
-  }, []);
+    if (connection) {
+      getAuditors();
+    }
+  }, [connection]);
 
   return (
     <div className="max-w-[1400px] mx-auto px-6">
@@ -111,13 +140,17 @@ export default function AuditorsPage() {
                   <span className="text-sm font-medium text-white font-mono">{auditor.totalEarned.toFixed(2)} USDC</span>
                 </div>
                 <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold uppercase tracking-widest text-zinc-600">Staked</span>
+                  <span className="text-sm font-medium text-green-500 font-mono">{(auditor.stakeAmount! / 1_000_000).toFixed(0)} USDC</span>
+                </div>
+                <div className="flex justify-between items-center">
                   <span className="text-xs font-bold uppercase tracking-widest text-zinc-600">Audits Done</span>
                   <span className="text-sm font-medium text-white">{auditor.skillsAudited}</span>
                 </div>
                 
                 <div className="pt-4 flex gap-2">
                   <Button className="flex-1 uppercase text-[10px] font-black tracking-widest h-10">
-                    Stake to Vote
+                    {auditor.active ? "Delegate Stake" : "Inactive"}
                   </Button>
                   <Button variant="outline" size="icon" className="h-10 w-10 border-zinc-900">
                     <LucideExternalLink size={14} />
