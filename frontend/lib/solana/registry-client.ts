@@ -84,6 +84,22 @@ export class SigilRegistryClient {
       .rpc();
   }
 
+  async getAuditor(auditorPda: PublicKey) {
+    try {
+      return await (this.program.account as any).auditor.fetch(auditorPda);
+    } catch {
+      return null;
+    }
+  }
+
+  async getAllAuditors() {
+    try {
+      return await (this.program.account as any).auditor.all();
+    } catch {
+      return [];
+    }
+  }
+
   // Helper to derive PDAs
   deriveAuditorPda(auditorPubkey: PublicKey): PublicKey {
     const [pda] = PublicKey.findProgramAddressSync(
