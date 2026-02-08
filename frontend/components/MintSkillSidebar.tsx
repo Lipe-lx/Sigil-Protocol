@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { LucideX, LucideLoader2, LucideChevronRight, LucideInfo } from 'lucide-react';
+import { X as LucideX, Loader2 as LucideLoader2, ChevronRight as LucideChevronRight, Info as LucideInfo } from 'lucide-react';
 import { useSigil } from '@/hooks/useSigil';
 import { BN } from '@coral-xyz/anchor';
 import { PublicKey, SystemProgram } from '@solana/web3.js';

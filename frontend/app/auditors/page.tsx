@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { LucideShieldCheck, LucideExternalLink, LucideAward, LucideSearch } from 'lucide-react';
+import { ShieldCheck as LucideShieldCheck, ExternalLink as LucideExternalLink, Award as LucideAward, Search as LucideSearch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';

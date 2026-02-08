@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { LucideActivity, LucideCheckCircle2, LucideXCircle, LucideClock } from 'lucide-react';
+import { Activity as LucideActivity, CheckCircle2 as LucideCheckCircle2, XCircle as LucideXCircle, Clock as LucideClock } from 'lucide-react';
 import { useSigil } from '@/hooks/useSigil';
 import { cn } from '@/lib/utils';
 

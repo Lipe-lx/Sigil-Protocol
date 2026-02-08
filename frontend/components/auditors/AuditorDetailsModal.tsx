@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
-  LucideShieldCheck, 
-  LucideAward, 
-  LucideActivity, 
-  LucideHistory, 
-  LucideAlertTriangle,
-  LucideCheckCircle2,
-  LucideExternalLink,
-  LucideCopy
+  ShieldCheck as LucideShieldCheck, 
+  Award as LucideAward, 
+  Activity as LucideActivity, 
+  History as LucideHistory, 
+  AlertTriangle as LucideAlertTriangle,
+  CheckCircle2 as LucideCheckCircle2,
+  ExternalLink as LucideExternalLink,
+  Copy as LucideCopy
 } from "lucide-react";
 import { useState } from "react";
 

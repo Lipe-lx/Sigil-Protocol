@@ -4,7 +4,17 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSigil } from '@/hooks/useSigil';
 import { PublicKey } from '@solana/web3.js';
-import { LucideTerminal, LucideArrowLeft, LucideCopy, LucideCpu, LucideShieldCheck, LucideActivity, LucideShieldAlert, LucideCoins, LucideExternalLink } from 'lucide-react';
+import { 
+  Terminal as LucideTerminal, 
+  ArrowLeft as LucideArrowLeft, 
+  Copy as LucideCopy, 
+  Cpu as LucideCpu, 
+  ShieldCheck as LucideShieldCheck, 
+  Activity as LucideActivity, 
+  ShieldAlert as LucideShieldAlert, 
+  Coins as LucideCoins, 
+  ExternalLink as LucideExternalLink 
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

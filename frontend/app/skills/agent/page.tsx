@@ -1,6 +1,16 @@
 'use client';
 
-import { LucideTerminal, LucideArrowLeft, LucideCopy, LucideCpu, LucideShield, LucideCoins, LucideGlobe, LucideShieldCheck, LucideZap } from 'lucide-react';
+import { 
+  Terminal as LucideTerminal, 
+  ArrowLeft as LucideArrowLeft, 
+  Copy as LucideCopy, 
+  Cpu as LucideCpu, 
+  Shield as LucideShield, 
+  Coins as LucideCoins, 
+  Globe as LucideGlobe, 
+  ShieldCheck as LucideShieldCheck, 
+  Zap as LucideZap 
+} from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 

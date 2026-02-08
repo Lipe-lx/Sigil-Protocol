@@ -1,7 +1,7 @@
 'use client';
 
 import { NetworkActivityFeed } from '@/components/NetworkActivityFeed';
-import { LucideActivity, LucideShield, LucideGlobe } from 'lucide-react';
+import { Activity as LucideActivity, Shield as LucideShield, Globe as LucideGlobe } from 'lucide-react';
 
 export default function ActivityPage() {
   return (

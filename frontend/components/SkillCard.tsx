@@ -4,7 +4,15 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { LucideCheckCircle2, LucideZap, LucideCpu, LucideLoader2, LucideActivity as ActivityIcon, LucideShieldAlert, LucideShieldCheck as ShieldCheckIcon } from 'lucide-react';
+import { 
+  CheckCircle2 as LucideCheckCircle2, 
+  Zap as LucideZap, 
+  Cpu as LucideCpu, 
+  Loader2 as LucideLoader2, 
+  Activity as ActivityIcon, 
+  ShieldAlert as LucideShieldAlert, 
+  ShieldCheck as ShieldCheckIcon 
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSigil } from '@/hooks/useSigil';
 import { PublicKey, SystemProgram, Keypair } from '@solana/web3.js';

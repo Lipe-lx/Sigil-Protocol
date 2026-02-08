@@ -4,15 +4,15 @@ import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  LucideActivity, 
-  LucideExternalLink, 
-  LucideZap, 
-  LucideUserCheck, 
-  LucideShield, 
-  LucideWallet,
-  LucideClock,
-  LucideCheckCircle2,
-  LucideFileCode
+  Activity as LucideActivity, 
+  ExternalLink as LucideExternalLink, 
+  Zap as LucideZap, 
+  UserCheck as LucideUserCheck, 
+  Shield as LucideShield, 
+  Wallet as LucideWallet,
+  Clock as LucideClock,
+  CheckCircle2 as LucideCheckCircle2,
+  FileCode as LucideFileCode
 } from 'lucide-react';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';

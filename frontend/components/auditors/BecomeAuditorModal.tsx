@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
-import { LucideShieldCheck, LucideLoader2, LucideInfo } from "lucide-react";
+import { ShieldCheck as LucideShieldCheck, Loader2 as LucideLoader2, Info as LucideInfo } from "lucide-react";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";

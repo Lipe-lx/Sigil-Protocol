@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { SkillCard } from '@/components/SkillCard';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useSigil } from '@/hooks/useSigil';
-import { LucideSearch, LucideArrowUpDown, LucideFilter, LucidePlus } from 'lucide-react';
+import { Search as LucideSearch, ArrowUpDown as LucideArrowUpDown, Filter as LucideFilter, Plus as LucidePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BN } from '@coral-xyz/anchor';
 import { MintSkillSidebar } from '@/components/MintSkillSidebar';

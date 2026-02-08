@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LucideArrowRight, LucideShieldCheck, LucideZap, LucideCpu, LucideLayers, LucideGlobe, LucideLock } from 'lucide-react';
+import { ArrowRight as LucideArrowRight, ShieldCheck as LucideShieldCheck, Zap as LucideZap, Cpu as LucideCpu, Layers as LucideLayers, Globe as LucideGlobe, Lock as LucideLock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ExecutionFeed } from '@/components/ExecutionFeed';
