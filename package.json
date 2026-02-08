@@ -2,6 +2,11 @@
   "name": "sigil-protocol",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "sdk"
+  ],
   "scripts": {
     "backend:dev": "npm run dev --prefix backend",
     "frontend:dev": "npm run dev --prefix frontend",
