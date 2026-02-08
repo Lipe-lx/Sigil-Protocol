@@ -40,6 +40,7 @@ function SkillDetailContent() {
 
       // Handle Protocol Documentation Slugs (Local MD files)
       const protocolSkills: Record<string, any> = {
+        'SigilProtocolPresentation': { name: 'Protocol: Presentation', file: 'SigilProtocolPresentation.md' },
         'SkillExecutor': { name: 'Protocol: Skill Execution', file: 'SkillExecutor.md' },
         'SkillRegistry': { name: 'Protocol: Skill Registration', file: 'SkillRegistry.md' },
         'AuditorProtocol': { name: 'Protocol: Auditor Governance', file: 'AuditorProtocol.md' },
