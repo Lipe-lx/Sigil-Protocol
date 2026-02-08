@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { LucideCheckCircle2, LucideZap, LucideCpu, LucideLoader2, LucideActivity as ActivityIcon, LucideShieldAlert, LucideShieldCheck as ShieldCheckIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSigil } from '@/hooks/useSigil';
@@ -182,22 +183,24 @@ export function SkillCard({ skill }: { skill: Skill }) {
       
       <CardHeader className="relative z-10">
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-none group-hover:border-zinc-500 transition-colors relative">
-            <LucideCpu size={20} className="text-zinc-400 group-hover:text-white transition-colors" />
+          <Link href={`/skills/${skill.pda}`} className="p-2 bg-zinc-900 border border-zinc-800 rounded-none hover:border-zinc-500 transition-colors relative group/icon">
+            <LucideCpu size={20} className="text-zinc-400 group-hover/icon:text-white transition-colors" />
             {integrityStatus === 'invalid' && (
               <div className="absolute -top-1 -right-1 bg-red-600 rounded-full p-0.5 border border-black animate-pulse">
                 <LucideShieldAlert size={10} className="text-white" />
               </div>
             )}
-          </div>
+          </Link>
           <div className="flex flex-col items-end">
             <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Price per run</span>
             <span className="text-xl font-bold font-mono text-white">${skill.priceUsdc} <span className="text-xs text-zinc-500">USDC</span></span>
           </div>
         </div>
-        <CardTitle className="text-xl tracking-tight leading-tight group-hover:text-white transition-colors font-serif italic uppercase">
-          {skill.name || `Sigil Skill #${skill.id.slice(0, 4)}`}
-        </CardTitle>
+        <Link href={`/skills/${skill.pda}`} className="hover:opacity-80 transition-opacity">
+          <CardTitle className="text-xl tracking-tight leading-tight group-hover:text-white transition-colors font-serif italic uppercase">
+            {skill.name || `Sigil Skill #${skill.id.slice(0, 4)}`}
+          </CardTitle>
+        </Link>
         {skill.description && (
           <p className="text-[10px] text-zinc-400 mt-2 line-clamp-2 italic">
             {skill.description}
