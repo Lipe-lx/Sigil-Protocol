@@ -135,6 +135,8 @@ pub struct Auditor {
     pub tier: AuditorTier,
     pub skills_audited: u64,
     pub reputation: u16,
+    pub stake_amount: u64,
+    pub locked_until: i64,
     pub total_earned: u64,
     pub active: bool,
 }

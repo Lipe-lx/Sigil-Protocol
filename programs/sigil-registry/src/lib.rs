@@ -75,6 +75,22 @@ pub mod sigil_registry {
             reasoning_ipfs_hash,
         )
     }
+
+    pub fn stake_usdc(ctx: Context<StakeUsdc>, amount: u64) -> Result<()> {
+        instructions::stake_usdc::handler(ctx, amount)
+    }
+
+    pub fn request_unstake(ctx: Context<RequestUnstake>) -> Result<()> {
+        instructions::request_unstake::handler(ctx)
+    }
+
+    pub fn withdraw_stake(ctx: Context<WithdrawStake>) -> Result<()> {
+        instructions::withdraw_stake::handler(ctx)
+    }
+
+    pub fn slash_auditor(ctx: Context<SlashAuditor>) -> Result<()> {
+        instructions::slash_auditor::handler(ctx)
+    }
 }
 
 #[error_code]
@@ -87,4 +103,12 @@ pub enum ErrorCode {
     InvalidConsensusVerdict,
     #[msg("Skill already has a recorded consensus")]
     ConsensusAlreadyRecorded,
+    #[msg("Insufficient stake amount")]
+    InsufficientStake,
+    #[msg("Stake is still locked for unbonding")]
+    StillLocked,
+    #[msg("Unstake has not been requested yet")]
+    UnstakeNotRequested,
+    #[msg("Auditor has no stake to slash")]
+    NothingToSlash,
 }

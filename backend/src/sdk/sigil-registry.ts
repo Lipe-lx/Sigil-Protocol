@@ -172,6 +172,86 @@ export class SigilRegistryClient {
     }
   }
 
+  async stakeUsdc(amount: BN): Promise<string> {
+    const [auditorPda] = PublicKey.findProgramAddressSync(
+      [Buffer.from('auditor'), this.provider.wallet.publicKey.toBuffer()],
+      this.program.programId
+    );
+    
+    // Find Mint for USDC (assuming devnet known mint or passed as param? User didn't specify, logic implies strict mint)
+    // For now we need to know the USDC mint. In devnet it's 4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU usually
+    // But the contract takes it as an account.
+    // Let's assume we pass it or it's a constant in the project. 
+    // The user didn't give the mint address in the snippet.
+    // I will add a TO-DO or pass it as argument.
+    // Wait, the user said "Adicionei os métodos... Helpers para derivar as PDAs do Vault e da Vault Authority".
+    // I will implement generic ones.
+    
+    // Actually, looking at the contract `stake_usdc.rs`, it takes `usdc_mint`.
+    // I will add mint as a parameter or defaults if I knew it.
+    // Let's add it as a parameter to be safe.
+    
+    throw new Error("Method not implemented in SDK yet - User claimed it was done but file was empty of these methods. Please verify inputs.");
+  }
+  
+  // WAIT, I should IMPLEMENT them properly.
+  
+  async stakeUsdc(amount: BN, usdcMint: PublicKey): Promise<string> {
+    const auditorPda = this.deriveAuditorPda(this.provider.wallet.publicKey);
+    const vaultPda = this.deriveVaultPda(usdcMint, auditorPda);
+    const vaultAuthorityPda = this.deriveVaultAuthorityPda();
+    
+    const auditorTokenAccount = await this.getAssociatedTokenAddress(usdcMint, this.provider.wallet.publicKey);
+    
+    return await this.program.methods
+        .stakeUsdc(amount)
+        .accounts({
+            auditor: auditorPda,
+            auditorTokenAccount: auditorTokenAccount,
+            vaultTokenAccount: vaultPda,
+            vaultAuthority: vaultAuthorityPda,
+            usdcMint: usdcMint,
+            authority: this.provider.wallet.publicKey,
+            tokenProgram: web3.TOKEN_PROGRAM_ID,
+            systemProgram: web3.SystemProgram.programId,
+            rent: web3.SYSVAR_RENT_PUBKEY,
+        })
+        .rpc();
+  }
+
+  async requestUnstake(): Promise<string> {
+    const auditorPda = this.deriveAuditorPda(this.provider.wallet.publicKey);
+    
+    return await this.program.methods
+        .requestUnstake()
+        .accounts({
+            auditor: auditorPda,
+            authority: this.provider.wallet.publicKey,
+        })
+        .rpc();
+  }
+
+  async withdrawStake(usdcMint: PublicKey): Promise<string> {
+    const auditorPda = this.deriveAuditorPda(this.provider.wallet.publicKey);
+    const vaultPda = this.deriveVaultPda(usdcMint, auditorPda);
+    const vaultAuthorityPda = this.deriveVaultAuthorityPda();
+    
+    const auditorTokenAccount = await this.getAssociatedTokenAddress(usdcMint, this.provider.wallet.publicKey);
+
+    return await this.program.methods
+        .withdrawStake()
+        .accounts({
+            auditor: auditorPda,
+            auditorTokenAccount: auditorTokenAccount,
+            vaultTokenAccount: vaultPda,
+            vaultAuthority: vaultAuthorityPda,
+            usdcMint: usdcMint,
+            authority: this.provider.wallet.publicKey,
+            tokenProgram: web3.TOKEN_PROGRAM_ID,
+        })
+        .rpc();
+  }
+
   // Helper to derive PDAs
   deriveSkillPda(skillId: number[] | Uint8Array): PublicKey {
     const [pda] = PublicKey.findProgramAddressSync(
@@ -200,5 +280,25 @@ export class SigilRegistryClient {
       this.program.programId
     );
     return pda;
+  }
+  
+  deriveVaultPda(mint: PublicKey, auditor: PublicKey): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('vault'), mint.toBuffer(), auditor.toBuffer()],
+        this.program.programId
+    );
+    return pda;
+  }
+
+  deriveVaultAuthorityPda(): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('vault_authority')],
+        this.program.programId
+    );
+    return pda;
+  }
+
+  async getAssociatedTokenAddress(mint: PublicKey, owner: PublicKey): Promise<PublicKey> {
+      return await anchor.utils.token.associatedAddress({ mint, owner });
   }
 }

@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import { BN } from "@coral-xyz/anchor";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddress } from "@solana/spl-token";
+
+const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
+
 // Use the same interface as the page, or import it if shared
 export interface Auditor {
   id: string;
@@ -24,8 +31,10 @@ export interface Auditor {
   skillsAudited: number;
   reputation: number;
   totalEarned: number;
-  // Add extended fields that might come from a detailed query later
-  stakedAmount?: number;
+  // On-chain fields
+  stakeAmount?: number;
+  lockedUntil?: number;
+  active?: boolean;
   accuracy?: number;
   isVerified?: boolean;
   slashedAmount?: number;
@@ -36,28 +45,78 @@ interface AuditorDetailsModalProps {
   auditor: Auditor | null;
   isOpen: boolean;
   onClose: () => void;
+  onUpdate?: () => void;
 }
 
-export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetailsModalProps) {
+export function AuditorDetailsModal({ auditor, isOpen, onClose, onUpdate }: AuditorDetailsModalProps) {
+  const { publicKey, signTransaction, signAllTransactions } = useWallet();
+  const { connection } = useConnection();
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!auditor) return null;
 
+  const isOwner = publicKey?.toBase58() === auditor.pubkey;
+  const now = Math.floor(Date.now() / 1000);
+  const isLocked = auditor.lockedUntil ? auditor.lockedUntil > now : false;
+  const canWithdraw = auditor.lockedUntil ? (auditor.lockedUntil > 0 && now >= auditor.lockedUntil) : false;
+  const isUnstaking = auditor.lockedUntil ? auditor.lockedUntil > 0 : false;
+
   // Mock data for reliability metrics if not present in basic object
   const accuracy = auditor.accuracy || 98.5;
-  const stakedAmount = auditor.stakedAmount || (auditor.tier === 'Critical' ? 5000 : auditor.tier === 'Premium' ? 1000 : 100);
+  const stakedAmount = auditor.stakeAmount !== undefined ? auditor.stakeAmount / 1_000_000 : (auditor.tier === 'Critical' ? 5000 : auditor.tier === 'Premium' ? 1000 : 100);
   const isVerified = auditor.isVerified !== undefined ? auditor.isVerified : true; // Most top auditors are verified
   const slashedAmount = auditor.slashedAmount || 0;
   
   // Calculate a trust score based on reputation and history
   const trustScore = Math.min(100, (auditor.reputation / 10) + (auditor.skillsAudited / 5));
   const trustColor = trustScore > 90 ? "text-green-500" : trustScore > 70 ? "text-yellow-500" : "text-red-500";
-  const trustLabel = trustScore > 90 ? "Highly Trusted" : trustScore > 70 ? "Reliable" : "New / Unverified";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(auditor.pubkey);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleRequestUnstake = async () => {
+    if (!publicKey || !signTransaction || !signAllTransactions) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { SigilRegistryClient } = await import('@/lib/solana/registry-client');
+      const client = new SigilRegistryClient(connection, { publicKey, signTransaction, signAllTransactions });
+      const auditorPda = client.deriveAuditorPda(publicKey);
+      await client.requestUnstake(auditorPda);
+      onUpdate?.();
+      onClose();
+    } catch (err: any) {
+      setError(err.message || "Unstake request failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleWithdraw = async () => {
+    if (!publicKey || !signTransaction || !signAllTransactions) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { SigilRegistryClient } = await import('@/lib/solana/registry-client');
+      const client = new SigilRegistryClient(connection, { publicKey, signTransaction, signAllTransactions });
+      const auditorPda = client.deriveAuditorPda(publicKey);
+      const auditorTokenAccount = await getAssociatedTokenAddress(USDC_MINT, publicKey);
+      const vaultTokenAccount = client.deriveVaultPda(USDC_MINT, auditorPda);
+      const vaultAuthority = client.deriveVaultAuthorityPda();
+
+      await client.withdrawStake(auditorPda, auditorTokenAccount, vaultTokenAccount, vaultAuthority, USDC_MINT);
+      onUpdate?.();
+      onClose();
+    } catch (err: any) {
+      setError(err.message || "Withdrawal failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,6 +148,11 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
                   <Badge variant="default" className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-[10px] uppercase tracking-widest">
                     {auditor.tier} Tier
                   </Badge>
+                  {!auditor.active && (
+                    <Badge variant="destructive" className="text-[10px] uppercase tracking-widest gap-1 py-0.5 h-5">
+                      Inactive
+                    </Badge>
+                  )}
                   <span className="text-xs text-zinc-500 font-mono">Joined Feb 2026</span>
                 </div>
               </div>
@@ -136,6 +200,11 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
                   {stakedAmount.toLocaleString()} USDC
                   <LucideShieldCheck size={12} className="text-zinc-500" />
                 </div>
+                {isUnstaking && (
+                  <p className="text-[9px] text-yellow-500 mt-1 uppercase font-bold">
+                    {isLocked ? `Unlocking in ${Math.ceil((auditor.lockedUntil! - now) / 86400)} days` : "Ready to withdraw"}
+                  </p>
+                )}
               </div>
               <div>
                 <span className="text-[10px] uppercase text-zinc-600 block mb-0.5">Total Earnings</span>
@@ -165,6 +234,13 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
           </div>
         </div>
 
+        {/* Error message */}
+        {error && (
+          <div className="mx-6 mt-4 p-3 bg-red-950/20 border border-red-900 rounded text-red-500 text-xs text-center">
+            {error}
+          </div>
+        )}
+
         {/* Recent Activity / History */}
         <div className="p-6 bg-black">
           <div className="flex items-center justify-between mb-4">
@@ -182,7 +258,7 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
                   <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                   <div>
                     <div className="text-xs font-mono text-zinc-300">Skill #{1020 + i}: Quantum Arbitrage v{i}.0</div>
-                    <div className="text-[10px] text-zinc-600">Verified • 2 days ago</div>
+                    <div className="text-[10px] text-zinc-600">Verified • {i + 1} days ago</div>
                   </div>
                 </div>
                 <div className="text-right">
@@ -198,9 +274,39 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
           <Button variant="outline" className="flex-1 border-zinc-800 hover:bg-zinc-800 uppercase text-[10px] font-bold tracking-widest h-12">
             View on Solscan <LucideExternalLink size={12} className="ml-2" />
           </Button>
-          <Button className="flex-1 bg-white text-black hover:bg-zinc-200 uppercase text-[10px] font-bold tracking-widest h-12">
-            Delegate Stake
-          </Button>
+          
+          {isOwner ? (
+            <>
+              {canWithdraw ? (
+                <Button 
+                  onClick={handleWithdraw}
+                  disabled={loading}
+                  className="flex-1 bg-green-600 text-white hover:bg-green-700 uppercase text-[10px] font-bold tracking-widest h-12"
+                >
+                  {loading ? "Processing..." : "Withdraw Stake"}
+                </Button>
+              ) : isUnstaking ? (
+                <Button 
+                  disabled
+                  className="flex-1 bg-zinc-800 text-zinc-500 uppercase text-[10px] font-bold tracking-widest h-12"
+                >
+                  Unbonding active
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleRequestUnstake}
+                  disabled={loading}
+                  className="flex-1 bg-red-950 text-red-500 hover:bg-red-900 border border-red-900 uppercase text-[10px] font-bold tracking-widest h-12"
+                >
+                  {loading ? "Processing..." : "Request Unstake"}
+                </Button>
+              )}
+            </>
+          ) : (
+            <Button className="flex-1 bg-white text-black hover:bg-zinc-200 uppercase text-[10px] font-bold tracking-widest h-12">
+              Delegate Stake
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

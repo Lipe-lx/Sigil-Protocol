@@ -6,7 +6,7 @@ pub struct InitializeAuditor<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 32 + 1 + 8 + 2 + 8 + 1 + 100, // Discriminator + pubkey + tier + skills_audited + reputation + total_earned + active + padding
+        space = 8 + 32 + 1 + 8 + 2 + 8 + 8 + 8 + 1 + 100, // Explicit sizes + padding
         seeds = [b"auditor", authority.key().as_ref()],
         bump
     )]
@@ -22,6 +22,8 @@ pub fn handler(ctx: Context<InitializeAuditor>) -> Result<()> {
     auditor.tier = AuditorTier::Tier3; // Default tier for new community auditors
     auditor.skills_audited = 0;
     auditor.reputation = 20; // Starting reputation for Tier3
+    auditor.stake_amount = 0;
+    auditor.locked_until = 0;
     auditor.total_earned = 0;
     auditor.active = true;
     

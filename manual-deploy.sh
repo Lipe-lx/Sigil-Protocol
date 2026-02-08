@@ -72,8 +72,11 @@ docker run --rm -it \
         
         solana config set --url devnet
         
-        echo '   Deploying...'
-        anchor deploy --provider.cluster devnet --provider.wallet /root/.config/solana/id.json --program-keypair programs/sigil-registry-keypair.json --program-name sigil_registry
+        echo '   Deploying with solana-cli...'
+        solana program deploy target/deploy/sigil_registry.so \
+            --program-id programs/sigil-registry-keypair.json \
+            --keypair /root/.config/solana/id.json \
+            --url devnet
         
         echo '🔄 Syncing IDL...'
         # Try init first, if fails (already exists), try upgrade

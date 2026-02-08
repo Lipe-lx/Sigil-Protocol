@@ -4,6 +4,10 @@ pub mod mint_skill;
 pub mod add_signature;
 pub mod log_execution;
 pub mod record_consensus;
+pub mod stake_usdc;
+pub mod request_unstake;
+pub mod withdraw_stake;
+pub mod slash_auditor;
 
 pub use initialize_registry::*;
 pub use initialize_auditor::*;
@@ -11,3 +15,7 @@ pub use mint_skill::*;
 pub use add_signature::*;
 pub use log_execution::*;
 pub use record_consensus::*;
+pub use stake_usdc::*;
+pub use request_unstake::*;
+pub use withdraw_stake::*;
+pub use slash_auditor::*;
