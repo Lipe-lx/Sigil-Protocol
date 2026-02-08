@@ -45,7 +45,7 @@ export default function Nav() {
 
         <div className="flex items-center gap-4">
           {mounted && (
-            <WalletMultiButton className="!bg-white !text-black !rounded-none !h-10 !px-6 !text-sm !font-bold !transition-transform active:!scale-95" />
+            <WalletMultiButton className="sigil-wallet-button" />
           )}
         </div>
       </div>

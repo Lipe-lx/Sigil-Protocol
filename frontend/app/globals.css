@@ -54,3 +54,127 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
+
+/* Solana Wallet Adapter Overrides */
+.wallet-adapter-button {
+  background-color: white !important;
+  color: black !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
+  height: 44px !important;
+  padding: 0 32px !important;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background-color: #f4f4f5 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 25px -10px rgba(255, 255, 255, 0.4) !important;
+  letter-spacing: 0.25em !important;
+}
+
+.wallet-adapter-button:active {
+  transform: translateY(1px) !important;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: white !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background-color: #000000 !important;
+  border: 1px solid #18181b !important;
+  border-radius: 0 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.wallet-adapter-modal-overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.wallet-adapter-modal-container {
+  font-family: inherit !important;
+}
+
+.wallet-adapter-modal-title {
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3em !important;
+  font-size: 14px !important;
+  color: white !important;
+  padding: 48px 40px 32px 40px !important;
+  text-align: left !important;
+}
+
+.wallet-adapter-modal-button-close {
+  top: 24px !important;
+  right: 24px !important;
+  background-color: transparent !important;
+  color: #52525b !important;
+  transition: color 0.3s ease !important;
+}
+
+.wallet-adapter-modal-button-close:hover {
+  color: white !important;
+}
+
+.wallet-adapter-modal-list {
+  margin: 0 40px 40px 40px !important;
+  grid-gap: 8px !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button {
+  background-color: #09090b !important;
+  color: #d4d4d8 !important;
+  border: 1px solid #18181b !important;
+  margin-bottom: 0 !important;
+  height: 64px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  justify-content: flex-start !important;
+  padding: 0 24px !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button:hover {
+  background-color: #121214 !important;
+  color: white !important;
+  border-color: #27272a !important;
+  transform: translateX(4px) !important;
+  letter-spacing: 0.2em !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button-end-icon {
+  margin-left: auto !important;
+}
+
+.wallet-adapter-dropdown-list {
+  background-color: #09090b !important;
+  border: 1px solid #18181b !important;
+  border-radius: 0 !important;
+  padding: 4px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+  margin-top: 8px !important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  color: #a1a1aa !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  padding: 10px 16px !important;
+  border-radius: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.wallet-adapter-dropdown-list-item:hover {
+  background-color: #18181b !important;
+  color: white !important;
+  padding-left: 20px !important;
+}
