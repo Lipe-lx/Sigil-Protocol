@@ -91,7 +91,7 @@ function SkillDetailContent() {
         const successCount = toNum(account.successCount || account.success_count);
         const ipfsHash = account.ipfsHash || account.ipfs_hash || "";
         
-        let name = `Sigil Skill #${id.toString().slice(0, 4)}`;
+        let name = \`Sigil Skill #\${id.toString().slice(0, 4)}\`;
         let description = "";
         let externalUrl = "";
         let integrityHash = "";
@@ -172,7 +172,7 @@ function SkillDetailContent() {
 
   const copyToClipboard = () => {
     if (!skill) return;
-    const content = skill.description || `# ${skill.name}\n\nNo logic provided.`;
+    const content = skill.description || \`# \${skill.name}\\n\\nNo logic provided.\`;
     navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -216,7 +216,7 @@ function SkillDetailContent() {
           <div className="grid grid-cols-2 gap-4 mb-12">
              <div className="p-6 border border-zinc-900 bg-zinc-950/50">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2">Price per Run</span>
-                <span className="text-3xl font-bold font-mono text-white">${skill.priceUsdc} <span className="text-sm text-zinc-600">USDC</span></span>
+                <span className="text-3xl font-bold font-mono text-white">\${skill.priceUsdc} <span className="text-sm text-zinc-600">USDC</span></span>
              </div>
              <div className="p-6 border border-zinc-900 bg-zinc-950/50">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2">Trust Score</span>
