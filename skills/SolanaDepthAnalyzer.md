@@ -1,15 +1,10 @@
-# SolanaDepthAnalyzer (Sigil-enabled)
 ---
-sigil_id: "skill_sol_depth_001"
-registry: "sigil.protocol/registry"
-price_usdc: 0.03
-sigil_chain: ["Certora", "TrailOfBits"]
-trust_score: 987
-permissions:
-  network: read_only
-  filesystem: none
-  compute: max_2s
+name: sigil-solana-depth-analyzer
+description: Analyzes Solana order books for deep liquidity insights and rugpull detection.
+license: MIT
 ---
+
+# Solana Depth Analyzer (Sigil-enabled)
 
 ## Description
 Analyzes Solana order books for deep liquidity insights and rugpull detection.

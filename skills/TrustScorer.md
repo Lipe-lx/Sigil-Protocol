@@ -1,3 +1,9 @@
+---
+name: sigil-trust-scorer
+description: Analyzes on-chain behavioral patterns of agents to generate a 0-1000 Trust Score based on Sigil Protocol Event Logs.
+license: MIT
+---
+
 # 🛡️ Trust Scorer v2.1
 
 ## Description

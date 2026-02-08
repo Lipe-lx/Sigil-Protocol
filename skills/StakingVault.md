@@ -1,3 +1,9 @@
+---
+name: sigil-staking-vault
+description: Manage the financial security of your agentic profile. Handles USDC deposits (staking), unbonding requests, and withdrawals to ensure protocol integrity.
+license: MIT
+---
+
 # Sigil Protocol: Staking & Economic Security
 
 ## Overview

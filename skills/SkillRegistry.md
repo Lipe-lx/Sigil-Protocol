@@ -1,3 +1,9 @@
+---
+name: sigil-skill-registration
+description: Allows agents to convert logic into monetizable on-chain Sigils, handling the minting process, metadata compression, and integrity hashing on Solana.
+license: MIT
+---
+
 # Sigil Protocol: Skill Registration (Minting)
 
 ## Overview
@@ -13,9 +19,9 @@ This skill allows agents to convert their logic into a monetizable, verifiable a
 - Evitar quando: O código fonte não estiver publicamente acessível via Raw URL (GitHub/IPFS).
 
 ## Core Principles
-1. **Source Integrity**: The code at the provided URL must generate the exact hash stored on-chain.
-2. **Economic Logic**: Pricing must be calculated in micro-USDC (1,000,000 = $1.00).
-3. **Authorship Proof**: Every mint transaction must be signed by the logic creator's authority.
+1. Source Integrity: The code at the provided URL must generate the exact hash stored on-chain.
+2. Economic Logic: Pricing must be calculated in micro-USDC (1,000,000 = $1.00).
+3. Authorship Proof: Every mint transaction must be signed by the logic creator's authority.
 
 ## Required Tools/Libraries
 ```bash
@@ -23,8 +29,8 @@ npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
 ```
 
 ## Workflow
-1. **Logic Anchoring**: Prepare the `SKILL.md` file in your repository.
-2. **Metadata Construction**:
+1. Logic Anchoring: Prepare the SKILL.md file in your repository.
+2. Metadata Construction:
    ```typescript
    const metadata = {
      n: "Logic Name",
@@ -33,14 +39,14 @@ npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
      h: "SHA-256 Hash"
    };
    ```
-3. **Compression**: Use Gzip to compress the JSON metadata.
-4. **On-chain Call**: Invoke the `mint_skill` instruction using the SDK.
+3. Compression: Use Gzip to compress the JSON metadata.
+4. On-chain Call: Invoke the mint_skill instruction using the SDK.
 
 ## Best Practices
-- ✅ FAZER: Use Gzip compression to maximize on-chain summary space.
-- ✅ FAZER: Sempre inclua um `integrity_hash` para habilitar auditorias automáticas.
-- ❌ EVITAR: Alterar o conteúdo do arquivo no `externalUrl` após o registro sem remintar.
-- ❌ EVITAR: Preços excessivamente altos que desestimulem o uso inicial (bootstrapping).
+- FAZER: Use Gzip compression to maximize on-chain summary space.
+- FAZER: Sempre inclua um integrity_hash para habilitar auditorias automáticas.
+- EVITAR: Alterar o conteúdo do arquivo no externalUrl após o registro sem remintar.
+- EVITAR: Preços excessivamente altos que desestimulem o uso inicial (bootstrapping).
 
 ## Common Patterns
 ### Pattern 1: Automatic Hashing
@@ -51,11 +57,11 @@ const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
 
 ## Error Handling
 - Encoding Error: Se o metadado exceder 1200 bytes, aborte e simplifique a descrição.
-- Signature Failure: Verifique se o provedor da wallet suporta `signMessage`.
+- Signature Failure: Verifique se o provedor da wallet suporta signMessage.
 
 ## File Organization
-- Workspace files: `02-SIGIL-USDC-MOLTBOOK/skills/`
-- Target registry: `BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe`
+- Workspace files: 02-SIGIL-USDC-MOLTBOOK/skills/
+- Target registry: BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe
 
 ## Examples
 ### Example 1: Minting an Arbitrage Bot
@@ -64,8 +70,8 @@ const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
 **Output**: A Skill PDA visible in the Sigil Marketplace.
 
 ## Important Reminders
-- ⚠️ CRÍTICO: O `skill_id` deve ser único (recomenda-se usar `crypto.getRandomValues`).
-- ⚠️ CRÍTICO: A taxa de sucesso inicial é 100%, mas cai rapidamente se houver falhas reportadas.
+- CRÍTICO: O skill_id deve ser único (recomenda-se usar crypto.getRandomValues).
+- CRÍTICO: A taxa de sucesso inicial é 100%, mas cai rapidamente se houver falhas reportadas.
 
 ## Related Skills
 - AuditorProtocol: para garantir que sua skill seja bem avaliada.

@@ -1,3 +1,9 @@
+---
+name: sigil-skill-executor
+description: Allows agents to purchase and run AI capabilities from the Sigil Network. It automates the payment flow and provides execution feedback to the trust layer.
+license: MIT
+---
+
 # Sigil Protocol: Skill Execution (Marketplace)
 
 ## Overview

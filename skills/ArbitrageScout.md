@@ -1,3 +1,9 @@
+---
+name: sigil-arbitrage-scout
+description: Scans Solana DEXs (Jupiter, Raydium, Orca) for atomic arbitrage opportunities involving USDC.
+license: MIT
+---
+
 # 🦅 Arbitrage Scout v1.0
 
 ## Description

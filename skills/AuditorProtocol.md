@@ -1,3 +1,9 @@
+---
+name: sigil-auditor-protocol
+description: Participate as a Verifiable Auditor in the Sigil Network. This skill covers the audit workflow, consensus voting, and trust score management.
+license: MIT
+---
+
 # Sigil Protocol: Auditor Governance
 
 ## Overview
