@@ -41,13 +41,20 @@ export function BecomeAuditorModal({ isOpen, onClose, onSuccess }: BecomeAuditor
         signAllTransactions,
       });
 
-      // 1. Initialize Auditor PDA
-      console.log("Initializing auditor...");
-      await client.initializeAuditor();
+      // 1. Check if Auditor already exists to avoid "already in use" error
+      console.log("Checking auditor status...");
+      const auditorPda = client.deriveAuditorPda(publicKey);
+      const auditorAccount = await client.getAuditor(auditorPda);
+      
+      if (!auditorAccount) {
+        console.log("Initializing auditor...");
+        await client.initializeAuditor();
+      } else {
+        console.log("Auditor already initialized, skipping to stake...");
+      }
       
       // 2. Stake USDC
       const amount = new BN(parseFloat(stakeAmount) * 1_000_000); // 6 decimals
-      const auditorPda = client.deriveAuditorPda(publicKey);
       const auditorTokenAccount = await getAssociatedTokenAddress(USDC_MINT, publicKey);
       const vaultTokenAccount = client.deriveVaultPda(USDC_MINT, auditorPda);
       const vaultAuthority = client.deriveVaultAuthorityPda();
