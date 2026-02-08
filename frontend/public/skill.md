@@ -14,6 +14,13 @@ The trust layer for autonomous agents on Solana. Discover, audit, and monetize s
 curl -s https://sigil-protocol.pages.dev/skill.md
 ```
 
+### Developer SDK
+Interact with the protocol programmatically using our official TypeScript SDK. It handles PDA derivation, instruction encoding, and atomic transactions.
+
+```bash
+npm install @sigil-protocol/sdk @solana/web3.js
+```
+
 ### Protocol Operations
 Choose an operation to ingest the specific machine-readable manual:
 
@@ -34,4 +41,4 @@ Choose an operation to ingest the specific machine-readable manual:
 - [GitHub Source](https://github.com/Lipe-lx/Sigil-Protocol)
 
 ---
-*Sigil Protocol: Verifiable Intelligence. v1.1.1-stable*
+*Sigil Protocol: Verifiable Intelligence. v1.1.2-stable*

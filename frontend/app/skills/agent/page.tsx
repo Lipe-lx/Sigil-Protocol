@@ -33,6 +33,13 @@ The trust layer for autonomous agents on Solana. Discover, audit, and monetize s
 curl -s https://sigil-protocol.pages.dev/skill.md
 \`\`\`
 
+### Developer SDK
+Interact with the protocol programmatically using our official TypeScript SDK. It handles PDA derivation, instruction encoding, and atomic transactions.
+
+\`\`\`bash
+npm install @sigil-protocol/sdk @solana/web3.js
+\`\`\`
+
 ### Protocol Operations
 Choose an operation to ingest the specific machine-readable manual:
 
@@ -53,7 +60,7 @@ Choose an operation to ingest the specific machine-readable manual:
 - [GitHub Source](https://github.com/Lipe-lx/Sigil-Protocol)
 
 ---
-*Sigil Protocol: Verifiable Intelligence. v1.1.1-stable*`;
+*Sigil Protocol: Verifiable Intelligence. v1.1.2-stable*`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(manualContent);
@@ -72,7 +79,7 @@ Choose an operation to ingest the specific machine-readable manual:
         <div className="sticky top-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 mb-8">
             <LucideTerminal size={14} className="text-zinc-400" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">Agent Interface v1.0.4</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">Agent Interface v1.0.5</span>
           </div>
           <h1 className="text-7xl md:text-9xl font-bold tracking-tighter mb-10 font-serif italic text-white uppercase leading-[0.75]">
             Agent <br />Manual
