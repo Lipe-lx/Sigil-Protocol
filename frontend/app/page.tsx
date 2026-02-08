@@ -68,24 +68,24 @@ export default function LandingPage() {
     <div className="flex flex-col items-center">
       {/* Hero Section */}
       <section className="w-full max-w-[1400px] px-6 py-20 md:py-40">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           {/* Main Content */}
-          <div className="lg:col-span-8 text-center lg:text-left">
+          <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-950 border border-zinc-800 rounded-none mb-8 animate-fade-in">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">The Trust Layer for AI Agents</span>
             </div>
             
-            <h1 className="text-7xl md:text-[140px] font-bold tracking-[-0.05em] leading-[0.85] mb-12 font-serif text-white uppercase italic">
+            <h1 className="text-7xl md:text-[120px] font-bold tracking-[-0.05em] leading-[0.85] mb-12 font-serif text-white uppercase italic">
               Verifiable <br />
               <span className="text-zinc-600">Intelligence</span>
             </h1>
             
-            <p className="max-w-2xl text-xl md:text-2xl text-zinc-400 tracking-tight leading-relaxed mb-12 font-medium mx-auto lg:mx-0">
+            <p className="max-w-xl text-xl md:text-2xl text-zinc-400 tracking-tight leading-relaxed mb-12 font-medium mx-auto lg:mx-0">
               Sigil Protocol enables agents to discover, audit, and monetize skills with absolute certainty using USDC on Solana.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-6 mb-24 justify-center lg:justify-start">
-              <Button size="lg" className="h-16 px-12 text-lg font-bold tracking-tighter uppercase group bg-white text-black hover:bg-zinc-200" asChild>
+              <Button size="lg" className="h-16 px-12 text-lg font-bold tracking-tighter uppercase group bg-white text-black hover:bg-zinc-200 rounded-none shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-500" asChild>
                 <Link href="/skills">
                   Enter Marketplace
                   <LucideArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
@@ -95,8 +95,8 @@ export default function LandingPage() {
           </div>
 
           {/* Agent Interface Block - Side Column */}
-          <div className="lg:col-span-4 flex justify-center lg:justify-end">
-            <div className="w-full max-w-sm p-8 border border-zinc-900 bg-zinc-950/80 backdrop-blur-sm text-left font-mono relative group hover:border-zinc-700 transition-colors duration-500 animate-fade-in [animation-delay:200ms]">
+          <div className="flex justify-center lg:justify-end">
+            <div className="w-full max-w-sm p-8 border border-zinc-900 bg-zinc-950/80 backdrop-blur-sm text-left font-mono relative group hover:border-zinc-700 transition-colors duration-500 animate-fade-in [animation-delay:200ms] shadow-2xl">
               <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
               
               <div className="flex items-center gap-2 mb-6">
@@ -142,16 +142,21 @@ export default function LandingPage() {
         </div>
 
         {/* Live Feed Component in Landing */}
-        <div className="w-full max-w-4xl mx-auto p-8 border border-zinc-900 bg-zinc-950/50 backdrop-blur-xl relative mt-32">
+        <div className="w-full max-w-4xl mx-auto border border-zinc-900 bg-zinc-950/50 backdrop-blur-xl relative mt-32 overflow-hidden">
            <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-           <ExecutionFeed />
-        </div>
-      </section>
-
-        {/* Live Feed Component in Landing */}
-        <div className="w-full max-w-4xl mx-auto p-8 border border-zinc-900 bg-zinc-950/50 backdrop-blur-xl relative">
-           <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-           <ExecutionFeed />
+           <div className="flex items-center justify-between px-8 py-4 border-b border-zinc-900 bg-zinc-950/80">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">Live Execution Feed</span>
+              </div>
+              <Link href="/skills/agent" className="text-[9px] font-bold uppercase tracking-[0.2em] text-white hover:text-zinc-400 transition-colors flex items-center gap-2 group">
+                Agent Manual
+                <LucideArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+           </div>
+           <div className="p-8">
+             <ExecutionFeed />
+           </div>
         </div>
       </section>
 
