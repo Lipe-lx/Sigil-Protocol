@@ -1,58 +1,62 @@
-# ♠️ Sigil Protocol SDK (Agent-First)
+# @sigil-protocol/sdk
 
-The official TypeScript SDK for interacting with the Sigil Protocol on Solana. Designed for autonomous agents to discover, audit, and monetize logic with absolute certainty.
+Official TypeScript SDK for interacting with the Sigil Protocol on Solana. Designed for autonomous agents to discover, verify, and execute skills.
 
 ## Installation
 
 ```bash
-npm install @sigil-protocol/sdk
+npm install @sigil-protocol/sdk @solana/web3.js @coral-xyz/anchor
 ```
 
-## Quick Start
+## Usage
 
 ### 1. Initialize Client
+
 ```typescript
-import { SigilClient } from '@sigil-protocol/sdk';
 import { Connection, Keypair } from '@solana/web3.js';
+import { Wallet } from '@coral-xyz/anchor';
+import { SigilClient } from '@sigil-protocol/sdk';
 
-const connection = new Connection('https://api.devnet.solana.com');
-const wallet = Keypair.generate(); // Use your agent's wallet
-
+const connection = new Connection("https://api.devnet.solana.com");
+const wallet = new Wallet(Keypair.fromSecretKey(...));
 const client = new SigilClient(connection, wallet);
 ```
 
-### 2. Execute a Skill (Atomic Pay-per-Run)
-```typescript
-const skillPda = new PublicKey('...');
-const tx = await client.executeSkill(skillPda, true, 120);
-console.log('Execution logged and USDC settled:', tx);
-```
+### 2. Register a Skill (Mint)
 
-### 3. Register your own Skill (Monetize)
 ```typescript
 const tx = await client.registerSkill({
-  name: "Arbitrage Scanner v1",
-  description: "Scans Jupiter for atomic USDC loops.",
-  priceUsdc: 0.05,
-  externalUrl: "https://raw.githubusercontent.com/user/repo/main/SKILL.md",
-  logicContent: "..." // Optional: content for integrity hashing
+  name: "Arbitrage Scout",
+  description: "Finds atomic arb routes on Jupiter",
+  priceUsdc: 0.1, // 0.10 USDC
+  externalUrl: "https://github.com/agent/skills/arb.md",
+  logicContent: "console.log('logic code here')..." // Optional: for hash generation
 });
+console.log("Skill Minted:", tx);
 ```
 
-### 4. Verify Logic Integrity (Audit)
+### 3. Execute a Skill (Atomic Payment)
+
 ```typescript
-const isSafe = await client.verifyIntegrity(skillPda, currentCodeContent);
-if (isSafe) {
-  await client.executeSkill(skillPda, true, 50);
-}
+const skillPda = new PublicKey("..."); // Get from marketplace
+const tx = await client.executeSkill(
+  skillPda,
+  true, // Success status
+  150   // Latency in ms
+);
+console.log("Execution logged & paid:", tx);
 ```
 
-## Features
-- **High-Level Abstraction**: Single methods for complex on-chain operations.
-- **Auto-PDA Derivation**: No need to manually calculate seeds for skills, auditors, or vaults.
-- **Built-in Compression**: Automatic Gzip compression for metadata to fit within Solana MTU.
-- **Integrity Checks**: Native SHA-256 comparison between on-chain hashes and local code.
-- **Atomic Splits**: Handles the 98/2 split logic for USDC automatically.
+### 4. Verify Integrity
 
----
-*Sigil Protocol: Verifiable Intelligence.*
+Before executing code downloaded from an external URL, verify it matches the on-chain hash.
+
+```typescript
+const isValid = await client.verifyIntegrity(skillPda, downloadedCode);
+if (!isValid) throw new Error("Security Alert: Code has been tampered with!");
+```
+
+## Compatibility
+- Node.js 18+
+- Solana Web3.js 1.95+
+- Anchor 0.30+
