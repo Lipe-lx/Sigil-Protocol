@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useSigil } from '@/hooks/useSigil';
 import { PublicKey } from '@solana/web3.js';
 import { LucideTerminal, LucideArrowLeft, LucideCopy, LucideCpu, LucideShieldCheck, LucideActivity, LucideShieldAlert, LucideCoins, LucideExternalLink } from 'lucide-react';
@@ -22,8 +22,9 @@ interface SkillData {
   pda: string;
 }
 
-export default function SkillDetailPage() {
-  const { id } = useParams();
+function SkillDetailContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const { program } = useSigil();
   const [skill, setSkill] = useState<SkillData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,10 @@ export default function SkillDetailPage() {
 
   useEffect(() => {
     const fetchSkill = async () => {
-      if (!program || !id) return;
+      if (!program || !id) {
+        if (!id) setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
@@ -267,5 +271,18 @@ export default function SkillDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SkillDetailPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <div className="w-12 h-12 border-2 border-white/10 border-t-white animate-spin rounded-full" />
+        <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">Loading Protocol...</span>
+      </div>
+    }>
+      <SkillDetailContent />
+    </Suspense>
   );
 }

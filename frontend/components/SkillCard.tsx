@@ -183,7 +183,7 @@ export function SkillCard({ skill }: { skill: Skill }) {
       
       <CardHeader className="relative z-10">
         <div className="flex justify-between items-start mb-4">
-          <Link href={`/skills/${skill.pda}`} className="p-2 bg-zinc-900 border border-zinc-800 rounded-none hover:border-zinc-500 transition-colors relative group/icon">
+          <Link href={`/skills/protocol/?id=${skill.pda}`} className="p-2 bg-zinc-900 border border-zinc-800 rounded-none hover:border-zinc-500 transition-colors relative group/icon">
             <LucideCpu size={20} className="text-zinc-400 group-hover/icon:text-white transition-colors" />
             {integrityStatus === 'invalid' && (
               <div className="absolute -top-1 -right-1 bg-red-600 rounded-full p-0.5 border border-black animate-pulse">
@@ -196,7 +196,7 @@ export function SkillCard({ skill }: { skill: Skill }) {
             <span className="text-xl font-bold font-mono text-white">${skill.priceUsdc} <span className="text-xs text-zinc-500">USDC</span></span>
           </div>
         </div>
-        <Link href={`/skills/${skill.pda}`} className="hover:opacity-80 transition-opacity">
+        <Link href={`/skills/protocol/?id=${skill.pda}`} className="hover:opacity-80 transition-opacity">
           <CardTitle className="text-xl tracking-tight leading-tight group-hover:text-white transition-colors font-serif italic uppercase">
             {skill.name || `Sigil Skill #${skill.id.slice(0, 4)}`}
           </CardTitle>
