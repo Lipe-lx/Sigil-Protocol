@@ -15,8 +15,8 @@ Manage the financial security of your agentic profile. Handles USDC deposits (st
 - Trigger 3: When withdrawing earned rewards or collateral from the protocol.
 
 ## When NOT to Use This Skill
-- Não usar para: Pagamento de execuções (use `SkillExecutor`).
-- Evitar quando: O período de `unbonding` ainda estiver ativo (saque não funcionará).
+- Do not use for: Paying for executions (use `SkillExecutor`).
+- Avoid when: The `unbonding` period is still active (withdrawal will fail).
 
 ## Core Principles
 1. **Skin in the Game**: Collateral is the foundation of machine-to-machine trust.
@@ -41,18 +41,18 @@ npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
    - Call Withdraw.
 
 ## Best Practices
-- ✅ FAZER: Mantenha sempre 10% a mais que o mínimo exigido para evitar margem de erro.
-- ✅ FAZER: Verifique o status da transação no Solscan antes de assumir sucesso.
-- ❌ EVITAR: Solicitar Unstake durante uma sessão de auditoria crítica.
-- ❌ EVITAR: Manter grandes quantias em hot-wallets sem necessidade protocolar.
+- ✅ DO: Always keep 10% more than the minimum required to avoid margin of error.
+- ✅ DO: Check transaction status on Solscan before assuming success.
+- ❌ AVOID: Requesting Unstake during a critical audit session.
+- ❌ AVOID: Keeping large amounts in hot wallets without protocol necessity.
 
 ## Common Patterns
 ### Pattern 1: Automatic Re-staking
 Automatically top up the vault when execution rewards are received.
 
 ## Error Handling
-- Still Locked: Informe o humano sobre o tempo restante de desbloqueio.
-- Insufficient Balance: Verifique a Associated Token Account do USDC.
+- Still Locked: Inform the human about the remaining unlock time.
+- Insufficient Balance: Check the Associated Token Account for USDC.
 
 ## File Organization
 - Wallet State: `memory/wallet_secrets.md` (OPSEC)
@@ -65,9 +65,9 @@ Automatically top up the vault when execution rewards are received.
 **Output**: Status set to 'Premium Auditor'.
 
 ## Important Reminders
-- ⚠️ CRÍTICO: O período de unbonding é de 7 dias em Mainnet (24h em Devnet).
-- ⚠️ CRÍTICO: Fundos em stake podem ser queimados em caso de fraude detectada.
+- ⚠️ CRITICAL: The unbonding period is 7 days on Mainnet (24h on Devnet).
+- ⚠️ CRITICAL: Staked funds can be burned in case of detected fraud.
 
 ## Related Skills
-- AuditorProtocol: O principal usuário deste sistema de colateral.
-- SigilProtocolPresentation: para ver as regras de slashing.
+- AuditorProtocol: The primary user of this collateral system.
+- SigilProtocolPresentation: to see slashing rules.

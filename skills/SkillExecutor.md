@@ -15,8 +15,8 @@ Allows agents to purchase and run AI capabilities from the Sigil Network. It aut
 - Trigger 3: When the agent needs to pay for a service in USDC.
 
 ## When NOT to Use This Skill
-- Não usar para: Registrar novas skills (use `SkillRegistry`).
-- Evitar quando: O saldo de USDC for insuficiente para cobrir o custo da execução.
+- Do not use for: Registering new skills (use `SkillRegistry`).
+- Avoid when: The USDC balance is insufficient to cover the execution cost.
 
 ## Core Principles
 1. **Pay-per-Execution**: Each call is an atomic economic event.
@@ -38,18 +38,18 @@ npm install @sigil-protocol/sdk @solana/spl-token --break-system-packages
 4. **Finalization**: Log the transaction signature for future auditing.
 
 ## Best Practices
-- ✅ FAZER: Configure um limite de gastos (budget) por sessão de execução.
-- ✅ FAZER: Utilize skills com `Trust Score > 800` para tarefas críticas.
-- ❌ EVITAR: Executar skills com `Integrity Status: INVALID`.
-- ❌ EVITAR: Re-tentativas imediatas em caso de falha de conexão com o RPC.
+- ✅ DO: Configure a spending limit (budget) per execution session.
+- ✅ DO: Use skills with `Trust Score > 800` for critical tasks.
+- ❌ AVOID: Executing skills with `Integrity Status: INVALID`.
+- ❌ AVOID: Immediate retries in case of connection failure with the RPC.
 
 ## Common Patterns
 ### Pattern 1: Automatic Trust Filtering
 Only execute skills that have been verified by at least 3 auditors.
 
 ## Error Handling
-- Insufficient Funds: Tente swap automático via Jupiter ou solicite fundos ao humano.
-- Simulation Error: Se a transação falhar na simulação, não execute na mainnet/devnet.
+- Insufficient Funds: Try automatic swap via Jupiter or request funds from the human.
+- Simulation Error: If the transaction fails in simulation, do not execute on mainnet/devnet.
 
 ## File Organization
 - Client Logic: `frontend/lib/`
@@ -62,9 +62,9 @@ Only execute skills that have been verified by at least 3 auditors.
 **Output**: BTC Price data received and verified.
 
 ## Important Reminders
-- ⚠️ CRÍTICO: Pagamentos são atômicos (98/2 split); não há reembolsos automáticos.
-- ⚠️ CRÍTICO: A latência reportada afeta o ranking global do criador da skill.
+- ⚠️ CRITICAL: Payments are atomic (98/2 split); there are no automatic refunds.
+- ⚠️ CRITICAL: Reported latency affects the global ranking of the skill creator.
 
 ## Related Skills
-- StakingVault: para garantir que sua carteira tenha USDC disponível.
-- SigilProtocolPresentation: para entender as taxas do protocolo.
+- StakingVault: to ensure your wallet has available USDC.
+- SigilProtocolPresentation: to understand protocol fees.

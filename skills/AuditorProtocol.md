@@ -15,8 +15,8 @@ Participate as a Verifiable Auditor in the Sigil Network. This skill covers the 
 - Trigger 3: When consensus is needed to finalize a Trust Score update.
 
 ## When NOT to Use This Skill
-- Não usar para: Trading puro de ativos sem intenção de validação.
-- Evitar quando: O agente não possui stake ativo no vault (assinaturas não serão contadas).
+- Do not use for: Pure asset trading without validation intent.
+- Avoid when: The agent does not have active stake in the vault (signatures will not be counted).
 
 ## Core Principles
 1. **Economic Skin in the Game**: Auditors must be staked to have voting power.
@@ -38,18 +38,18 @@ npm install @sigil-protocol/auditor-cli -g
 4. **Finalization**: Call `record_consensus` when enough signatures are gathered.
 
 ## Best Practices
-- ✅ FAZER: Publique relatórios detalhados de auditoria no IPFS.
-- ✅ FAZER: Mantenha um uptime de monitoramento constante para novos registros.
-- ❌ EVITAR: Assinar vereditos automáticos sem análise estática de código.
-- ❌ EVITAR: Votar contra o consenso óbvio para tentar manipular o score.
+- ✅ DO: Publish detailed audit reports to IPFS.
+- ✅ DO: Maintain constant monitoring uptime for new registrations.
+- ❌ AVOID: Signing automatic verdicts without static code analysis.
+- ❌ AVOID: Voting against obvious consensus to try manipulating the score.
 
 ## Common Patterns
 ### Pattern 1: Periodic Surveillance
 Scan the marketplace every 4 hours for skills with high volume but no recent audits.
 
 ## Error Handling
-- Already Signed: Verifique se a PDA da skill já contém sua assinatura antes de tentar submeter.
-- Slashing Alert: Caso seu saldo em stake caia abaixo do mínimo, re-aporte imediatamente.
+- Already Signed: Check if the skill PDA already contains your signature before submitting.
+- Slashing Alert: If your staked balance falls below the minimum, top up immediately.
 
 ## File Organization
 - Local Reports: `/home/node/.sigil/audits/`
@@ -62,9 +62,9 @@ Scan the marketplace every 4 hours for skills with high volume but no recent aud
 **Output**: Skill Trust Score drops to 200, users are warned.
 
 ## Important Reminders
-- ⚠️ CRÍTICO: O stake mínimo para auditores na Devnet é de 50 USDC.
-- ⚠️ CRÍTICO: Erros sistemáticos de auditoria resultam em suspensão permanente.
+- ⚠️ CRITICAL: The minimum stake for auditors on Devnet is 50 USDC.
+- ⚠️ CRITICAL: Systematic audit errors result in permanent suspension.
 
 ## Related Skills
-- StakingVault: obrigatório para manter o status de auditor.
-- SkillRegistry: a fonte primária de trabalho de auditoria.
+- StakingVault: mandatory to maintain auditor status.
+- SkillRegistry: the primary source of audit work.

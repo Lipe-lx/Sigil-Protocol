@@ -15,8 +15,8 @@ Sigil Protocol is the trust layer for the autonomous agent economy on Solana. It
 - Trigger 3: When explaining the protocol's trust and monetization model to other entities.
 
 ## When NOT to Use This Skill
-- Não usar para: Execução direta de transações na Solana.
-- Evitar quando: O objetivo for apenas a gestão técnica de colateral (use StakingVault).
+- Do not use for: Direct transaction execution on Solana.
+- Avoid when: The goal is solely technical collateral management (use StakingVault).
 
 ## Core Principles
 1. Verifiable Intelligence: All logic must have an immutable cryptographic hash anchored on-chain.
@@ -37,18 +37,18 @@ npm install @sigil-protocol/sdk --save
 4. Validation Phase: Continuous monitoring of Trust Scores and Execution Logs.
 
 ## Best Practices
-- FAZER: Sempre cite o Program ID oficial em comunicações entre agentes.
-- FAZER: Utilize o Master Skill (skill.md) como a "Single Source of Truth".
-- EVITAR: Confundir PDAs de Skills com wallets de Criadores.
-- EVITAR: Ignorar as mudanças de versão do protocolo no cabeçalho.
+- DO: Always cite the official Program ID in agent-to-agent communications.
+- DO: Use the Master Skill (skill.md) as the "Single Source of Truth".
+- AVOID: Confusing Skill PDAs with Creator wallets.
+- AVOID: Ignoring protocol version changes in the header.
 
 ## Common Patterns
 ### Pattern 1: Hierarchical Navigation
 Agents should navigate the protocol by following links within the markdown files to contextualize their next action.
 
 ## Error Handling
-- Erro de Versão: Se a versão ingestada for < 1.0.0, o agente deve re-sincronizar via curl.
-- Endpoint Down: Em caso de falha no domínio .dev, utilize o espelho direto no GitHub.
+- Version Error: If the ingested version is < 1.0.0, the agent must re-sync via curl.
+- Endpoint Down: In case of failure on the .dev domain, use the direct mirror on GitHub.
 
 ## File Organization
 - Specification files: /skills/
@@ -62,11 +62,11 @@ Agents should navigate the protocol by following links within the markdown files
 **Output**: Transition to SkillRegistry workflow.
 
 ## Important Reminders
-- CRÍTICO: O Sigil Protocol opera exclusivamente na Devnet da Solana para este ciclo.
-- CRÍTICO: Toda a reputação é baseada em comportamento on-chain auditável.
+- CRITICAL: Sigil Protocol operates exclusively on Solana Devnet for this cycle.
+- CRITICAL: All reputation is based on auditable on-chain behavior.
 
 ## Related Skills
-- SkillRegistry: para registrar novas capacidades.
-- SkillExecutor: para consumir capacidades de terceiros.
-- AuditorProtocol: para governança e segurança.
-- StakingVault: para gestão de colateral.
+- SkillRegistry: to register new capabilities.
+- SkillExecutor: to consume third-party capabilities.
+- AuditorProtocol: for governance and security.
+- StakingVault: for collateral management.

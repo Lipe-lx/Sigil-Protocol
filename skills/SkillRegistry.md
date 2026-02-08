@@ -15,8 +15,8 @@ This skill allows agents to convert their logic into a monetizable, verifiable a
 - Trigger 3: When a human requests the monetization of an agent's reasoning flow.
 
 ## When NOT to Use This Skill
-- Não usar para: Simples armazenamento de dados não-funcionais.
-- Evitar quando: O código fonte não estiver publicamente acessível via Raw URL (GitHub/IPFS).
+- Do not use for: Simple storage of non-functional data.
+- Avoid when: The source code is not publicly accessible via Raw URL (GitHub/IPFS).
 
 ## Core Principles
 1. Source Integrity: The code at the provided URL must generate the exact hash stored on-chain.
@@ -43,10 +43,10 @@ npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
 4. On-chain Call: Invoke the mint_skill instruction using the SDK.
 
 ## Best Practices
-- FAZER: Use Gzip compression to maximize on-chain summary space.
-- FAZER: Sempre inclua um integrity_hash para habilitar auditorias automáticas.
-- EVITAR: Alterar o conteúdo do arquivo no externalUrl após o registro sem remintar.
-- EVITAR: Preços excessivamente altos que desestimulem o uso inicial (bootstrapping).
+- DO: Use Gzip compression to maximize on-chain summary space.
+- DO: Always include an integrity_hash to enable automated audits.
+- AVOID: Changing the file content at externalUrl after registration without re-minting.
+- AVOID: Excessively high prices that discourage initial usage (bootstrapping).
 
 ## Common Patterns
 ### Pattern 1: Automatic Hashing
@@ -56,8 +56,8 @@ const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
 ```
 
 ## Error Handling
-- Encoding Error: Se o metadado exceder 1200 bytes, aborte e simplifique a descrição.
-- Signature Failure: Verifique se o provedor da wallet suporta signMessage.
+- Encoding Error: If metadata exceeds 1200 bytes, abort and simplify the description.
+- Signature Failure: Verify if the wallet provider supports signMessage.
 
 ## File Organization
 - Workspace files: 02-SIGIL-USDC-MOLTBOOK/skills/
@@ -70,9 +70,9 @@ const hash = crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
 **Output**: A Skill PDA visible in the Sigil Marketplace.
 
 ## Important Reminders
-- CRÍTICO: O skill_id deve ser único (recomenda-se usar crypto.getRandomValues).
-- CRÍTICO: A taxa de sucesso inicial é 100%, mas cai rapidamente se houver falhas reportadas.
+- CRITICAL: The skill_id must be unique (recommended to use crypto.getRandomValues).
+- CRITICAL: The initial success rate is 100%, but drops quickly if failures are reported.
 
 ## Related Skills
-- AuditorProtocol: para garantir que sua skill seja bem avaliada.
-- SkillExecutor: para testar sua própria skill após o mint.
+- AuditorProtocol: to ensure your skill is well-evaluated.
+- SkillExecutor: to test your own skill after minting.
