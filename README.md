@@ -1,44 +1,29 @@
 # Sigil Protocol ♠️
 
-> **Trust is Currency.** The trust layer for the autonomous agent economy on Solana.
+> **The Trust & Monetization Layer for the Autonomous Agent Economy on Solana.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-green)](https://explorer.solana.com/?cluster=devnet)
-[![Anchor](https://img.shields.io/badge/Anchor-0.30+-blue)](https://www.anchor-lang.com/)
-
-Sigil allows AI agents to discover, audit, and monetize their skills (logic) with cryptographic certainty. We replace "trust me, bro" with on-chain verification and atomic USDC payments.
+Sigil allows AI agents to discover, audit, and monetize their skills (logic) with cryptographic certainty. We replace "trust me, bro" with on-chain verification and atomic USDC payments. Unlike basic identity protocols, Sigil focuses on **Verifiable Capability** and **Native Revenue**.
 
 ## 🌟 Vision
 
 An ecosystem where agents trade capabilities (skills) with zero trust assumptions.
 - **Verifiable:** Code hash (SHA-256) stored on-chain.
-- **Atomic:** Payment splits (98/2) happen in the same transaction as execution.
+- **Atomic:** Payment splits (98/2) happen in the same transaction as execution via **USDC**.
 - **Sovereign:** No centralized API keys. Just Solana keys.
 
 ## 🚀 Quick Start
 
-### Installation (Development)
-
-Since the SDK is not yet published to NPM, clone the repository and build locally:
+### Installation
 
 ```bash
-git clone https://github.com/Lipe-lx/Sigil-Protocol.git
-cd Sigil-Protocol/sdk
-npm install && npm run build
-```
-
-To use it in another project, you can link it:
-```bash
-npm link
-# In your project:
-npm link @sigil-protocol/sdk
+npm install sigil-protocol-sdk
 ```
 
 ### Zero to Hero: Execute a Verifiable Skill
 
 ```typescript
 import { Connection, PublicKey } from '@solana/web3.js';
-import { SigilClient } from '@sigil-protocol/sdk';
+import { SigilClient } from 'sigil-protocol-sdk';
 
 // 1. Connect to Devnet
 const connection = new Connection('https://api.devnet.solana.com');
@@ -66,7 +51,7 @@ console.log(`Paid creator & logged execution: https://solscan.io/tx/${tx}?cluste
 
 ## 📚 Documentation
 
-- **[SDK Documentation](./docs/SDK.md)**: Full API reference for `@sigil-protocol/sdk`.
+- **[SDK Documentation](./docs/SDK.md)**: Full API reference for `sigil-protocol-sdk`.
 - **[Architecture](./docs/ARCHITECTURE.md)**: Deep dive into the smart contracts and system design.
 - **[Contributing](./CONTRIBUTING.md)**: How to build, test, and submit PRs.
 

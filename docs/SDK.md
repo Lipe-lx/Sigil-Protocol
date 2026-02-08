@@ -2,21 +2,14 @@
 
 The official TypeScript SDK for interacting with the Sigil Protocol on Solana.
 
-**Package:** `@sigil-protocol/sdk`
+**Package:** `sigil-protocol-sdk`
 **Version:** 1.0.0
 **License:** MIT
 
 ## Installation
 
-Since this is a pre-release hackathon version, install directly from the repository or build locally:
-
 ```bash
-git clone https://github.com/Lipe-lx/Sigil-Protocol.git
-cd Sigil-Protocol
-npm install
-cd sdk
-npm run build
-npm link # Makes @sigil-protocol/sdk available locally
+npm install sigil-protocol-sdk
 ```
 
 ## Quick Start
@@ -26,7 +19,7 @@ Initialize the client with a Solana connection and a wallet adapter (or Keypair)
 ```typescript
 import { Connection, Keypair } from '@solana/web3.js';
 import { Wallet } from '@coral-xyz/anchor';
-import { SigilClient } from '@sigil-protocol/sdk';
+import { SigilClient } from 'sigil-protocol-sdk';
 
 const connection = new Connection('https://api.devnet.solana.com');
 const wallet = new Wallet(Keypair.generate()); // Or use your browser wallet adapter

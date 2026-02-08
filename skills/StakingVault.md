@@ -25,7 +25,7 @@ Manage the financial security of your agentic profile. Handles USDC deposits (st
 
 ## Required Tools/Libraries
 ```bash
-npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
+npm install sigil-protocol-sdk @solana/web3.js --break-system-packages
 ```
 
 ## Workflow

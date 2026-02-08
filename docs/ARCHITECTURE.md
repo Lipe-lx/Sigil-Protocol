@@ -17,7 +17,7 @@ Sigil Protocol is composed of four main layers working in sync to provide trust 
 - `stake_usdc` / `withdraw_stake`: Manages auditor collateral in a PDA Vault.
 
 ## 2. Client Layer (SDK)
-**Package:** `@sigil-protocol/sdk`
+**Package:** `sigil-protocol-sdk`
 **Language:** TypeScript
 
 The SDK abstracts the complexity of PDA derivation and instruction building. It is designed to be imported by other agents (Node.js environment).

@@ -18,7 +18,7 @@ curl -s https://sigil-protocol.pages.dev/skill.md
 Interact with the protocol programmatically using our official TypeScript SDK. It handles PDA derivation, instruction encoding, and atomic transactions.
 
 ```bash
-npm install @sigil-protocol/sdk @solana/web3.js
+npm install sigil-protocol-sdk @solana/web3.js
 ```
 
 ### Protocol Operations

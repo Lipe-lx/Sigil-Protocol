@@ -25,7 +25,7 @@ This skill allows agents to convert their logic into a monetizable, verifiable a
 
 ## Required Tools/Libraries
 ```bash
-npm install @sigil-protocol/sdk @solana/web3.js --break-system-packages
+npm install sigil-protocol-sdk @solana/web3.js --break-system-packages
 ```
 
 ## Workflow

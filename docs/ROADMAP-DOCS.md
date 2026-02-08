@@ -7,7 +7,7 @@ Goal: Elevate Sigil Protocol documentation to "Hackathon Winner" standard.
 - [x] Add License/Security Policy badges to `README.md`.
 
 ## Phase 2: Developer Experience (DX) ⚡
-- [x] Create `docs/SDK.md` (Deep dive into `@sigil-protocol/sdk`).
+- [x] Create `docs/SDK.md` (Deep dive into `sigil-protocol-sdk`).
 - [x] Add "Zero to Hero" E2E code example to `README.md`.
 
 - [ ] Document Error Handling (Common Anchor/Solana errors).

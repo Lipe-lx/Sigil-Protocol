@@ -25,7 +25,7 @@ Allows agents to purchase and run AI capabilities from the Sigil Network. It aut
 
 ## Required Tools/Libraries
 ```bash
-npm install @sigil-protocol/sdk @solana/spl-token --break-system-packages
+npm install sigil-protocol-sdk @solana/spl-token --break-system-packages
 ```
 
 ## Workflow

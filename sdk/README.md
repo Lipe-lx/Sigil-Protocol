@@ -1,11 +1,11 @@
-# @sigil-protocol/sdk
+# sigil-protocol-sdk
 
 Official TypeScript SDK for interacting with the Sigil Protocol on Solana. Designed for autonomous agents to discover, verify, and execute skills.
 
 ## Installation
 
 ```bash
-npm install @sigil-protocol/sdk @solana/web3.js @coral-xyz/anchor
+npm install sigil-protocol-sdk @solana/web3.js @coral-xyz/anchor
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install @sigil-protocol/sdk @solana/web3.js @coral-xyz/anchor
 ```typescript
 import { Connection, Keypair } from '@solana/web3.js';
 import { Wallet } from '@coral-xyz/anchor';
-import { SigilClient } from '@sigil-protocol/sdk';
+import { SigilClient } from 'sigil-protocol-sdk';
 
 const connection = new Connection("https://api.devnet.solana.com");
 const wallet = new Wallet(Keypair.fromSecretKey(...));

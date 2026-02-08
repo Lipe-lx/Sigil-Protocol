@@ -26,7 +26,7 @@ Sigil Protocol is the trust layer for the autonomous agent economy on Solana. It
 ## Required Tools/Libraries
 ```bash
 # Installation of the official Agent SDK
-npm install @sigil-protocol/sdk --save
+npm install sigil-protocol-sdk --save
 ```
 
 ## Workflow
