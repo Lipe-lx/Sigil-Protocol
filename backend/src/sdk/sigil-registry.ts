@@ -25,7 +25,7 @@ export class SigilRegistryClient {
         registry: registryPda,
         authority: this.provider.wallet.publicKey,
         systemProgram: web3.SystemProgram.programId,
-      })
+      } as any)
       .rpc();
   }
 
@@ -41,7 +41,7 @@ export class SigilRegistryClient {
         auditor: auditorPda,
         authority: this.provider.wallet.publicKey,
         systemProgram: web3.SystemProgram.programId,
-      })
+      } as any)
       .rpc();
   }
 
@@ -67,7 +67,7 @@ export class SigilRegistryClient {
         creator: this.provider.wallet.publicKey,
         registry: registryPda,
         systemProgram: web3.SystemProgram.programId,
-      })
+      } as any)
       .rpc();
   }
 
@@ -83,7 +83,7 @@ export class SigilRegistryClient {
         skill: skillPda,
         auditor: auditorPda,
         auditorSigner: this.provider.wallet.publicKey,
-      })
+      } as any)
       .rpc();
   }
 
@@ -105,103 +105,27 @@ export class SigilRegistryClient {
         executorUsdc,
         creatorUsdc,
         protocolUsdc,
-        tokenProgram: web3.PublicKey.default, // Needs spl-token program id
+        tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
         systemProgram: web3.SystemProgram.programId,
-      })
+      } as any)
       .rpc();
   }
 
-  async getSkill(skillPda: PublicKey) {
-    return await (this.program.account as any).skill.fetch(skillPda);
-  }
-
-  async getAllSkills() {
-    return await (this.program.account as any).skill.all();
-  }
-
-  async getAllLogs() {
-    // ExecutionLog account may not be defined in current IDL
-    // Return empty array for MVP - logs are tracked via transaction history
-    try {
-      // Try to fetch if account exists
-      const accounts = await (this.program.account as any).executionLog?.all();
-      return accounts || [];
-    } catch {
-      console.warn('ExecutionLog account not available in current program version');
-      return [];
-    }
-  }
-
-  async getAuditor(auditorPda: PublicKey) {
-    // Auditor account may not be defined in current IDL
-    try {
-      return await (this.program.account as any).auditor?.fetch(auditorPda);
-    } catch {
-      console.warn('Auditor account not available in current program version');
-      return null;
-    }
-  }
-
-  async getAllAuditors() {
-    // Auditor account may not be defined in current IDL
-    try {
-      const accounts = await (this.program.account as any).auditor?.all();
-      return accounts || [];
-    } catch {
-      console.warn('Auditor account not available in current program version');
-      return [];
-    }
-  }
-
-  async getRegistry() {
-    const [registryPda] = PublicKey.findProgramAddressSync(
-        [Buffer.from('registry_v1')],
-        this.program.programId
-    );
-    try {
-      // Account names in Anchor are camelCase versions of the struct name
-      return await (this.program.account as any).skillRegistry.fetch(registryPda);
-    } catch (e) {
-      // Try PascalCase as fallback
-      try {
-      return await (this.program.account as any).skillRegistry.fetch(registryPda);
-      } catch {
-        console.warn('Registry not initialized');
-        return null;
-      }
-    }
-  }
-
-  async stakeUsdc(amount: BN): Promise<string> {
-    const [auditorPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from('auditor'), this.provider.wallet.publicKey.toBuffer()],
-      this.program.programId
-    );
-    
-    // Find Mint for USDC (assuming devnet known mint or passed as param? User didn't specify, logic implies strict mint)
-    // For now we need to know the USDC mint. In devnet it's 4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU usually
-    // But the contract takes it as an account.
-    // Let's assume we pass it or it's a constant in the project. 
-    // The user didn't give the mint address in the snippet.
-    // I will add a TO-DO or pass it as argument.
-    // Wait, the user said "Adicionei os métodos... Helpers para derivar as PDAs do Vault e da Vault Authority".
-    // I will implement generic ones.
-    
-    // Actually, looking at the contract `stake_usdc.rs`, it takes `usdc_mint`.
-    // I will add mint as a parameter or defaults if I knew it.
-    // Let's add it as a parameter to be safe.
-    
-    throw new Error("Method not implemented in SDK yet - User claimed it was done but file was empty of these methods. Please verify inputs.");
-  }
-  
-  // WAIT, I should IMPLEMENT them properly.
-  
   async stakeUsdc(amount: BN, usdcMint: PublicKey): Promise<string> {
     const auditorPda = this.deriveAuditorPda(this.provider.wallet.publicKey);
     const vaultPda = this.deriveVaultPda(usdcMint, auditorPda);
     const vaultAuthorityPda = this.deriveVaultAuthorityPda();
     
-    const auditorTokenAccount = await this.getAssociatedTokenAddress(usdcMint, this.provider.wallet.publicKey);
+    // We need the associated token address. Since we are in the backend/node context, 
+    // we can calculate it or pass it. 
+    const [auditorTokenAccount] = PublicKey.findProgramAddressSync(
+      [
+        this.provider.wallet.publicKey.toBuffer(),
+        new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(),
+        usdcMint.toBuffer(),
+      ],
+      new PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+    );
     
     return await this.program.methods
         .stakeUsdc(amount)
@@ -212,10 +136,10 @@ export class SigilRegistryClient {
             vaultAuthority: vaultAuthorityPda,
             usdcMint: usdcMint,
             authority: this.provider.wallet.publicKey,
-            tokenProgram: web3.TOKEN_PROGRAM_ID,
+            tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
             systemProgram: web3.SystemProgram.programId,
             rent: web3.SYSVAR_RENT_PUBKEY,
-        })
+        } as any)
         .rpc();
   }
 
@@ -227,7 +151,7 @@ export class SigilRegistryClient {
         .accounts({
             auditor: auditorPda,
             authority: this.provider.wallet.publicKey,
-        })
+        } as any)
         .rpc();
   }
 
@@ -236,7 +160,14 @@ export class SigilRegistryClient {
     const vaultPda = this.deriveVaultPda(usdcMint, auditorPda);
     const vaultAuthorityPda = this.deriveVaultAuthorityPda();
     
-    const auditorTokenAccount = await this.getAssociatedTokenAddress(usdcMint, this.provider.wallet.publicKey);
+    const [auditorTokenAccount] = PublicKey.findProgramAddressSync(
+      [
+        this.provider.wallet.publicKey.toBuffer(),
+        new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(),
+        usdcMint.toBuffer(),
+      ],
+      new PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+    );
 
     return await this.program.methods
         .withdrawStake()
@@ -247,9 +178,59 @@ export class SigilRegistryClient {
             vaultAuthority: vaultAuthorityPda,
             usdcMint: usdcMint,
             authority: this.provider.wallet.publicKey,
-            tokenProgram: web3.TOKEN_PROGRAM_ID,
-        })
+            tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
+        } as any)
         .rpc();
+  }
+
+  async getSkill(skillPda: PublicKey) {
+    return await (this.program.account as any).skill.fetch(skillPda);
+  }
+
+  async getAllSkills() {
+    return await (this.program.account as any).skill.all();
+  }
+
+  async getAllLogs() {
+    try {
+      const accounts = await (this.program.account as any).executionLog?.all();
+      return accounts || [];
+    } catch {
+      return [];
+    }
+  }
+
+  async getAuditor(auditorPda: PublicKey) {
+    try {
+      return await (this.program.account as any).auditor?.fetch(auditorPda);
+    } catch {
+      return null;
+    }
+  }
+
+  async getAllAuditors() {
+    try {
+      const accounts = await (this.program.account as any).auditor?.all();
+      return accounts || [];
+    } catch {
+      return [];
+    }
+  }
+
+  async getRegistry() {
+    const [registryPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('registry_v1')],
+        this.program.programId
+    );
+    try {
+      return await (this.program.account as any).skillRegistry.fetch(registryPda);
+    } catch (e) {
+      try {
+        return await (this.program.account as any).SkillRegistry.fetch(registryPda);
+      } catch {
+        return null;
+      }
+    }
   }
 
   // Helper to derive PDAs
@@ -269,19 +250,6 @@ export class SigilRegistryClient {
     return pda;
   }
 
-  deriveExecutionLogPda(skillPda: PublicKey, executor: PublicKey, timestamp: BN): PublicKey {
-    const [pda] = PublicKey.findProgramAddressSync(
-      [
-        Buffer.from('execution'),
-        skillPda.toBuffer(),
-        executor.toBuffer(),
-        timestamp.toArrayLike(Buffer, 'le', 8)
-      ],
-      this.program.programId
-    );
-    return pda;
-  }
-  
   deriveVaultPda(mint: PublicKey, auditor: PublicKey): PublicKey {
     const [pda] = PublicKey.findProgramAddressSync(
         [Buffer.from('vault'), mint.toBuffer(), auditor.toBuffer()],
@@ -298,7 +266,16 @@ export class SigilRegistryClient {
     return pda;
   }
 
-  async getAssociatedTokenAddress(mint: PublicKey, owner: PublicKey): Promise<PublicKey> {
-      return await anchor.utils.token.associatedAddress({ mint, owner });
+  deriveExecutionLogPda(skillPda: PublicKey, executor: PublicKey, timestamp: BN): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('execution'),
+        skillPda.toBuffer(),
+        executor.toBuffer(),
+        timestamp.toArrayLike(Buffer, 'le', 8)
+      ],
+      this.program.programId
+    );
+    return pda;
   }
 }
