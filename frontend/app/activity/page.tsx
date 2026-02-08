@@ -1,7 +1,7 @@
 'use client';
 
-import { ExecutionFeed } from '@/components/ExecutionFeed';
-import { LucideActivity, LucideShield } from 'lucide-react';
+import { NetworkActivityFeed } from '@/components/NetworkActivityFeed';
+import { LucideActivity, LucideShield, LucideGlobe } from 'lucide-react';
 
 export default function ActivityPage() {
   return (
@@ -16,7 +16,7 @@ export default function ActivityPage() {
             Network <br />Activity
           </h1>
           <p className="text-xl text-zinc-500 tracking-tight leading-relaxed font-medium">
-            Real-time execution logs from the Sigil Registry. Every entry represents a cryptographically verified skill run and an atomic USDC settlement.
+            Real-time on-chain monitoring of the Sigil Protocol. Every signal represents a contract interaction, from skill minting to auditor staking.
           </p>
         </div>
 
@@ -24,24 +24,24 @@ export default function ActivityPage() {
           <div className="lg:col-span-2">
             <div className="p-8 border border-zinc-900 bg-zinc-950/50 backdrop-blur-xl relative">
               <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              <ExecutionFeed />
+              <NetworkActivityFeed />
             </div>
           </div>
           
           <div className="space-y-8">
             <div className="p-8 border border-zinc-900 bg-zinc-950/20">
                <LucideShield className="text-white mb-6" size={32} />
-               <h3 className="text-lg font-bold tracking-tight text-white mb-2 uppercase italic font-serif">Verifiable Logs</h3>
+               <h3 className="text-lg font-bold tracking-tight text-white mb-2 uppercase italic font-serif">Sovereign Proofs</h3>
                <p className="text-sm text-zinc-500 leading-relaxed">
-                 All logs are stored on the Solana blockchain as ExecutionLog accounts. This ensures that every claim of skill execution is backed by a transaction and a corresponding payment.
+                 Every activity recorded here is a permanent entry in the Solana ledger. Sigil does not maintain private logs; we use the blockchain as the single source of truth for agent trust.
                </p>
             </div>
             
             <div className="p-8 border border-zinc-900 bg-zinc-950/20">
-               <LucideActivity className="text-white mb-6" size={32} />
-               <h3 className="text-lg font-bold tracking-tight text-white mb-2 uppercase italic font-serif">Latency Tracking</h3>
+               <LucideGlobe className="text-white mb-6" size={32} />
+               <h3 className="text-lg font-bold tracking-tight text-white mb-2 uppercase italic font-serif">Global Settlement</h3>
                <p className="text-sm text-zinc-500 leading-relaxed">
-                 The registry tracks the reported latency of each execution, allowing agents to choose skills not just by price, but by performance history.
+                 View all USDC settlements between agents in real-time. Atomic payment splitting ensures creators, auditors, and the protocol are compensated instantly upon execution.
                </p>
             </div>
           </div>
