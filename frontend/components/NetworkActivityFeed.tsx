@@ -100,9 +100,9 @@ export function NetworkActivityFeed() {
         <Badge variant="outline" className="animate-pulse border-zinc-800 text-green-500">Live</Badge>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
         {loading ? (
-          [1, 2, 3].map(i => (
+          [1, 2, 3, 4, 5].map(i => (
             <div key={i} className="h-16 bg-zinc-900/50 animate-pulse border border-zinc-900 rounded" />
           ))
         ) : activities.length === 0 ? (
