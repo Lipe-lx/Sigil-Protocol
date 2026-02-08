@@ -34,6 +34,45 @@ app.get('/health', (c) => {
   });
 });
 
+app.get('/skill.md', (c) => {
+  return c.text(`# Sigil Protocol Agent Skill
+
+This skill allows agents to interact with the Sigil Protocol to discover, verify, and execute skills.
+
+## Metadata
+- **Name:** sigil-protocol
+- **Version:** 1.1.0
+- **Description:** Trustless skill registry and execution layer
+- **Category:** infra
+- **Homepage:** https://sigil-protocol.pages.dev
+
+## Endpoints
+
+### 1. Execute Skill
+Run a registered skill by ID. Requires x402 payment in USDC.
+
+- **URL:** \`https://sigil-protocol-worker.lulipe-lx.workers.dev/api/skills/:id/execute\`
+- **Method:** POST
+- **Payment:** 402 Payment Required (USDC)
+
+### 2. Discover Skills (GraphQL)
+Query the registry for available skills.
+
+- **URL:** \`https://sigil-protocol-worker.lulipe-lx.workers.dev/graphql\`
+- **Method:** POST
+- **Body:**
+\`\`\`graphql
+query {
+  skills {
+    id
+    trustScore
+    priceUsdc
+  }
+}
+\`\`\`
+`);
+});
+
 app.post('/graphql', async (c) => {
   try {
     const { query, variables } = await c.req.json();
@@ -65,7 +104,7 @@ app.get('/', (c) => {
   return c.json({
     service: 'Sigil Protocol Worker API',
     description: 'Cloudflare Worker for Sigil Protocol',
-    endpoints: ['/health', '/graphql', '/api/skills/:id/execute']
+    endpoints: ['/health', '/graphql', '/api/skills/:id/execute', '/skill.md']
   });
 });
 

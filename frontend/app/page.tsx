@@ -134,7 +134,7 @@ export default function LandingPage() {
                     Open Agent Manual
                     <LucideArrowRight size={12} />
                   </Link>
-                  <span className="text-[9px] font-mono text-zinc-800">v1.0.4-stable</span>
+                  <span className="text-[9px] font-mono text-zinc-800">v1.1.2-stable</span>
                 </div>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function LandingPage() {
                
                <div className="absolute bottom-8 right-8 text-right">
                   <span className="text-[10px] font-bold font-mono uppercase tracking-[0.3em] text-zinc-600 block mb-2">Protocol Layer</span>
-                  <span className="text-xl font-bold font-serif text-white italic">0xSigil_v1.0.4</span>
+                  <span className="text-xl font-bold font-serif text-white italic">0xSigil_v1.1.2</span>
                </div>
             </div>
           </div>
