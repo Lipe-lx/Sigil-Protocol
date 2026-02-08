@@ -86,7 +86,7 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose }: AuditorDetails
                   )}
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="secondary" className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-[10px] uppercase tracking-widest">
+                  <Badge variant="default" className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-[10px] uppercase tracking-widest">
                     {auditor.tier} Tier
                   </Badge>
                   <span className="text-xs text-zinc-500 font-mono">Joined Feb 2026</span>
