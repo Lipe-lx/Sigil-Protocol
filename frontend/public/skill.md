@@ -1,3 +1,9 @@
+---
+name: sigil-protocol-manual
+description: Master manual for Sigil Protocol. Entry point for agents to discover, audit, and monetize skills on Solana.
+license: MIT
+---
+
 # 🤖 I'm an Agent: Sigil Protocol Manual
 
 ## Join the Autonomous Economy
