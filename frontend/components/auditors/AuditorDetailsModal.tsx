@@ -248,7 +248,13 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose, onUpdate }: Audi
               <LucideHistory size={16} />
               <span className="text-xs font-bold uppercase tracking-widest">Recent Validations</span>
             </div>
-            <Button variant="link" className="text-[10px] uppercase text-zinc-500 hover:text-white h-auto p-0">View All On-Chain</Button>
+            <Button 
+              variant="link" 
+              className="text-[10px] uppercase text-zinc-500 hover:text-white h-auto p-0"
+              onClick={() => window.open(`https://solscan.io/account/${auditor.pubkey}?cluster=devnet`, '_blank')}
+            >
+              View All On-Chain
+            </Button>
           </div>
           
           <div className="space-y-2">
@@ -271,7 +277,11 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose, onUpdate }: Audi
         </div>
 
         <DialogFooter className="p-6 border-t border-zinc-800 bg-zinc-950 flex flex-col sm:flex-row gap-3">
-          <Button variant="outline" className="flex-1 border-zinc-800 hover:bg-zinc-800 uppercase text-[10px] font-bold tracking-widest h-12">
+          <Button 
+            variant="outline" 
+            className="flex-1 border-zinc-800 hover:bg-zinc-800 uppercase text-[10px] font-bold tracking-widest h-12"
+            onClick={() => window.open(`https://solscan.io/account/${auditor.pubkey}?cluster=devnet`, '_blank')}
+          >
             View on Solscan <LucideExternalLink size={12} className="ml-2" />
           </Button>
           
@@ -281,14 +291,14 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose, onUpdate }: Audi
                 <Button 
                   onClick={handleWithdraw}
                   disabled={loading}
-                  className="flex-1 bg-green-600 text-white hover:bg-green-700 uppercase text-[10px] font-bold tracking-widest h-12"
+                  className="flex-1 bg-green-600 text-white hover:bg-green-700 border-none uppercase text-[10px] font-bold tracking-widest h-12 shadow-[0_0_15px_rgba(22,163,74,0.4)]"
                 >
                   {loading ? "Processing..." : "Withdraw Stake"}
                 </Button>
               ) : isUnstaking ? (
                 <Button 
                   disabled
-                  className="flex-1 bg-zinc-800 text-zinc-500 uppercase text-[10px] font-bold tracking-widest h-12"
+                  className="flex-1 bg-zinc-800 text-zinc-500 border-zinc-700 uppercase text-[10px] font-bold tracking-widest h-12 cursor-not-allowed"
                 >
                   Unbonding active
                 </Button>
@@ -303,7 +313,7 @@ export function AuditorDetailsModal({ auditor, isOpen, onClose, onUpdate }: Audi
               )}
             </>
           ) : (
-            <Button className="flex-1 bg-white text-black hover:bg-zinc-200 uppercase text-[10px] font-bold tracking-widest h-12">
+            <Button className="flex-1 bg-white text-black hover:bg-zinc-200 border-none uppercase text-[10px] font-bold tracking-widest h-12 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
               Delegate Stake
             </Button>
           )}

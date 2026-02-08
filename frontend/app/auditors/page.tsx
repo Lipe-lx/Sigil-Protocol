@@ -149,10 +149,20 @@ export default function AuditorsPage() {
                 </div>
                 
                 <div className="pt-4 flex gap-2">
-                  <Button className="flex-1 uppercase text-[10px] font-black tracking-widest h-10">
+                  <Button 
+                    className="flex-1 bg-white text-black hover:bg-zinc-200 border-none uppercase text-[10px] font-black tracking-widest h-10 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300"
+                  >
                     {auditor.active ? "Delegate Stake" : "Inactive"}
                   </Button>
-                  <Button variant="outline" size="icon" className="h-10 w-10 border-zinc-900">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-10 w-10 border-zinc-800 hover:border-white transition-colors duration-300"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`https://solscan.io/account/${auditor.pubkey}?cluster=devnet`, '_blank');
+                    }}
+                  >
                     <LucideExternalLink size={14} />
                   </Button>
                 </div>
@@ -174,7 +184,7 @@ export default function AuditorsPage() {
                   setIsModalOpen(true);
                 }}
                 variant="outline" 
-                className="border-zinc-800 uppercase text-[10px] font-bold tracking-[0.2em]"
+                className="border-zinc-800 hover:border-white hover:bg-white hover:text-black uppercase text-[10px] font-bold tracking-[0.2em] h-10 px-8 transition-all duration-500"
              >
                 Apply Now
              </Button>
