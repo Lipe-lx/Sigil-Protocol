@@ -33,14 +33,46 @@ function SkillDetailContent() {
 
   useEffect(() => {
     const fetchSkill = async () => {
-      if (!program || !id) {
-        if (!id) setLoading(false);
+      if (!id) {
+        setLoading(false);
         return;
       }
 
-      try {
-        setLoading(true);
-        const pda = new PublicKey(id as string);
+      // Handle Protocol Documentation Slugs (Local MD files)
+      const protocolSkills: Record<string, any> = {
+        'SkillExecutor': { name: 'Protocol: Skill Execution', file: 'SkillExecutor.md' },
+        'SkillRegistry': { name: 'Protocol: Skill Registration', file: 'SkillRegistry.md' },
+        'AuditorProtocol': { name: 'Protocol: Auditor Governance', file: 'AuditorProtocol.md' },
+        'StakingVault': { name: 'Protocol: Staking Vault', file: 'StakingVault.md' }
+      };
+
+      if (protocolSkills[id]) {
+        try {
+          setLoading(true);
+          const response = await fetch(`https://raw.githubusercontent.com/Lipe-lx/Sigil-Protocol/main/skills/${protocolSkills[id].file}`);
+          const content = await response.text();
+          setSkill({
+            name: protocolSkills[id].name,
+            description: content,
+            externalUrl: `https://github.com/Lipe-lx/Sigil-Protocol/blob/main/skills/${protocolSkills[id].file}`,
+            integrityHash: "PROTOCOL_VERIFIED",
+            priceUsdc: 0,
+            trustScore: 1000,
+            executionCount: 0,
+            successRate: 100,
+            creator: "Sigil Protocol Foundation",
+            pda: "N/A (Protocol Native)"
+          });
+          setIntegrityStatus('valid');
+        } catch (e) {
+          console.error("Failed to fetch protocol skill:", e);
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!program) return;
         // @ts-ignore
         const account = await program.account.skill.fetch(pda);
         
