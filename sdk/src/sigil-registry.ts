@@ -1,4 +1,4 @@
-import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { SigilRegistry } from './types';
 import idl from '../../target/idl/sigil_registry.json';
@@ -11,7 +11,7 @@ export class SigilRegistryClient {
     this.provider = new AnchorProvider(connection, wallet, {
       commitment: 'confirmed',
     });
-    this.program = new Program(idl as any, new PublicKey('BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe'), this.provider);
+    this.program = new Program(idl as any, this.provider);
   }
 
   async initializeRegistry(): Promise<string> {
@@ -25,7 +25,6 @@ export class SigilRegistryClient {
       .accounts({
         registry: registryPda,
         authority: this.provider.wallet.publicKey,
-        systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
   }
@@ -51,7 +50,6 @@ export class SigilRegistryClient {
         skill: skillPda,
         creator: this.provider.wallet.publicKey,
         registry: registryPda,
-        systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
   }
@@ -90,8 +88,6 @@ export class SigilRegistryClient {
         executorUsdc,
         creatorUsdc,
         protocolUsdc,
-        tokenProgram: web3.PublicKey.default, // Needs spl-token program id
-        systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
   }
@@ -174,9 +170,6 @@ export class SigilRegistryClient {
         vaultAuthority: vaultAuthorityPda,
         usdcMint,
         authority: this.provider.wallet.publicKey,
-        tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'), // SPL Token Program
-        systemProgram: web3.SystemProgram.programId,
-        rent: web3.SYSVAR_RENT_PUBKEY,
       } as any)
       .rpc();
   }
@@ -207,7 +200,6 @@ export class SigilRegistryClient {
         vaultAuthority: vaultAuthorityPda,
         usdcMint,
         authority: this.provider.wallet.publicKey,
-        tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
       } as any)
       .rpc();
   }

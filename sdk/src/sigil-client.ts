@@ -1,8 +1,7 @@
 import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
-import { Connection, PublicKey, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
+import { Connection, PublicKey, SystemProgram, Keypair } from '@solana/web3.js';
 import { 
   TOKEN_PROGRAM_ID, 
-  ASSOCIATED_TOKEN_PROGRAM_ID, 
   getAssociatedTokenAddress 
 } from '@solana/spl-token';
 import { SigilRegistry } from './types';
@@ -18,7 +17,7 @@ export class SigilClient {
     this.provider = new AnchorProvider(connection, wallet, {
       commitment: 'confirmed',
     });
-    this.program = new Program(idl as any, new PublicKey('BWppEKBBET8EJWsi1QaudVWwhaPX7JhNLDDpfHcCjmwe'), this.provider);
+    this.program = new Program(idl as any, this.provider);
   }
 
   /**
@@ -45,8 +44,6 @@ export class SigilClient {
         executorUsdc,
         creatorUsdc,
         protocolUsdc,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
       })
       .signers([executionLog])
       .rpc();
@@ -113,7 +110,6 @@ export class SigilClient {
         skill: skillPda,
         creator: this.provider.wallet.publicKey,
         registry: registryPda,
-        systemProgram: SystemProgram.programId,
       })
       .rpc();
   }
@@ -161,7 +157,6 @@ export class SigilClient {
       await this.program.methods.initializeAuditor().accounts({
         auditor: auditorPda,
         authority: this.provider.wallet.publicKey,
-        systemProgram: SystemProgram.programId,
       }).rpc();
     }
 
@@ -179,9 +174,6 @@ export class SigilClient {
         vaultAuthority,
         usdcMint,
         authority: this.provider.wallet.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
-        rent: web3.SYSVAR_RENT_PUBKEY,
       } as any)
       .rpc();
   }
