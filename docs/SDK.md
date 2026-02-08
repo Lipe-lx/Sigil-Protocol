@@ -85,13 +85,42 @@ if (isSafe) {
 }
 ```
 
-### 4. Staking (`stake`)
+### 4. Staking (`stakeUsdc`)
 
 Auditors must stake USDC to participate in the reputation network.
 
 ```typescript
 const amount = 100; // 100 USDC
-const tx = await client.stake(amount);
+const tx = await client.stakeUsdc(
+  auditorPda, 
+  auditorTokenAccount, 
+  vaultTokenAccount, 
+  vaultAuthorityPda, 
+  usdcMint, 
+  new BN(amount * 1_000_000)
+);
+```
+
+### 5. Auditor Registration (`initializeAuditor`)
+
+Register as an auditor to start validating skills.
+
+```typescript
+const tx = await client.initializeAuditor();
+console.log("Auditor Registered:", tx);
+```
+
+### 6. Signing Skills (`addAuditorSignature`)
+
+Auditors sign skills after verification to vouch for their quality and safety.
+
+```typescript
+const tx = await client.addAuditorSignature(
+  skillPda,
+  auditorPda,
+  signatureBytes,
+  auditReportHash
+);
 ```
 
 ## Error Handling

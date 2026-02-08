@@ -56,6 +56,34 @@ const isValid = await client.verifyIntegrity(skillPda, downloadedCode);
 if (!isValid) throw new Error("Security Alert: Code has been tampered with!");
 ```
 
+### 5. Auditor Management
+
+Join the decentralized network of auditors to verify skills and earn rewards.
+
+```typescript
+// Register as an Auditor
+const tx = await client.initializeAuditor();
+console.log("Auditor Registered:", tx);
+
+// Stake USDC for skin-in-the-game
+const stakeTx = await client.stakeUsdc(
+  auditorPda, 
+  auditorTokenAccount, 
+  vaultTokenAccount, 
+  vaultAuthorityPda, 
+  usdcMint, 
+  new BN(1000_000000) // 1000 USDC
+);
+
+// Sign a Skill (Approve)
+const signTx = await client.addAuditorSignature(
+  skillPda,
+  auditorPda,
+  signatureBytes,
+  auditReportHash
+);
+```
+
 ## Compatibility
 - Node.js 18+
 - Solana Web3.js 1.95+
