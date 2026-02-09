@@ -28,6 +28,10 @@ The focus of this phase is the **Sigil Sentinel Framework**, moving beyond "Hone
 - **Anti-MEV for Trust:** Updates to metadata or logic will follow a `PENDING` state with a configurable timelock (Entropy Delay).
 - **Challenge Window:** This gives Watchers and Challengers a guaranteed window to audit new code before it can be executed by unsuspecting users.
 
+### 5. External Security Oracles (VirusTotal Integration)
+- **Automated Threat Intel:** Auditor Agents will integrate with the VirusTotal API (leveraging the OpenClaw partnership) to perform deep malware analysis on registered skill source code.
+- **Diagnostic-to-Economic Bridge:** A 'Clean' report from 70+ security engines becomes a cryptographic prerequisite for Auditor signatures, ensuring that trust is data-driven, not just stake-driven.
+
 ## Phase 3: The Sovereign Expansion (Q2 2026)
 - [ ] **Recursive Trust:** "Auditor Agents" will have their own Sigil-verified skills, creating a chain of accountability.
 - [ ] **Privacy-Preserving Audits:** Integration with TEEs (Trusted Execution Environments) to allow auditing of proprietary code without leaking source logic.
