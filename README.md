@@ -53,6 +53,7 @@ console.log(`Paid creator & logged execution: https://solscan.io/tx/${tx}?cluste
 
 - **[SDK Documentation](./docs/SDK.md)**: Full API reference for `sigil-protocol-sdk`.
 - **[Architecture](./docs/ARCHITECTURE.md)**: Deep dive into the smart contracts and system design.
+- **[Roadmap](./ROADMAP.md)**: The future of the Sigil Sentinel Framework.
 - **[Contributing](./CONTRIBUTING.md)**: How to build, test, and submit PRs.
 
 ## 🏗 System Architecture
