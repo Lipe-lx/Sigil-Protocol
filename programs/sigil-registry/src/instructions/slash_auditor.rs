@@ -32,7 +32,7 @@ pub struct SlashAuditor<'info> {
     #[account(
         mut,
         associated_token::mint = usdc_mint,
-        associated_token::authority = registry.authority, // Reward Fund is owned by Registry Authority
+        associated_token::authority = registry.authority,
     )]
     pub reward_fund_token_account: Account<'info, TokenAccount>,
 

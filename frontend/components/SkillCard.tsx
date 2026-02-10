@@ -102,9 +102,9 @@ export function SkillCard({ skill }: { skill: Skill }) {
 
       // 2. Check: Does the executor (user) have a USDC account?
       const executorAccount = await connection.getAccountInfo(executorUsdc);
-      if (!executorAccount) {
-        toast.error("USDC Account Missing", {
-          description: "You have tokens, but your Associated Token Account for this USDC mint is not detected. Please ensure you are on Devnet and have a USDC account initialized."
+      if (!executorAccount || executorAccount.data.length === 0) {
+        toast.error("USDC Account Not Initialized", {
+          description: "Sua conta de USDC na Devnet ainda não foi criada ou está vazia. Por favor, obtenha tokens de teste (Faucets) para inicializar sua conta de token."
         });
         setExecuting(false);
         return;

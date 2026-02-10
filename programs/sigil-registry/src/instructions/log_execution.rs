@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_spl::token::{self, Token, TokenAccount, Transfer, Mint};
+use anchor_spl::associated_token::AssociatedToken;
 use crate::state::*;
 
 #[derive(Accounts)]
@@ -15,7 +16,8 @@ pub struct LogExecution<'info> {
     #[account(mut)]
     pub executor: Signer<'info>,
 
-    // USDC Payment accounts
+    pub usdc_mint: Account<'info, Mint>,
+
     #[account(mut)]
     pub executor_usdc: Account<'info, TokenAccount>,
     #[account(mut)]
@@ -24,6 +26,7 @@ pub struct LogExecution<'info> {
     pub protocol_usdc: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
 }
 
