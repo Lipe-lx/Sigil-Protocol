@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SigilRegistryClient = void 0;
 const anchor_1 = require("@coral-xyz/anchor");
 const web3_js_1 = require("@solana/web3.js");
-const sigil_registry_json_1 = __importDefault(require("../../target/idl/sigil_registry.json"));
+const sigil_registry_json_1 = __importDefault(require("./idl/sigil_registry.json"));
 class SigilRegistryClient {
     constructor(connection, wallet) {
         this.provider = new anchor_1.AnchorProvider(connection, wallet, {
@@ -57,12 +57,14 @@ class SigilRegistryClient {
             .rpc();
     }
     async logExecution(skillPda, executionLogPda, executorUsdc, creatorUsdc, protocolUsdc, success, latencyMs) {
+        const usdcMint = new web3_js_1.PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU');
         return await this.program.methods
             .logExecution(success, latencyMs)
             .accounts({
             skill: skillPda,
             executionLog: executionLogPda,
             executor: this.provider.wallet.publicKey,
+            usdcMint,
             executorUsdc,
             creatorUsdc,
             protocolUsdc,

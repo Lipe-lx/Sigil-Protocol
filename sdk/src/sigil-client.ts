@@ -2,10 +2,11 @@ import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
 import { Connection, PublicKey, SystemProgram, Keypair } from '@solana/web3.js';
 import { 
   TOKEN_PROGRAM_ID, 
+  ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress 
 } from '@solana/spl-token';
 import { SigilRegistry } from './types';
-import idl from '../../target/idl/sigil_registry.json';
+import idl from './idl/sigil_registry.json';
 
 export class SigilClient {
   program: Program<SigilRegistry>;
@@ -41,6 +42,7 @@ export class SigilClient {
         skill: skillPda,
         executionLog: executionLog.publicKey,
         executor: this.provider.wallet.publicKey,
+        usdcMint,
         executorUsdc,
         creatorUsdc,
         protocolUsdc,
@@ -83,7 +85,8 @@ export class SigilClient {
     // 3. Compress using Gzip
     const metadataStr = JSON.stringify(metadataObj);
     const blob = new Blob([metadataStr]);
-    const compressedStream = blob.stream().pipeThrough(new (window as any).DecompressionStream('gzip'));
+    const compressionStream = new (globalThis as any).CompressionStream('gzip');
+    const compressedStream = blob.stream().pipeThrough(compressionStream);
     const compressedBuffer = await new Response(compressedStream).arrayBuffer();
     const finalMetadata = `gz:${Buffer.from(compressedBuffer).toString('base64')}`;
 
@@ -125,10 +128,11 @@ export class SigilClient {
 
     // Decompress
     const base64Data = ipfsHash.slice(3);
-    const binaryString = window.atob(base64Data);
+    const binaryString = globalThis.atob(base64Data);
     const bytes = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
-    const decompressedStream = new Blob([bytes]).stream().pipeThrough(new (window as any).DecompressionStream('gzip'));
+    const decompressionStream = new (globalThis as any).DecompressionStream('gzip');
+    const decompressedStream = new Blob([bytes]).stream().pipeThrough(decompressionStream);
     const metadata = JSON.parse(await new Response(decompressedStream).text());
 
     if (!metadata.h) return true; // No hash to verify

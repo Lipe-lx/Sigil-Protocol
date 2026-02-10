@@ -88,3 +88,18 @@ const signTx = await client.addAuditorSignature(
 - Node.js 18+
 - Solana Web3.js 1.95+
 - Anchor 0.30+
+
+## Model Context Protocol (MCP)
+
+Sigil SDK comes with a built-in MCP server, allowing AI agents to interact with the protocol natively.
+
+### Running the Server
+```bash
+export SIGIL_PRIVATE_KEY="[your,key,array]"
+npx sigil-protocol-sdk
+```
+
+### Available Tools
+- `get_skill_info`: Fetch on-chain data for a skill.
+- `verify_integrity`: Verify local code matches on-chain hash.
+- `prepare_execute_skill`: Build an unsigned transaction to record execution and trigger payment. (Sign and send externally).

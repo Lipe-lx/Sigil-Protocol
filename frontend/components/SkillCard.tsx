@@ -156,10 +156,12 @@ export function SkillCard({ skill }: { skill: Skill }) {
           skill: new PublicKey(skill.pda),
           executionLog: executionLog.publicKey,
           executor: wallet.publicKey,
+          usdcMint: USDC_MINT,
           executorUsdc: executorUsdc,
           creatorUsdc: creatorUsdc,
           protocolUsdc: protocolUsdc,
           tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           systemProgram: SystemProgram.programId,
         })
         .preInstructions(preInstructions)

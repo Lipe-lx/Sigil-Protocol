@@ -1,18 +1,28 @@
 {
   "name": "sigil-protocol-sdk",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "sigil-protocol-sdk": "dist/mcp-server.js"
+  },
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.95.8",
-    "@solana/spl-token": "^0.4.14"
+    "dotenv": "^17.2.4"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
-    "@types/node": "^20.17.10"
+    "@types/node": "^20.17.10",
+    "typescript": "^5.7.2"
   }
 }

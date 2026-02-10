@@ -11,7 +11,13 @@ This document outlines the strategic evolution of the Sigil Protocol. Our missio
 ## Phase 2: The Sentinel Update (Q1 2026 - IN DESIGN)
 The focus of this phase is the **Sigil Sentinel Framework**, moving beyond "Honest Majority" assumptions to cryptographic and economic enforcement.
 
-### 1. Supervised Hash Validation (Dual-Signature)
+### 1. Progressive Decentralization (Governance)
+We acknowledge the "Admin Key Risk" in the initial bootstrap phase. We are executing a 3-step transition to full decentralization:
+- **Step 1: Benevolent Dictatorship (Current):** A single Authority key controls the `slash_auditor` function for rapid response during the network bootstrap/hackathon phase.
+- **Step 2: Security Council (Post-Launch):** The `authority` will be transferred to a **Squads Multisig (3-of-5)**. This council will include trusted entities (e.g., top auditors, protocol partners) to eliminate the single point of failure.
+- **Step 3: DAO Sovereignty (Maturity):** Final ownership transfer to a Governance PDA managed by token voting or reputation-weighted consensus, automating the slashing and parameter update process.
+
+### 2. Supervised Hash Validation (Dual-Signature)
 - **Mechanism:** To log an execution for reputation, the user agent must report the hash it calculated locally.
 - **Enforcement:** If the user-reported hash differs from the Auditor-signed hash, the execution is flagged, and the Skill is temporarily restricted.
 

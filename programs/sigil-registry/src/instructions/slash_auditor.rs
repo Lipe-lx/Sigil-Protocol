@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Transfer, Token, TokenAccount};
+use anchor_spl::token::{self, Transfer, Token, TokenAccount, Mint};
+use anchor_spl::associated_token::AssociatedToken;
 use crate::state::*;
 use crate::ErrorCode;
 
@@ -21,12 +22,18 @@ pub struct SlashAuditor<'info> {
 
     #[account(
         mut,
-        seeds = [b"vault", vault_token_account.mint.as_ref(), auditor.key().as_ref()],
+        seeds = [b"vault", usdc_mint.key().as_ref(), auditor.key().as_ref()],
         bump,
     )]
     pub vault_token_account: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    pub usdc_mint: Account<'info, Mint>,
+
+    #[account(
+        mut,
+        associated_token::mint = usdc_mint,
+        associated_token::authority = registry.authority, // Reward Fund is owned by Registry Authority
+    )]
     pub reward_fund_token_account: Account<'info, TokenAccount>,
 
     /// CHECK: PDA for vault authority
@@ -38,6 +45,8 @@ pub struct SlashAuditor<'info> {
 
     pub authority: Signer<'info>,
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<SlashAuditor>) -> Result<()> {

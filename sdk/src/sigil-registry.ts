@@ -1,7 +1,8 @@
 import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
+import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { SigilRegistry } from './types';
-import idl from '../../target/idl/sigil_registry.json';
+import idl from './idl/sigil_registry.json';
 
 export class SigilRegistryClient {
   program: Program<SigilRegistry>;
@@ -94,12 +95,15 @@ export class SigilRegistryClient {
     success: boolean,
     latencyMs: number
   ): Promise<string> {
+    const usdcMint = new PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU');
+    
     return await this.program.methods
       .logExecution(success, latencyMs)
       .accounts({
         skill: skillPda,
         executionLog: executionLogPda,
         executor: this.provider.wallet.publicKey,
+        usdcMint,
         executorUsdc,
         creatorUsdc,
         protocolUsdc,

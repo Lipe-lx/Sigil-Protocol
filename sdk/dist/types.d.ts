@@ -100,6 +100,10 @@ export type SigilRegistry = {
                     "signer": true;
                 },
                 {
+                    "name": "usdcMint";
+                    "writable": false;
+                },
+                {
                     "name": "executorUsdc";
                     "writable": true;
                 },
@@ -114,6 +118,10 @@ export type SigilRegistry = {
                 {
                     "name": "tokenProgram";
                     "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+                },
+                {
+                    "name": "associatedTokenProgram";
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
                 },
                 {
                     "name": "systemProgram";
@@ -337,6 +345,10 @@ export type SigilRegistry = {
                 {
                     "name": "tokenProgram";
                     "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+                },
+                {
+                    "name": "associatedTokenProgram";
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
                 },
                 {
                     "name": "systemProgram";

@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Transfer, Token, TokenAccount, Mint};
+use anchor_spl::associated_token::AssociatedToken;
 use crate::state::*;
 use crate::ErrorCode;
 
@@ -14,7 +15,11 @@ pub struct StakeUsdc<'info> {
     )]
     pub auditor: Account<'info, Auditor>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        associated_token::mint = usdc_mint,
+        associated_token::authority = authority,
+    )]
     pub auditor_token_account: Account<'info, TokenAccount>,
 
     #[account(
@@ -40,6 +45,7 @@ pub struct StakeUsdc<'info> {
     pub authority: Signer<'info>,
     
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
 }

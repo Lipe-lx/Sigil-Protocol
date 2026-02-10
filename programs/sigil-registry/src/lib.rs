@@ -111,4 +111,6 @@ pub enum ErrorCode {
     UnstakeNotRequested,
     #[msg("Auditor has no stake to slash")]
     NothingToSlash,
+    #[msg("Invalid Protocol Treasury account provided")]
+    InvalidProtocolTreasury,
 }
